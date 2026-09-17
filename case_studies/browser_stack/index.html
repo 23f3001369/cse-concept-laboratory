@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9M9C5T1Y9R"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);} gtag('js',new Date()); gtag('config','G-9M9C5T1Y9R');</script>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Back Again — Browser Stack (LIFO)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg-1:#FDF1E9;--bg-2:#EDF3FA;--bg-3:#E4EEFA;--primary:#4A9BD1;--primary-dark:#2B6FA3;--primary-deep:#1B4A66;--amber:#EA8C36;--amber-dark:#C96F1F;--danger:#D9714F;--success:#4B7A4A;--ink:#1F2E37;--muted:#54666D;--faint:#93A5AB;--card-bg:#fff;--glass-border:#D9E5F2;--shadow-card:rgba(23,50,77,0.12);--shadow-btn:rgba(43,111,163,0.28);--radius-lg:18px}
+*,*::before,*::after{box-sizing:border-box}html,body{height:100%}body{margin:0;min-height:100vh;font-family:'Inter',sans-serif;color:var(--ink);background:linear-gradient(180deg,var(--bg-1) 0%,var(--bg-2) 40%,var(--bg-2) 100%);background-attachment:fixed;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;margin:0}p{line-height:1.65;color:var(--muted);margin:0}button{font-family:'Poppins',sans-serif;cursor:pointer}
+.wrap{max-width:960px;margin:0 auto;padding:96px 20px 70px}
+.stepper{max-width:700px;margin:0 auto 30px;display:flex;align-items:center;justify-content:center;padding:0 12px}
+.step-item{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;position:relative}
+.step-circle{width:32px;height:32px;border-radius:50%;background:var(--bg-3);color:var(--primary-deep);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;border:2px solid var(--glass-border);transition:.25s;z-index:2;font-family:'Poppins',sans-serif}
+.step-label{font-size:10px;font-weight:700;color:var(--muted);text-align:center;letter-spacing:.03em;font-family:'Poppins',sans-serif}
+.step-line{position:absolute;top:16px;left:-50%;width:100%;height:2px;background:var(--glass-border);z-index:1}
+.step-item:first-child .step-line{display:none}
+.step-item.done .step-circle{background:var(--primary-dark);border-color:var(--primary-dark);color:#fff}
+.step-item.done .step-line{background:var(--primary-dark)}
+.step-item.active .step-circle{background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-color:var(--primary-dark);color:#fff;box-shadow:0 0 0 4px rgba(74,155,209,.25)}
+.step-item.active .step-label{color:var(--primary-dark)}
+.section{display:none}.section.active-view{display:block;animation:sectionFade .35s ease}
+@keyframes sectionFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--amber-dark);background:#FBE9DA;padding:6px 14px;border-radius:999px;margin-bottom:12px;font-family:'Poppins',sans-serif}
+.section-title{font-size:clamp(24px,4vw,36px);color:var(--ink);margin:0 0 8px;text-align:center}
+.section-sub{max-width:640px;margin:0 auto 18px;text-align:center;font-size:14.5px;color:var(--muted)}
+.hero{text-align:center}.hero h1{font-size:clamp(26px,4.4vw,40px);margin:0 0 12px}
+.card{background:transparent;border:none;padding:6px 0 0}
+.btn{border:none;border-radius:999px;padding:13px 24px;font-weight:600;font-size:15px;color:#fff;background:linear-gradient(135deg,var(--primary),var(--primary-dark));box-shadow:0 12px 24px -10px var(--shadow-btn);transition:.15s}
+.btn:hover:not(:disabled){transform:translateY(-1px)} .btn:disabled{opacity:.4}
+.btn.secondary{background:#fff;color:var(--primary-dark);border:1.5px solid var(--primary);box-shadow:none}
+.btn.ghost{background:transparent;color:var(--primary-dark);box-shadow:none;border:1.5px solid var(--primary);padding:10px 16px}
+.btn.small{padding:9px 18px;font-size:13px}
+.section-nav{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:26px}
+.problem-card{text-align:left;max-width:680px;margin:20px auto 0}.problem-card p{margin:0 0 14px;font-size:15.5px}.problem-card b{color:var(--primary-deep)}
+.game-shell{width:100%;max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.browser{border:1.5px solid var(--glass-border);border-radius:14px;overflow:hidden;background:#fff;box-shadow:0 10px 28px rgba(23,50,77,.08)}
+.browser-bar{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#F3F8FD;border-bottom:1px solid var(--glass-border)}
+.browser-dots{display:flex;gap:6px} .dot{width:10px;height:10px;border-radius:50%} .dot.r{background:#FF5F57} .dot.y{background:#FFBD2E} .dot.g{background:#28CA42}
+.browser-nav{display:flex;gap:8px} .nav-btn{width:32px;height:32px;border-radius:8px;border:1.5px solid var(--glass-border);background:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--primary-deep)}
+.nav-btn:disabled{opacity:.35}
+.address{flex:1;background:#fff;border:1.5px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:13px;color:var(--muted);text-align:left;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.browser-page{padding:22px;min-height:140px;text-align:left}.browser-page h3{font-size:17px;margin-bottom:6px}.browser-page p{font-size:13.5px}
+.history{display:flex;flex-direction:column-reverse;gap:8px;min-height:120px;background:#F3F8FD;border:1.5px dashed var(--glass-border);border-radius:14px;padding:14px}
+.history-empty{color:var(--faint);font-size:13px;text-align:center;padding:12px}
+.hist-item{padding:10px 14px;border-radius:10px;background:#fff;border:1.5px solid var(--glass-border);font-weight:700;font-size:13px;color:var(--primary-deep);display:flex;justify-content:space-between;align-items:center}
+.hist-item.top{border-color:var(--amber);box-shadow:0 0 0 3px rgba(234,140,54,.2);transform:scale(1.02)}
+.hist-item span.sub{font-weight:500;font-size:11px;color:var(--muted)}
+.stats{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:8px}
+.stat{font-size:12.5px;font-weight:700;color:var(--muted)} .stat strong{color:var(--ink)}
+.rules-list{list-style:none;margin:20px auto 0;padding:0;max-width:560px;display:flex;flex-direction:column;gap:8px}
+.rules-list li{font-size:14px;color:var(--muted);display:flex;gap:10px;align-items:flex-start;line-height:1.5}
+.rules-list li::before{content:"✕";color:var(--danger);font-weight:700;flex-shrink:0}
+.rules-list li.ok::before{content:"✓";color:var(--success)}
+.qgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:8px}
+.qcard{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:18px;padding:22px 20px 20px;box-shadow:0 14px 30px -18px rgba(23,50,77,.3);min-height:140px;display:flex;flex-direction:column;gap:10px}
+.qcard:hover{transform:translateY(-3px);box-shadow:0 18px 34px -16px rgba(23,50,77,.38)}
+.qcard .q-num{font-weight:800;font-size:13px;color:var(--primary)}
+.qcard .q-text{font-size:14.5px;color:var(--ink);line-height:1.6;font-weight:600}
+@media(max-width:900px){.qgrid{grid-template-columns:repeat(2,1fr)}}@media(max-width:640px){.qgrid{grid-template-columns:1fr}}
+.learning-flow{max-width:640px;margin:0 auto;text-align:left}.learning-flow > * + *{margin-top:22px;padding-top:22px;border-top:1px dashed var(--glass-border)}
+.key-learnings h3{font-size:16px;margin-bottom:12px;color:var(--primary-deep);text-align:center}
+.kl-grid{display:flex;flex-direction:column;gap:14px}
+.kl-item{display:flex;gap:12px;align-items:flex-start;text-align:left}
+.kl-item + .kl-item{padding-top:14px;border-top:1px dotted var(--glass-border)}
+.kl-icon{font-size:20px;flex-shrink:0}
+.kl-item b{display:block;font-size:13.5px;color:var(--primary-deep);margin-bottom:3px}
+.kl-item p{font-size:12.5px;color:var(--muted);line-height:1.5}
+.concept-blank{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:18px;padding:22px;box-shadow:0 14px 30px -18px rgba(23,50,77,.3);margin-bottom:18px}
+.concept-blank h4{font-size:13px;color:var(--primary);margin:14px 0 6px;text-transform:uppercase;letter-spacing:.04em}
+.concept-blank h4:first-child{margin-top:0}
+.compare-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.compare-card{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:14px;padding:18px;text-align:center}
+.compare-title{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.compare-sub{font-size:12.5px;color:var(--faint);margin-top:4px}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#22496B;color:#fff;font-weight:600;padding:12px 20px;border-radius:999px;opacity:0;pointer-events:none;transition:.3s;z-index:90} .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="stepper" id="stepper">
+<div class="step-item active" id="step-1"><span class="step-line"></span><span class="step-circle">1</span><span class="step-label">The Puzzle</span></div>
+<div class="step-item" id="step-2"><span class="step-line"></span><span class="step-circle">2</span><span class="step-label">The Briefing</span></div>
+<div class="step-item" id="step-3"><span class="step-line"></span><span class="step-circle">3</span><span class="step-label">The Browser</span></div>
+<div class="step-item" id="step-4"><span class="step-line"></span><span class="step-circle">4</span><span class="step-label">Case Notes</span></div>
+<div class="step-item" id="step-5"><span class="step-line"></span><span class="step-circle">5</span><span class="step-label">The Method</span></div>
+<div class="step-item" id="step-6"><span class="step-line"></span><span class="step-circle">6</span><span class="step-label">New Cases</span></div>
+</div>
+
+<section class="section active-view" id="sec-puzzle">
+<div class="hero">
+<span class="eyebrow">Chapter 1 · The Puzzle</span>
+<h1>You clicked 10 links. How do you go back 3 steps?</h1>
+</div>
+<div class="problem-card">
+<p>Aisha has 10 tabs open: <b>Google → Wiki → YouTube → Docs → Reddit</b>. She needs Wiki from 3 clicks ago — but <b>Back only goes one step</b>.</p>
+<p>To reach Wiki she must pop <b>Reddit → Docs → YouTube</b> one by one. With 20 pages, the bottom takes 20 backs.</p>
+<div style="display:flex;gap:12px;align-items:flex-start;background:var(--card-bg);border:1px solid var(--glass-border);border-radius:12px;padding:12px 14px;margin-top:14px">
+<div style="width:36px;height:36px;flex-shrink:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,#EA8C36,#C96F1F);display:flex;align-items:center;justify-content:center;font-size:18px">👩‍🎓</div>
+<div style="font-size:13.5px;color:var(--ink);line-height:1.5"><span style="font-size:11px;color:var(--amber-dark);font-weight:700;letter-spacing:.05em">AISHA</span><br>“Why can’t I just jump to Wiki? Why must I go back step by step?”</div>
+</div>
+</div>
+<div class="section-nav"><button class="btn" id="btn-puzzle-continue">Continue to the Briefing ➜</button></div>
+</section>
+
+<section class="section" id="sec-briefing">
+<div class="hero">
+<span class="eyebrow">Chapter 2 · The Briefing</span>
+<h1>Back Again — The Browser Stack</h1>
+</div>
+<div class="card" style="text-align:center;max-width:640px;margin:0 auto">
+<p style="margin-bottom:14px">Your history is a <b>pile</b> — every visit is <b>pushed on top</b>. You can only <b>Back (pop)</b> the top or <b>peek</b> at it.</p>
+<ul class="rules-list">
+<li>Search Bar is not a stack — you can't jump to middle.</li>
+<li>History search is disabled.</li>
+<li class="ok">Every Visit → push on top</li>
+<li class="ok">Back → pop the top only</li>
+</ul>
+</div>
+<div class="section-nav"><button class="btn ghost" id="btn-briefing-back">⬅ Back</button><button class="btn" id="btn-briefing-start">Enter the Browser ▶</button></div>
+</section>
+
+<section class="section" id="sec-search">
+<span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 3 · The Browser</span>
+<h2 class="section-title">Your History is a Stack</h2>
+<p class="section-sub">Click <b>Visit</b> to push, <b>Back</b> to pop — last visited, first returned.</p>
+<div class="game-shell">
+<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap" class="stats">
+<span class="stat">Pages: <strong id="s-size">0</strong></span><span class="stat">Back ops: <strong id="s-ops">0</strong></span><span class="stat">Current: <strong id="s-top">—</strong></span>
+</div>
+<div class="browser">
+<div class="browser-bar">
+<div class="browser-dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+<div style="display:flex;gap:8px"><button class="nav-btn" id="btn-back" title="Back">←</button><button class="nav-btn" id="btn-forward" title="Forward" disabled>→</button></div>
+<div class="address" id="address">about:blank</div>
+</div>
+<div class="browser-page" id="browser-page"><h3 id="page-title">New Tab</h3><p id="page-desc">Click <strong>Visit</strong> to start surfing.</p></div>
+</div>
+<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px">
+<button class="btn ghost small" id="btn-auto">▶ Auto Surf</button>
+<button class="btn ghost small" id="btn-visit">+ Visit Page</button>
+<button class="btn ghost small" id="btn-pop">← Back</button>
+<button class="btn ghost small" id="btn-reset">Reset</button>
+<button class="btn small" id="btn-challenge" style="background:var(--amber);color:#fff;border-color:var(--amber)">🎯 Challenge: Get to Wiki</button>
+</div>
+<div id="challenge-banner" style="display:none;margin-top:12px;padding:12px 16px;border-radius:12px;background:#FFF3E6;border:1.5px solid var(--amber);text-align:center;font-size:13px">
+<span style="font-weight:800;color:var(--amber-dark)">🎯 Mission:</span> <span id="challenge-mission" style="color:var(--ink)">Visit 4 pages, then get back to <b>Wikipedia</b> in exactly 2 Backs</span> <span id="challenge-status" style="font-weight:700;color:var(--muted)">— not started</span>
+</div>
+<div style="text-align:center;margin-top:10px"><div style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">History Stack — top is current page</div><div class="history" id="history"></div></div>
+<p style="text-align:center;margin-top:12px;font-size:13px;color:var(--primary-deep);background:rgba(74,155,209,.08);border:1px dashed var(--glass-border);border-radius:10px;padding:10px 14px" id="game-hint">Visit a page to push it. Back pops the top — LIFO.</p>
+</div>
+<div class="section-nav"><button class="btn ghost" id="btn-search-back">⬅ Back to Briefing</button><button class="btn" id="btn-search-continue">Continue to Case Notes ➜</button></div>
+</section>
+
+<section class="section" id="sec-notes">
+<span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 4 · Case Notes</span>
+<h2 class="section-title">What did you notice?</h2>
+<p class="section-sub">No single right answer — just what you felt while surfing.</p>
+<div class="card"><div class="qgrid">
+<div class="qcard"><span class="q-num">01 · Last page wins</span><span class="q-text">You visited Google → Wiki → YouTube and pressed Back — why did you get YouTube, not Google?</span></div>
+<div class="qcard"><span class="q-num">02 · Two backs</span><span class="q-text">You visited A → B → C → D, then pressed Back twice. What page shows now and what remains hidden?</span></div>
+<div class="qcard"><span class="q-num">03 · Peek vs Back</span><span class="q-text">Both show the top — but one changes history and one doesn't. When would you want each?</span></div>
+<div class="qcard"><span class="q-num">04 · LIFO everywhere</span><span class="q-text">Where else does “last in, first out” feel right — undo, call stack, plate pile? Why would a queue be wrong there?</span></div>
+<div class="qcard"><span class="q-num">05 · Cost of bottom</span><span class="q-text">Why is Back instant O(1) while reaching the bottom page takes 4 pops O(n)?</span></div>
+</div>
+<div class="section-nav"><button class="btn ghost" id="btn-notes-back">⬅ Back</button><button class="btn" id="btn-notes-continue">Continue to The Method ➜</button></div></div>
+</section>
+
+<section class="section" id="sec-method">
+<span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 5 · The Method</span>
+<h2 class="section-title">How it really worked</h2>
+<p class="section-sub">You just lived a Stack. Here's the name for what you felt.</p>
+<div class="hero" style="margin-bottom:6px"><div style="font-size:48px">🥞</div><h2>The Stack (LIFO)</h2></div>
+<div class="learning-flow">
+<div class="concept-blank">
+<h4>Definition</h4><p><strong>LIFO — Last In, First Out.</strong> Like plates, you can only touch the top. Last thing you put in is first you get back.</p>
+<h4>Mechanism</h4><p><code>push(x)</code> — visit on top, <code>pop()</code> — Back removes top, <code>peek()</code> — glance at top. All <code>O(1)</code>. No middle jump — must pop everything above.</p>
+<h4>Vocabulary</h4><p><code>top</code> — current page, <code>underflow</code> — Back on empty, <code>overflow</code> — push when full, <code>LIFO</code>.</p>
+</div>
+<div class="compare-cards">
+<div class="compare-card"><span class="compare-title">If it were a Queue (FIFO)</span><span class="compare-sub">Back would give Google first — oldest, not last. Undo would erase H from HELLO → ELLO!</span></div>
+<div class="compare-card"><span class="compare-title">Because it’s a Stack (LIFO)</span><span class="compare-sub">Back gives last visited — exactly what you expect. Undo fixes last mistake.</span></div>
+</div>
+<div class="key-learnings"><h3>🔑 Key Learnings</h3><div class="kl-grid">
+<div class="kl-item"><span class="kl-icon">🥞</span><div><b>The Shape</b><p>Only the top is reachable. That constraint is the whole power — and the limit.</p></div></div>
+<div class="kl-item"><span class="kl-icon">⚡</span><div><b>O(1) Top</b><p>Push, pop, peek never scan — they touch top only.</p></div></div>
+<div class="kl-item"><span class="kl-icon">↩️</span><div><b>Where You'll See It</b><p>Browser Back, Ctrl+Z, call stack, plate pile — all want last action first.</p></div></div>
+</div></div>
+</div>
+<div class="section-nav"><button class="btn ghost" id="btn-method-back">⬅ Back</button><button class="btn" id="btn-method-continue">Continue to New Cases ➜</button></div>
+</section>
+
+<section class="section" id="sec-cases">
+<span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 6 · New Cases</span>
+<h2 class="section-title">Try on your own</h2>
+<p class="section-sub">Trace the stack in your head.</p>
+<div class="card"><div class="qgrid">
+<div class="qcard"><span class="q-num">01 · Mixed visit</span><span class="q-text">Visit A → B → C → Back → Visit D → Back. What page shows? Trace top after each step.</span></div>
+<div class="qcard"><span class="q-num">02 · Typo</span><span class="q-text">Type H → E → L → L → O, then undo 3 times. What text remains?</span></div>
+<div class="qcard"><span class="q-num">03 · Stack vs Queue</span><span class="q-text">If undo were FIFO and you typed HELLO then undid once, what would remain? Why wrong?</span></div>
+<div class="qcard"><span class="q-num">04 · Empty Back</span><span class="q-text">History empty, user hits Back — what should happen? What is this called?</span></div>
+<div class="qcard"><span class="q-num">05 · Build it</span><span class="q-text">From empty, how would you end with history [Google, Docs] using only Visit and Back?</span></div>
+</div>
+<div class="section-nav"><button class="btn ghost" id="btn-cases-back">⬅ Back</button><button class="btn" id="btn-cases-home">🏠 Back to CSE Concept Laboratory</button><button class="btn" id="btn-cases-finish">Restart ↻</button></div></div>
+</section>
+
+</div>
+<div class="toast" id="toast"></div>
+<script>
+(function(){
+"use strict";
+const STEP_FOR={ 'sec-puzzle':1,'sec-briefing':2,'sec-search':3,'sec-notes':4,'sec-method':5,'sec-cases':6 };
+function setStep(n){for(let i=1;i<=6;i++){const el=document.getElementById('step-'+i);el.classList.remove('active','done');if(i<n)el.classList.add('done');if(i===n)el.classList.add('active');}}
+function showSection(id){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active-view'));document.getElementById(id).classList.add('active-view');setStep(STEP_FOR[id]||1);window.scrollTo({top:0,behavior:'smooth'});}
+document.getElementById('btn-puzzle-continue').addEventListener('click',()=>showSection('sec-briefing'));
+document.getElementById('btn-briefing-back').addEventListener('click',()=>showSection('sec-puzzle'));
+document.getElementById('btn-briefing-start').addEventListener('click',()=>showSection('sec-search'));
+document.getElementById('btn-search-back').addEventListener('click',()=>showSection('sec-briefing'));
+document.getElementById('btn-search-continue').addEventListener('click',()=>showSection('sec-notes'));
+document.getElementById('btn-notes-back').addEventListener('click',()=>showSection('sec-search'));
+document.getElementById('btn-notes-continue').addEventListener('click',()=>showSection('sec-method'));
+document.getElementById('btn-method-back').addEventListener('click',()=>showSection('sec-notes'));
+document.getElementById('btn-method-continue').addEventListener('click',()=>showSection('sec-cases'));
+document.getElementById('btn-cases-back').addEventListener('click',()=>showSection('sec-method'));
+document.getElementById('btn-cases-home').addEventListener('click',()=>window.location.href='../../');
+document.getElementById('btn-cases-finish').addEventListener('click',()=>{reset();showSection('sec-puzzle');});
+var pages=[
+{url:'google.com/search?q=assignment',title:'Google — Search',desc:'Results for "stack vs queue"...',icon:'🔍'},
+{url:'en.wikipedia.org/wiki/Stack',title:'Wikipedia — Stack',desc:'A stack is LIFO...',icon:'📖'},
+{url:'youtube.com/watch?v=backstack',title:'YouTube — How Back Works',desc:'1.2M views',icon:'▶️'},
+{url:'docs.google.com/assignment',title:'Google Docs — Assignment',desc:'Your draft — edited 2 min ago',icon:'📄'},
+{url:'reddit.com/r/coding',title:'Reddit — r/coding',desc:'Why is undo a stack? 342 comments',icon:'💬'},
+{url:'github.com/code',title:'GitHub — Code',desc:'Repo • 3 commits ahead',icon:'💻'}
+];
+var stack=[],forward=[],ops=0,pIdx=0;
+function render(){
+document.getElementById('s-size').textContent=stack.length;
+document.getElementById('s-ops').textContent=ops;
+document.getElementById('s-top').textContent=stack.length?stack[stack.length-1].title:'—';
+document.getElementById('address').textContent=stack.length?stack[stack.length-1].url:'about:blank';
+document.getElementById('page-title').textContent=stack.length?stack[stack.length-1].title:'New Tab';
+document.getElementById('page-desc').textContent=stack.length?stack[stack.length-1].desc:'Click Visit to start surfing.';
+document.getElementById('btn-back').disabled=stack.length===0;
+document.getElementById('btn-forward').disabled=forward.length===0;
+var h=document.getElementById('history');h.innerHTML='';
+if(!stack.length){h.innerHTML='<div class="history-empty">Empty — visit a page to build history.</div>';return;}
+for(var i=stack.length-1;i>=0;i--){
+var it=stack[i];var d=document.createElement('div');d.className='hist-item'+(i===stack.length-1?' top':'');
+d.innerHTML='<span>'+it.icon+' '+it.title+'</span><span class="sub">'+(i===stack.length-1?'TOP':'')+'</span>';
+h.appendChild(d);
+}}
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800);}
+var challengeOn=false, challengeDone=false, challengeNeed=0, challengeTarget='', challengeTotalOps=0;
+function checkChallenge(){
+if(!challengeOn || challengeDone) return;
+var s=document.getElementById('challenge-status');
+var topIsTarget = stack.length>0 && stack[stack.length-1].title===challengeTarget;
+if(stack.length===challengeNeed && topIsTarget && ops===challengeTotalOps){
+  s.textContent='✓ Done!'; s.style.color='var(--success)';
+  challengeDone=true;
+  toast('🎉 Challenge cleared — LIFO works!');
+  confetti();
+  document.getElementById('game-hint').textContent='🎉 You did it — '+challengeTarget+' on top after '+challengeTotalOps+' ops! Try Next Challenge →';
+  document.getElementById('btn-challenge').textContent='🔁 Next Challenge';
+  return;
+}
+if(stack.length < challengeNeed && ops>=challengeTotalOps){ s.textContent='✗ Too many backs — reset'; s.style.color='var(--danger)';}
+}
+function confetti(){
+var t=document.getElementById('toast'); t.style.background='var(--success)'; setTimeout(()=>t.style.background='#22496B',1800);
+for(var i=0;i<16;i++){
+  (function(k){
+    setTimeout(function(){
+      var e=document.createElement('div'); e.textContent=['🎉','✨','🎊','🥳'][k%4];
+      e.style.position='fixed'; e.style.left=(10+Math.random()*80)+'%'; e.style.top='-20px'; e.style.fontSize='22px';
+      e.style.transition='transform 1.2s ease-out, opacity 1.2s'; e.style.zIndex='99'; e.style.pointerEvents='none';
+      document.body.appendChild(e);
+      setTimeout(function(){ e.style.transform='translateY(90vh) rotate('+(Math.random()*360)+'deg)'; e.style.opacity='0';},20);
+      setTimeout(function(){ e.remove();},1300);
+    }, k*70);
+  })(i);
+}
+}
+document.getElementById('btn-challenge').addEventListener('click',function(){
+reset();
+// Randomize: 5-7 visits, 1-3 backs — covers Google, Wiki, YouTube, Docs, Reddit, GitHub
+var needPushes = 5 + Math.floor(Math.random()*3); // 5,6,7
+var needBacks = 1 + Math.floor(Math.random()*3); // 1,2,3
+if(needBacks >= needPushes) needBacks = needPushes - 1;
+challengeNeed = needPushes - needBacks;
+challengeTotalOps = needPushes + needBacks;
+var seq=[]; for(var i=0;i<needPushes;i++) seq.push(pages[i % pages.length].title);
+challengeTarget = seq[seq.length - 1 - needBacks];
+challengeOn=true; challengeDone=false;
+document.getElementById('challenge-banner').style.display='block';
+document.getElementById('challenge-mission').innerHTML='Visit '+needPushes+' pages, then get back to <b>'+challengeTarget.split(' —')[0]+'</b> in exactly '+needBacks+' Backs';
+document.getElementById('challenge-status').textContent='— visit '+needPushes+', then '+needBacks+' Backs to '+challengeTarget.split(' —')[0];
+document.getElementById('challenge-status').style.color='var(--muted)';
+document.getElementById('game-hint').textContent='Challenge ON — Visit '+needPushes+' times, then Back '+needBacks+'× to '+challengeTarget.split(' —')[0]+'. You got this, Aisha!';
+document.getElementById('btn-challenge').textContent='🎯 Challenge: '+needBacks+' Backs to '+challengeTarget.split(' —')[0];
+toast('🎯 Visit '+needPushes+' → '+needBacks+' Backs to '+challengeTarget.split(' —')[0]);
+});
+function doVisit(){var pg=pages[pIdx%pages.length];pIdx++;stack.push(pg);forward=[];ops++;render();document.getElementById('game-hint').textContent='Visited '+pg.title+' — pushed on top.';checkChallenge();}
+function doBack(){if(!stack.length){toast('Underflow — empty history');return;}var v=stack.pop();forward.push(v);ops++;render();document.getElementById('game-hint').textContent='Back ← popped '+v.title+' — LIFO.';checkChallenge();}
+function doForward(){if(!forward.length){toast('No forward history');return;}var v=forward.pop();stack.push(v);ops++;render();}
+function reset(){stack=[];forward=[];ops=0;pIdx=0; challengeOn=false; challengeDone=false; document.getElementById('challenge-banner').style.display='none'; render();document.getElementById('game-hint').textContent='Visit a page to push it. Back pops the top — LIFO.';}
+document.getElementById('btn-visit').addEventListener('click',doVisit);
+document.getElementById('btn-pop').addEventListener('click',doBack);
+document.getElementById('btn-back').addEventListener('click',doBack);
+document.getElementById('btn-forward').addEventListener('click',doForward);
+document.getElementById('btn-reset').addEventListener('click',reset);
+document.getElementById('btn-auto').addEventListener('click',function(){
+reset();
+var seq=[pages[0],pages[1],pages[2],pages[3]],i=0;
+function pushStep(){if(i<seq.length){stack.push(seq[i]);ops++;render();i++;setTimeout(pushStep,600);}else{
+setTimeout(()=>{var j=0;function popStep(){if(j<4){var v=stack.pop();forward.push(v);ops++;render();j++;setTimeout(popStep,600);}}popStep();},500);
+}}
+pushStep();
+});
+setStep(1);render();
+})();
+</script>
+</body>
+</html>
