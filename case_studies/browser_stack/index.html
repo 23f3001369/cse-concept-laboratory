@@ -4,7 +4,7 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-9M9C5T1Y9R"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);} gtag('js',new Date()); gtag('config','G-9M9C5T1Y9R');</script>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Back Again — Browser Stack (LIFO)</title>
+<title>Back Again — How Does Back Work?</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{--bg-1:#FDF1E9;--bg-2:#EDF3FA;--bg-3:#E4EEFA;--primary:#4A9BD1;--primary-dark:#2B6FA3;--primary-deep:#1B4A66;--amber:#EA8C36;--amber-dark:#C96F1F;--danger:#D9714F;--success:#4B7A4A;--ink:#1F2E37;--muted:#54666D;--faint:#93A5AB;--card-bg:#fff;--glass-border:#D9E5F2;--shadow-card:rgba(23,50,77,0.12);--shadow-btn:rgba(43,111,163,0.28);--radius-lg:18px}
@@ -95,8 +95,8 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;
 <h1>You clicked 10 links. How do you go back 3 steps?</h1>
 </div>
 <div class="problem-card">
-<p>Aisha has 10 tabs open: <b>Google → Wiki → YouTube → Docs → Reddit</b>. She needs Wiki from 3 clicks ago — but <b>Back only goes one step</b>.</p>
-<p>To reach Wiki she must pop <b>Reddit → Docs → YouTube</b> one by one. With 20 pages, the bottom takes 20 backs.</p>
+<p>Aisha has 10 tabs open: <b>Google → Wiki → YouTube → Docs → Reddit</b>. She needs Wiki from 3 clicks ago — but <b>Back only undoes one step</b>.</p>
+<p>To reach Wiki she must go back through <b>Reddit → Docs → YouTube</b> one by one. With 20 pages, the first page takes 20 Backs.</p>
 <div style="display:flex;gap:12px;align-items:flex-start;background:var(--card-bg);border:1px solid var(--glass-border);border-radius:12px;padding:12px 14px;margin-top:14px">
 <div style="width:36px;height:36px;flex-shrink:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,#EA8C36,#C96F1F);display:flex;align-items:center;justify-content:center;font-size:18px">👩‍🎓</div>
 <div style="font-size:13.5px;color:var(--ink);line-height:1.5"><span style="font-size:11px;color:var(--amber-dark);font-weight:700;letter-spacing:.05em">AISHA</span><br>“Why can’t I just jump to Wiki? Why must I go back step by step?”</div>
@@ -108,15 +108,15 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;
 <section class="section" id="sec-briefing">
 <div class="hero">
 <span class="eyebrow">Chapter 2 · The Briefing</span>
-<h1>Back Again — The Browser Stack</h1>
+<h1>Back Again</h1>
 </div>
 <div class="card" style="text-align:center;max-width:640px;margin:0 auto">
-<p style="margin-bottom:14px">Your history is a <b>pile</b> — every visit is <b>pushed on top</b>. You can only <b>Back (pop)</b> the top or <b>peek</b> at it.</p>
+<p style="margin-bottom:14px">Everything you visit forms a <b>pile</b> — every new page lands <b>on top</b>. <b>Back</b> removes the page you just saw, one at a time.</p>
 <ul class="rules-list">
-<li>Search Bar is not a stack — you can't jump to middle.</li>
-<li>History search is disabled.</li>
-<li class="ok">Every Visit → push on top</li>
-<li class="ok">Back → pop the top only</li>
+<li>No jumping — you can't open a middle page directly.</li>
+<li>You can't search your old pages.</li>
+<li class="ok">Every new page → lands on top</li>
+<li class="ok">Back → removes the top page only</li>
 </ul>
 </div>
 <div class="section-nav"><button class="btn ghost" id="btn-briefing-back">⬅ Back</button><button class="btn" id="btn-briefing-start">Enter the Browser ▶</button></div>
@@ -124,8 +124,8 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;
 
 <section class="section" id="sec-search">
 <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 3 · The Browser</span>
-<h2 class="section-title">Your History is a Stack</h2>
-<p class="section-sub">Click <b>Visit</b> to push, <b>Back</b> to pop — last visited, first returned.</p>
+<h2 class="section-title">Retrace Your Steps</h2>
+<p class="section-sub">Click <b>Visit</b> to add a page, <b>Back</b> to remove it — the page you saw last is the first one you return to.</p>
 <div class="game-shell">
 <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap" class="stats">
 <span class="stat">Pages: <strong id="s-size">0</strong></span><span class="stat">Back ops: <strong id="s-ops">0</strong></span><span class="stat">Current: <strong id="s-top">—</strong></span>
@@ -147,9 +147,10 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;
 </div>
 <div id="challenge-banner" style="display:none;margin-top:12px;padding:12px 16px;border-radius:12px;background:#FFF3E6;border:1.5px solid var(--amber);text-align:center;font-size:13px">
 <span style="font-weight:800;color:var(--amber-dark)">🎯 Mission:</span> <span id="challenge-mission" style="color:var(--ink)">Visit 4 pages, then get back to <b>Wikipedia</b> in exactly 2 Backs</span> <span id="challenge-status" style="font-weight:700;color:var(--muted)">— not started</span>
+<div id="mission-done" style="display:none;margin-top:12px;padding:12px 14px;border-radius:10px;background:rgba(75,122,74,.12);border:1.5px solid var(--success);font-weight:800;color:var(--success);font-size:14px">✅ Mission Completed</div>
 </div>
-<div style="text-align:center;margin-top:10px"><div style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">History Stack — top is current page</div><div class="history" id="history"></div></div>
-<p style="text-align:center;margin-top:12px;font-size:13px;color:var(--primary-deep);background:rgba(74,155,209,.08);border:1px dashed var(--glass-border);border-radius:10px;padding:10px 14px" id="game-hint">Visit a page to push it. Back pops the top — LIFO.</p>
+<div style="text-align:center;margin-top:10px"><div style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Your Visit Pile — top is current page</div><div class="history" id="history"></div></div>
+<p style="text-align:center;margin-top:12px;font-size:13px;color:var(--primary-deep);background:rgba(74,155,209,.08);border:1px dashed var(--glass-border);border-radius:10px;padding:10px 14px" id="game-hint">Visit a page to place it on top. Back removes the top page — the one you just saw.</p>
 </div>
 <div class="section-nav"><button class="btn ghost" id="btn-search-back">⬅ Back to Briefing</button><button class="btn" id="btn-search-continue">Continue to Case Notes ➜</button></div>
 </section>
@@ -159,11 +160,13 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;
 <h2 class="section-title">What did you notice?</h2>
 <p class="section-sub">No single right answer — just what you felt while surfing.</p>
 <div class="card"><div class="qgrid">
-<div class="qcard"><span class="q-num">01 · Last page wins</span><span class="q-text">You visited Google → Wiki → YouTube and pressed Back — why did you get YouTube, not Google?</span></div>
-<div class="qcard"><span class="q-num">02 · Two backs</span><span class="q-text">You visited A → B → C → D, then pressed Back twice. What page shows now and what remains hidden?</span></div>
-<div class="qcard"><span class="q-num">03 · Peek vs Back</span><span class="q-text">Both show the top — but one changes history and one doesn't. When would you want each?</span></div>
-<div class="qcard"><span class="q-num">04 · LIFO everywhere</span><span class="q-text">Where else does “last in, first out” feel right — undo, call stack, plate pile? Why would a queue be wrong there?</span></div>
-<div class="qcard"><span class="q-num">05 · Cost of bottom</span><span class="q-text">Why is Back instant O(1) while reaching the bottom page takes 4 pops O(n)?</span></div>
+<div class="qcard"><span class="q-num">01 · The newest page</span><span class="q-text">You went Google → Wiki → YouTube, then pressed Back. You got YouTube, not Google. Why?</span></div>
+<div class="qcard"><span class="q-num">02 · Two steps back</span><span class="q-text">You went A → B → C → D, then pressed Back twice. Which page are you on?</span></div>
+<div class="qcard"><span class="q-num">03 · One step forward</span><span class="q-text">After pressing Back once, a Forward arrow appears. Which page do you think it brings back?</span></div>
+<div class="qcard"><span class="q-num">04 · Same feeling</span><span class="q-text">Where else does “the newest thing comes undone first” feel right — fixing a typo, a pile of plates?</span></div>
+<div class="qcard"><span class="q-num">05 · Going deeper</span><span class="q-text">Why does going back one step feel instant, but a page 10 visits ago takes 10 presses?</span></div>
+<div class="qcard"><span class="q-num">06 · Pile of coal</span><span class="q-text">Coal is heaped up, with newer loads on top. A shovel takes from the top. Is the coal used first the newest or the oldest — and does that feel like Back?</span></div>
+<div class="qcard"><span class="q-num">07 · The printer queue</span><span class="q-text">Three people send documents to one printer: you, then someone else. Should your later job print before theirs? Why not?</span></div>
 </div>
 <div class="section-nav"><button class="btn ghost" id="btn-notes-back">⬅ Back</button><button class="btn" id="btn-notes-continue">Continue to The Method ➜</button></div></div>
 </section>
@@ -186,7 +189,7 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;
 <div class="key-learnings"><h3>🔑 Key Learnings</h3><div class="kl-grid">
 <div class="kl-item"><span class="kl-icon">🥞</span><div><b>The Shape</b><p>Only the top is reachable. That constraint is the whole power — and the limit.</p></div></div>
 <div class="kl-item"><span class="kl-icon">⚡</span><div><b>O(1) Top</b><p>Push, pop, peek never scan — they touch top only.</p></div></div>
-<div class="kl-item"><span class="kl-icon">↩️</span><div><b>Where You'll See It</b><p>Browser Back, Ctrl+Z, call stack, plate pile — all want last action first.</p></div></div>
+<div class="kl-item"><span class="kl-icon">↩️</span><div><b>Where You'll See It</b><p>Browser Back, Undo, function calls, plate piles, coal heaps — all want the newest thing first. Printer jobs, grocery shelves and checkout lines expect the oldest first.</p></div></div>
 </div></div>
 </div>
 <div class="section-nav"><button class="btn ghost" id="btn-method-back">⬅ Back</button><button class="btn" id="btn-method-continue">Continue to New Cases ➜</button></div>
@@ -195,13 +198,16 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;
 <section class="section" id="sec-cases">
 <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 6 · New Cases</span>
 <h2 class="section-title">Try on your own</h2>
-<p class="section-sub">Trace the stack in your head.</p>
+<p class="section-sub">Trace the steps in your head.</p>
 <div class="card"><div class="qgrid">
-<div class="qcard"><span class="q-num">01 · Mixed visit</span><span class="q-text">Visit A → B → C → Back → Visit D → Back. What page shows? Trace top after each step.</span></div>
-<div class="qcard"><span class="q-num">02 · Typo</span><span class="q-text">Type H → E → L → L → O, then undo 3 times. What text remains?</span></div>
-<div class="qcard"><span class="q-num">03 · Stack vs Queue</span><span class="q-text">If undo were FIFO and you typed HELLO then undid once, what would remain? Why wrong?</span></div>
-<div class="qcard"><span class="q-num">04 · Empty Back</span><span class="q-text">History empty, user hits Back — what should happen? What is this called?</span></div>
-<div class="qcard"><span class="q-num">05 · Build it</span><span class="q-text">From empty, how would you end with history [Google, Docs] using only Visit and Back?</span></div>
+<div class="qcard"><span class="q-num">01 · Mixed visit</span><span class="q-text">Visit A → B → C, press Back, visit D, press Back. Which page are you on?</span></div>
+<div class="qcard"><span class="q-num">02 · Typo</span><span class="q-text">Type H-E-L-L-O, then press Undo three times. Which letters are left?</span></div>
+<div class="qcard"><span class="q-num">03 · A wrong undo</span><span class="q-text">Suppose Undo erased the oldest letter first. You typed HELLO and undid once. What remains — and why is that confusing?</span></div>
+<div class="qcard"><span class="q-num">04 · Fresh start</span><span class="q-text">You open a fresh browser and press Back before visiting anything. What should the app do?</span></div>
+<div class="qcard"><span class="q-num">05 · Build it</span><span class="q-text">Start empty. You want Docs on top with Google just below it. Which two presses?</span></div>
+<div class="qcard"><span class="q-num">06 · Same or different</span><span class="q-text">Undo fixes your latest typo first. Printer jobs print in order received. Which one matches Back, and which one is its opposite?</span></div>
+<div class="qcard"><span class="q-num">07 · Stacked shelf</span><span class="q-text">Boxes are piled: shoes, then hats, then socks on top. Which box comes off first? Which one sits at the bottom?</span></div>
+<div class="qcard"><span class="q-num">08 · Milk shelf</span><span class="q-text">A shop sells old milk before new milk so nothing spoils. If it sold the newest first, what happens to the old bottles?</span></div>
 </div>
 <div class="section-nav"><button class="btn ghost" id="btn-cases-back">⬅ Back</button><button class="btn" id="btn-cases-home">🏠 Back to CSE Concept Laboratory</button><button class="btn" id="btn-cases-finish">Restart ↻</button></div></div>
 </section>
@@ -227,11 +233,11 @@ document.getElementById('btn-cases-back').addEventListener('click',()=>showSecti
 document.getElementById('btn-cases-home').addEventListener('click',()=>window.location.href='../../');
 document.getElementById('btn-cases-finish').addEventListener('click',()=>{reset();showSection('sec-puzzle');});
 var pages=[
-{url:'google.com/search?q=assignment',title:'Google — Search',desc:'Results for "stack vs queue"...',icon:'🔍'},
-{url:'en.wikipedia.org/wiki/Stack',title:'Wikipedia — Stack',desc:'A stack is LIFO...',icon:'📖'},
-{url:'youtube.com/watch?v=backstack',title:'YouTube — How Back Works',desc:'1.2M views',icon:'▶️'},
+{url:'google.com/search?q=assignment',title:'Google — Search',desc:'Results for "easy pasta recipe"...',icon:'🔍'},
+{url:'en.wikipedia.org/wiki/Railways',title:'Wikipedia — Article',desc:'Railway history • intro section',icon:'📖'},
+{url:'youtube.com/watch?v=lofi',title:'YouTube — Music',desc:'Lo-fi beats • 1.2M views',icon:'▶️'},
 {url:'docs.google.com/assignment',title:'Google Docs — Assignment',desc:'Your draft — edited 2 min ago',icon:'📄'},
-{url:'reddit.com/r/coding',title:'Reddit — r/coding',desc:'Why is undo a stack? 342 comments',icon:'💬'},
+{url:'reddit.com/r/food',title:'Reddit — r/food',desc:'Homemade biryani • 342 upvotes',icon:'💬'},
 {url:'github.com/code',title:'GitHub — Code',desc:'Repo • 3 commits ahead',icon:'💻'}
 ];
 var stack=[],forward=[],ops=0,pIdx=0;
@@ -245,14 +251,14 @@ document.getElementById('page-desc').textContent=stack.length?stack[stack.length
 document.getElementById('btn-back').disabled=stack.length===0;
 document.getElementById('btn-forward').disabled=forward.length===0;
 var h=document.getElementById('history');h.innerHTML='';
-if(!stack.length){h.innerHTML='<div class="history-empty">Empty — visit a page to build history.</div>';return;}
+if(!stack.length){h.innerHTML='<div class="history-empty">Empty — visit a page to start your pile.</div>';return;}
 for(var i=stack.length-1;i>=0;i--){
 var it=stack[i];var d=document.createElement('div');d.className='hist-item'+(i===stack.length-1?' top':'');
 d.innerHTML='<span>'+it.icon+' '+it.title+'</span><span class="sub">'+(i===stack.length-1?'TOP':'')+'</span>';
 h.appendChild(d);
 }}
 function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800);}
-var challengeOn=false, challengeDone=false, challengeNeed=0, challengeTarget='', challengeTotalOps=0;
+var challengeOn=false, challengeDone=false, challengeNeed=0, challengeBacks=0, challengeTarget='', challengeTotalOps=0;
 function checkChallenge(){
 if(!challengeOn || challengeDone) return;
 var s=document.getElementById('challenge-status');
@@ -260,13 +266,16 @@ var topIsTarget = stack.length>0 && stack[stack.length-1].title===challengeTarge
 if(stack.length===challengeNeed && topIsTarget && ops===challengeTotalOps){
   s.textContent='✓ Done!'; s.style.color='var(--success)';
   challengeDone=true;
-  toast('🎉 Challenge cleared — LIFO works!');
+  var done=document.getElementById('mission-done');
+  done.style.display='block';
+  done.textContent='✅ Mission Completed! You went back through '+challengeBacks+' page'+(challengeBacks>1?'s':'')+' to '+challengeTarget.split(' —')[0]+'.';
+  toast('🎉 Mission completed!');
   confetti();
-  document.getElementById('game-hint').textContent='🎉 You did it — '+challengeTarget+' on top after '+challengeTotalOps+' ops! Try Next Challenge →';
+  document.getElementById('game-hint').textContent='🎉 You did it — '+challengeTarget.split(' —')[0]+' is on top again! Try the next challenge →';
   document.getElementById('btn-challenge').textContent='🔁 Next Challenge';
   return;
 }
-if(stack.length < challengeNeed && ops>=challengeTotalOps){ s.textContent='✗ Too many backs — reset'; s.style.color='var(--danger)';}
+if(stack.length < challengeNeed && ops>=challengeTotalOps){ s.textContent='✗ Too many Backs — Reset and try again'; s.style.color='var(--danger)';}
 }
 function confetti(){
 var t=document.getElementById('toast'); t.style.background='var(--success)'; setTimeout(()=>t.style.background='#22496B',1800);
@@ -290,10 +299,12 @@ var needPushes = 5 + Math.floor(Math.random()*3); // 5,6,7
 var needBacks = 1 + Math.floor(Math.random()*3); // 1,2,3
 if(needBacks >= needPushes) needBacks = needPushes - 1;
 challengeNeed = needPushes - needBacks;
+challengeBacks = needBacks;
 challengeTotalOps = needPushes + needBacks;
 var seq=[]; for(var i=0;i<needPushes;i++) seq.push(pages[i % pages.length].title);
 challengeTarget = seq[seq.length - 1 - needBacks];
 challengeOn=true; challengeDone=false;
+document.getElementById('mission-done').style.display='none';
 document.getElementById('challenge-banner').style.display='block';
 document.getElementById('challenge-mission').innerHTML='Visit '+needPushes+' pages, then get back to <b>'+challengeTarget.split(' —')[0]+'</b> in exactly '+needBacks+' Backs';
 document.getElementById('challenge-status').textContent='— visit '+needPushes+', then '+needBacks+' Backs to '+challengeTarget.split(' —')[0];
@@ -302,10 +313,10 @@ document.getElementById('game-hint').textContent='Challenge ON — Visit '+needP
 document.getElementById('btn-challenge').textContent='🎯 Challenge: '+needBacks+' Backs to '+challengeTarget.split(' —')[0];
 toast('🎯 Visit '+needPushes+' → '+needBacks+' Backs to '+challengeTarget.split(' —')[0]);
 });
-function doVisit(){var pg=pages[pIdx%pages.length];pIdx++;stack.push(pg);forward=[];ops++;render();document.getElementById('game-hint').textContent='Visited '+pg.title+' — pushed on top.';checkChallenge();}
-function doBack(){if(!stack.length){toast('Underflow — empty history');return;}var v=stack.pop();forward.push(v);ops++;render();document.getElementById('game-hint').textContent='Back ← popped '+v.title+' — LIFO.';checkChallenge();}
-function doForward(){if(!forward.length){toast('No forward history');return;}var v=forward.pop();stack.push(v);ops++;render();}
-function reset(){stack=[];forward=[];ops=0;pIdx=0; challengeOn=false; challengeDone=false; document.getElementById('challenge-banner').style.display='none'; render();document.getElementById('game-hint').textContent='Visit a page to push it. Back pops the top — LIFO.';}
+function doVisit(){var pg=pages[pIdx%pages.length];pIdx++;stack.push(pg);forward=[];ops++;render();document.getElementById('game-hint').textContent='Visited '+pg.title+' — placed on top of your pile.';checkChallenge();}
+function doBack(){if(!stack.length){toast('Nothing to go back to yet');return;}var v=stack.pop();forward.push(v);ops++;render();document.getElementById('game-hint').textContent='Back → removed '+v.title+' from the top of your pile.';checkChallenge();}
+function doForward(){if(!forward.length){toast('No pages ahead');return;}var v=forward.pop();stack.push(v);ops++;render();}
+function reset(){stack=[];forward=[];ops=0;pIdx=0; challengeOn=false; challengeDone=false; challengeBacks=0; document.getElementById('mission-done').style.display='none'; document.getElementById('challenge-banner').style.display='none'; render();document.getElementById('game-hint').textContent='Visit a page to place it on top. Back removes the top page — the one you just saw.';}
 document.getElementById('btn-visit').addEventListener('click',doVisit);
 document.getElementById('btn-pop').addEventListener('click',doBack);
 document.getElementById('btn-back').addEventListener('click',doBack);
