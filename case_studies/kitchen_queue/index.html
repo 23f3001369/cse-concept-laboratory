@@ -73,6 +73,8 @@ h1,h2{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;mar
 .compare-title{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
 .compare-sub{font-size:12.5px;color:var(--faint);margin-top:4px}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#22496B;color:#fff;font-weight:600;padding:12px 20px;border-radius:999px;opacity:0;pointer-events:none;transition:.3s;z-index:90} .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.pulse{animation:ctaPulse 1.8s ease-in-out infinite}
+@keyframes ctaPulse{0%,100%{transform:translateY(0);box-shadow:0 0 0 0 rgba(74,155,209,.45)}50%{transform:translateY(-2px);box-shadow:0 0 0 10px rgba(74,155,209,0)}}
 </style>
 </head>
 <body>
@@ -122,7 +124,7 @@ h1,h2{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;mar
 <p class="section-sub">New orders join the back. Serve always from the front — first come, first served.</p>
 <div class="game-shell">
 <div style="display:flex;gap:12px;justify-content:center" class="stats">
-<span class="stat">In queue: <strong id="q-size">0</strong></span><span class="stat">Served: <strong id="q-ops">0</strong></span><span class="stat">Front: <strong id="q-front">—</strong></span><span class="stat">Rear: <strong id="q-rear">—</strong></span>
+<span class="stat">In queue: <strong id="q-size">0</strong></span><span class="stat">Served: <strong id="q-ops">0</strong></span><span class="stat">Front: <strong id="q-front">—</strong></span><span class="stat">Rear: <strong id="q-rear">—</strong></span><span class="stat">Mode: <strong id="q-mode">Manual</strong></span>
 </div>
 <div class="kitchen">
 <div class="kitchen-head"><span>🍳 Kitchen Rail — left = next to cook</span><span class="sub" id="kitchen-sub">Empty — new order will be rear</span></div>
@@ -139,7 +141,7 @@ h1,h2{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;mar
 <div id="challenge-banner" style="display:none;margin-top:12px;padding:12px 16px;border-radius:12px;background:#FFF3E6;border:1.5px solid var(--amber);text-align:center;font-size:13px">
 <span style="font-weight:800;color:var(--amber-dark)">🎯 Mission:</span> <span id="challenge-mission" style="color:var(--ink)">Add 4 orders, then <b>serve from the front 4 times</b> in order to keep <span id="stars">★★★★★</span></span> <span id="challenge-status" style="font-weight:700;color:var(--muted)">— not started</span>
 </div>
-<p style="text-align:center;margin-top:12px;font-size:13px;color:var(--primary-deep);background:rgba(74,155,209,.08);border:1px dashed var(--glass-border);border-radius:10px;padding:10px 14px" id="game-hint">New orders join the back. Serve always from the front — first come, first served.</p>
+<p style="text-align:center;margin-top:12px;font-size:13px;color:var(--primary-deep);background:rgba(74,155,209,.08);border:1px dashed var(--glass-border);border-radius:10px;padding:10px 14px" id="game-hint">Start: press + New Order to put the first order at the back of the line.</p>
 </div>
 <div class="section-nav"><button class="btn ghost" id="btn-search-back">⬅ Back to Briefing</button><button class="btn" id="btn-search-continue">Continue to Case Notes ➜</button></div>
 </section>
@@ -211,8 +213,8 @@ function setStep(n){for(let i=1;i<=6;i++){const el=document.getElementById('step
 function showSection(id){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active-view'));document.getElementById(id).classList.add('active-view');setStep(STEP_FOR[id]||1);window.scrollTo({top:0,behavior:'smooth'});}
 document.getElementById('btn-puzzle-continue').addEventListener('click',()=>showSection('sec-briefing'));
 document.getElementById('btn-briefing-back').addEventListener('click',()=>showSection('sec-puzzle'));
-document.getElementById('btn-briefing-start').addEventListener('click',()=>showSection('sec-search'));
-document.getElementById('btn-search-back').addEventListener('click',()=>showSection('sec-briefing'));
+document.getElementById('btn-briefing-start').addEventListener('click',()=>{showSection('sec-search');document.getElementById('game-hint').textContent='Start: press + New Order to put the first order at the back of the line.';});
+document.getElementById('btn-search-back').addEventListener('click',()=>{if(confirm('Going back will reset your current progress. Do you want to continue?')){if(mode==='auto')stopAuto();resetQ();showSection('sec-briefing');}});
 document.getElementById('btn-search-continue').addEventListener('click',()=>showSection('sec-notes'));
 document.getElementById('btn-notes-back').addEventListener('click',()=>showSection('sec-search'));
 document.getElementById('btn-notes-continue').addEventListener('click',()=>showSection('sec-method'));
@@ -228,7 +230,7 @@ var orders=[
 {emoji:'🍔',name:'Burger',time:'8:05'},
 {emoji:'🍜',name:'Noodles',time:'8:07'}
 ];
-var queue=[],ops=0,idx=0;
+var queue=[],ops=0,idx=0,mode='manual',autoTimer=null,autoStepIdx=0;
 var rail=document.getElementById('rail');
 function renderQ(){
 document.getElementById('q-size').textContent=queue.length;
@@ -237,7 +239,7 @@ document.getElementById('q-front').textContent=queue.length?queue[0].name:'—';
 document.getElementById('q-rear').textContent=queue.length?queue[queue.length-1].name:'—';
 document.getElementById('kitchen-sub').textContent=queue.length?('Front: '+queue[0].name+' • Rear: '+queue[queue.length-1].name):'Empty — new order will be rear';
 rail.innerHTML='';
-if(!queue.length){rail.innerHTML='<span style="color:var(--faint);margin:auto">No orders — click + New Order</span>';return;}
+if(!queue.length){rail.innerHTML='<span style="color:var(--faint);margin:auto">No orders — click + New Order</span>';document.getElementById('btn-enq').classList.toggle('pulse',!challengeOn&&mode!=='auto');return;}
 queue.forEach(function(o,i){
 var d=document.createElement('div');d.className='ticket'+(i===0?' front':'');
 d.innerHTML='<span class="badge '+(i===0?'front-badge':(i===queue.length-1?'rear-badge':''))+'" style="'+(i!==0&&i!==queue.length-1?'display:none':'')+'">'+(i===0?'FRONT':(i===queue.length-1?'REAR':''))+'</span><div class="emoji">'+o.emoji+'</div><div class="name">'+o.name+'</div><div class="time">'+o.time+'</div>';
@@ -279,19 +281,43 @@ checkChallenge(true);
 });
 function doEnq(){var o=orders[idx%orders.length];idx++;queue.push(o);ops++;renderQ();document.getElementById('game-hint').textContent=o.name+' joins the back of the line. Front is still '+queue[0].name+'.'; if(challengeOn && queue.length===4 && idx===4) document.getElementById('challenge-status').textContent='— now serve from the front 4×';}
 function doDeq(){if(!queue.length){toast('No orders to serve');return;}var o=queue.shift();ops++;renderQ();document.getElementById('game-hint').textContent='Served '+o.name+' from the front — first come, first served.'; checkChallenge(false);}
-function resetQ(){queue=[];ops=0;idx=0; challengeOn=false; challengeDone=false; updateStars(5); document.getElementById('challenge-banner').style.display='none'; renderQ();document.getElementById('game-hint').textContent='New orders join the back. Serve always from the front — first come, first served.';}
+function resetQ(){queue=[];ops=0;idx=0; challengeOn=false; challengeDone=false; updateStars(5); document.getElementById('challenge-banner').style.display='none'; renderQ();document.getElementById('game-hint').textContent='Start: press + New Order to put the first order at the back of the line. Serve always from the front — first come, first served.';}
 document.getElementById('btn-enq').addEventListener('click',doEnq);
 document.getElementById('btn-deq').addEventListener('click',doDeq);
 document.getElementById('btn-reset').addEventListener('click',resetQ);
-document.getElementById('btn-auto').addEventListener('click',function(){
+function startAuto(){
+mode='auto';autoStepIdx=0;
+document.getElementById('btn-auto').textContent='⏸ Stop Auto';
+document.getElementById('btn-enq').disabled=true;
+document.getElementById('btn-deq').disabled=true;
+document.getElementById('btn-cheat').disabled=true;
+document.getElementById('btn-challenge').disabled=true;
+document.getElementById('q-mode').textContent='Automatic';
+document.getElementById('game-hint').textContent='Automatic Mode — watch orders served first come, first served. Press ⏸ Stop Auto to take over.';
 resetQ();
-var seq=[orders[0],orders[1],orders[2],orders[3]],i=0;
-function enqStep(){if(i<seq.length){queue.push(seq[i]);ops++;renderQ();i++;setTimeout(enqStep,500);}else{
-setTimeout(()=>{var j=0;function deqStep(){if(j<4){var o=queue.shift();ops++;renderQ();j++;setTimeout(deqStep,500);}}deqStep();},600);
-}}
-enqStep();
-});
-setStep(1);renderQ();
+autoTimer=setInterval(autoTick,1100);
+}
+function stopAuto(){
+clearInterval(autoTimer);mode='manual';
+document.getElementById('btn-auto').textContent='▶ Auto Mode';
+document.getElementById('btn-enq').disabled=false;
+document.getElementById('btn-deq').disabled=false;
+document.getElementById('btn-cheat').disabled=false;
+document.getElementById('btn-challenge').disabled=false;
+document.getElementById('q-mode').textContent='Manual';
+document.getElementById('game-hint').textContent='Manual Mode — press + New Order and ✓ Serve Front at your own pace.';
+renderQ();
+}
+function autoTick(){
+if(mode!=='auto')return;
+if(autoStepIdx===0)resetQ();
+if(autoStepIdx<4){var o=orders[autoStepIdx%orders.length];queue.push(o);ops++;document.getElementById('game-hint').textContent='Auto · + '+o.name+' joins the back of the line.';}
+else{var o2=queue.shift();ops++;document.getElementById('game-hint').textContent='Auto · served '+o2.name+' — first come, first served.';}
+renderQ();
+autoStepIdx=(autoStepIdx+1)%8;
+}
+document.getElementById('btn-auto').addEventListener('click',function(){if(mode==='auto'){stopAuto();}else{startAuto();}});
+setStep(1);renderQ();document.getElementById('game-hint').textContent='Start: press + New Order to put the first order at the back of the line.';
 })();
 </script>
 </body>

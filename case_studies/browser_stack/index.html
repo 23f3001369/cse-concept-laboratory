@@ -76,6 +76,8 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;
 .compare-title{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
 .compare-sub{font-size:12.5px;color:var(--faint);margin-top:4px}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#22496B;color:#fff;font-weight:600;padding:12px 20px;border-radius:999px;opacity:0;pointer-events:none;transition:.3s;z-index:90} .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.pulse{animation:ctaPulse 1.8s ease-in-out infinite}
+@keyframes ctaPulse{0%,100%{transform:translateY(0);box-shadow:0 0 0 0 rgba(74,155,209,.45)}50%{transform:translateY(-2px);box-shadow:0 0 0 10px rgba(74,155,209,0)}}
 </style>
 </head>
 <body>
@@ -128,7 +130,7 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;
 <p class="section-sub">Click <b>Visit</b> to add a page, <b>Back</b> to remove it — the page you saw last is the first one you return to.</p>
 <div class="game-shell">
 <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap" class="stats">
-<span class="stat">Pages: <strong id="s-size">0</strong></span><span class="stat">Back ops: <strong id="s-ops">0</strong></span><span class="stat">Current: <strong id="s-top">—</strong></span>
+<span class="stat">Pages: <strong id="s-size">0</strong></span><span class="stat">Back ops: <strong id="s-ops">0</strong></span><span class="stat">Current: <strong id="s-top">—</strong></span><span class="stat">Mode: <strong id="s-mode">Manual</strong></span>
 </div>
 <div class="browser">
 <div class="browser-bar">
@@ -150,7 +152,7 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;
 <div id="mission-done" style="display:none;margin-top:12px;padding:12px 14px;border-radius:10px;background:rgba(75,122,74,.12);border:1.5px solid var(--success);font-weight:800;color:var(--success);font-size:14px">✅ Mission Completed</div>
 </div>
 <div style="text-align:center;margin-top:10px"><div style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Your Visit Pile — top is current page</div><div class="history" id="history"></div></div>
-<p style="text-align:center;margin-top:12px;font-size:13px;color:var(--primary-deep);background:rgba(74,155,209,.08);border:1px dashed var(--glass-border);border-radius:10px;padding:10px 14px" id="game-hint">Visit a page to place it on top. Back removes the top page — the one you just saw.</p>
+<p style="text-align:center;margin-top:12px;font-size:13px;color:var(--primary-deep);background:rgba(74,155,209,.08);border:1px dashed var(--glass-border);border-radius:10px;padding:10px 14px" id="game-hint">Start: press + Visit Page to place your first page on top. Back removes the top page — the one you just saw.</p>
 </div>
 <div class="section-nav"><button class="btn ghost" id="btn-search-back">⬅ Back to Briefing</button><button class="btn" id="btn-search-continue">Continue to Case Notes ➜</button></div>
 </section>
@@ -222,8 +224,8 @@ function setStep(n){for(let i=1;i<=6;i++){const el=document.getElementById('step
 function showSection(id){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active-view'));document.getElementById(id).classList.add('active-view');setStep(STEP_FOR[id]||1);window.scrollTo({top:0,behavior:'smooth'});}
 document.getElementById('btn-puzzle-continue').addEventListener('click',()=>showSection('sec-briefing'));
 document.getElementById('btn-briefing-back').addEventListener('click',()=>showSection('sec-puzzle'));
-document.getElementById('btn-briefing-start').addEventListener('click',()=>showSection('sec-search'));
-document.getElementById('btn-search-back').addEventListener('click',()=>showSection('sec-briefing'));
+document.getElementById('btn-briefing-start').addEventListener('click',()=>{showSection('sec-search');document.getElementById('game-hint').textContent='Start: press + Visit Page to place your first page on top.';});
+document.getElementById('btn-search-back').addEventListener('click',()=>{if(confirm('Going back will reset your current progress. Do you want to continue?')){if(mode==='auto')stopAuto();reset();showSection('sec-briefing');}});
 document.getElementById('btn-search-continue').addEventListener('click',()=>showSection('sec-notes'));
 document.getElementById('btn-notes-back').addEventListener('click',()=>showSection('sec-search'));
 document.getElementById('btn-notes-continue').addEventListener('click',()=>showSection('sec-method'));
@@ -240,7 +242,7 @@ var pages=[
 {url:'reddit.com/r/food',title:'Reddit — r/food',desc:'Homemade biryani • 342 upvotes',icon:'💬'},
 {url:'github.com/code',title:'GitHub — Code',desc:'Repo • 3 commits ahead',icon:'💻'}
 ];
-var stack=[],forward=[],ops=0,pIdx=0;
+var stack=[],forward=[],ops=0,pIdx=0,mode='manual',autoTimer=null,autoStepIdx=0;
 function render(){
 document.getElementById('s-size').textContent=stack.length;
 document.getElementById('s-ops').textContent=ops;
@@ -250,6 +252,7 @@ document.getElementById('page-title').textContent=stack.length?stack[stack.lengt
 document.getElementById('page-desc').textContent=stack.length?stack[stack.length-1].desc:'Click Visit to start surfing.';
 document.getElementById('btn-back').disabled=stack.length===0;
 document.getElementById('btn-forward').disabled=forward.length===0;
+document.getElementById('btn-visit').classList.toggle('pulse',stack.length===0&&!challengeOn&&mode!=='auto');
 var h=document.getElementById('history');h.innerHTML='';
 if(!stack.length){h.innerHTML='<div class="history-empty">Empty — visit a page to start your pile.</div>';return;}
 for(var i=stack.length-1;i>=0;i--){
@@ -316,21 +319,45 @@ toast('🎯 Visit '+needPushes+' → '+needBacks+' Backs to '+challengeTarget.sp
 function doVisit(){var pg=pages[pIdx%pages.length];pIdx++;stack.push(pg);forward=[];ops++;render();document.getElementById('game-hint').textContent='Visited '+pg.title+' — placed on top of your pile.';checkChallenge();}
 function doBack(){if(!stack.length){toast('Nothing to go back to yet');return;}var v=stack.pop();forward.push(v);ops++;render();document.getElementById('game-hint').textContent='Back → removed '+v.title+' from the top of your pile.';checkChallenge();}
 function doForward(){if(!forward.length){toast('No pages ahead');return;}var v=forward.pop();stack.push(v);ops++;render();}
-function reset(){stack=[];forward=[];ops=0;pIdx=0; challengeOn=false; challengeDone=false; challengeBacks=0; document.getElementById('mission-done').style.display='none'; document.getElementById('challenge-banner').style.display='none'; render();document.getElementById('game-hint').textContent='Visit a page to place it on top. Back removes the top page — the one you just saw.';}
+function reset(){stack=[];forward=[];ops=0;pIdx=0; challengeOn=false; challengeDone=false; challengeBacks=0; document.getElementById('mission-done').style.display='none'; document.getElementById('challenge-banner').style.display='none'; render();document.getElementById('game-hint').textContent='Start: press + Visit Page to place your first page on top. Back removes the top page — the one you just saw.';}
 document.getElementById('btn-visit').addEventListener('click',doVisit);
 document.getElementById('btn-pop').addEventListener('click',doBack);
 document.getElementById('btn-back').addEventListener('click',doBack);
 document.getElementById('btn-forward').addEventListener('click',doForward);
 document.getElementById('btn-reset').addEventListener('click',reset);
-document.getElementById('btn-auto').addEventListener('click',function(){
+function startAuto(){
+mode='auto';autoStepIdx=0;
+document.getElementById('btn-auto').textContent='⏸ Stop Auto';
+document.getElementById('btn-visit').disabled=true;
+document.getElementById('btn-pop').disabled=true;
+document.getElementById('btn-back').disabled=true;
+document.getElementById('btn-challenge').disabled=true;
+document.getElementById('s-mode').textContent='Automatic';
+document.getElementById('game-hint').textContent='Automatic Mode — watch the browser go back to the page it saw last. Press ⏸ Stop Auto to grab the controls.';
 reset();
-var seq=[pages[0],pages[1],pages[2],pages[3]],i=0;
-function pushStep(){if(i<seq.length){stack.push(seq[i]);ops++;render();i++;setTimeout(pushStep,600);}else{
-setTimeout(()=>{var j=0;function popStep(){if(j<4){var v=stack.pop();forward.push(v);ops++;render();j++;setTimeout(popStep,600);}}popStep();},500);
-}}
-pushStep();
-});
-setStep(1);render();
+autoTimer=setInterval(autoTick,1100);
+}
+function stopAuto(){
+clearInterval(autoTimer);mode='manual';
+document.getElementById('btn-auto').textContent='▶ Auto Mode';
+document.getElementById('btn-visit').disabled=false;
+document.getElementById('btn-pop').disabled=false;
+document.getElementById('btn-back').disabled=false;
+document.getElementById('btn-challenge').disabled=false;
+document.getElementById('s-mode').textContent='Manual';
+document.getElementById('game-hint').textContent='Manual Mode — press + Visit Page, then ← Back, at your own pace.';
+render();
+}
+function autoTick(){
+if(mode!=='auto')return;
+if(autoStepIdx===0)reset();
+if(autoStepIdx<4){var pg=pages[autoStepIdx%pages.length];stack.push(pg);ops++;document.getElementById('game-hint').textContent='Auto · visited '+pg.title.split(' —')[0]+' → now on top. Back would remove it.';}
+else{var v=stack.pop();forward.push(v);ops++;document.getElementById('game-hint').textContent='Auto · Back → returning to '+v.title.split(' —')[0]+', the page seen just before it.';}
+render();
+autoStepIdx=(autoStepIdx+1)%8;
+}
+document.getElementById('btn-auto').addEventListener('click',function(){if(mode==='auto'){stopAuto();}else{startAuto();}});
+setStep(1);render();document.getElementById('game-hint').textContent='Start: press + Visit Page to place your first page on top.';
 })();
 </script>
 </body>
