@@ -33,6 +33,7 @@ h1,h2{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;mar
 .btn.secondary{background:#fff;color:var(--primary-dark);border:1.5px solid var(--primary);box-shadow:none}
 .btn.ghost{background:transparent;color:var(--primary-dark);box-shadow:none;border:1.5px solid var(--primary);padding:10px 16px}
 .btn.small{padding:9px 18px;font-size:13px}
+.btn.on{box-shadow:0 0 0 3px var(--primary-deep);background:rgba(74,155,209,.12)}
 .section-nav{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:26px}
 .problem-card{text-align:left;max-width:680px;margin:20px auto 0}.problem-card p{margin:0 0 14px;font-size:15.5px}.problem-card b{color:var(--primary-deep)}
 .rules-list{list-style:none;margin:20px auto 0;padding:0;max-width:560px;display:flex;flex-direction:column;gap:8px}
@@ -138,6 +139,19 @@ h1,h2{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;mar
 <button class="btn small" id="btn-challenge" style="background:var(--amber);color:#fff;border-color:var(--amber)">🎯 Challenge: Keep ★★★★★</button>
 <button class="btn ghost small" id="btn-cheat" title="Try serving the last order first — watch what happens">⚠️ Cheat: Skip the Line</button>
 </div>
+<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:6px;align-items:center">
+<span style="font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)">Speed</span>
+<select id="speed-select" title="Playback speed" style="padding:7px 10px;border:1.5px solid var(--primary);border-radius:8px;background:var(--card-bg);color:var(--primary-dark);font-weight:800;font-size:12.5px;cursor:pointer">
+<option value="0.25">0.25x</option>
+<option value="0.5">0.5x</option>
+<option value="0.75">0.75x</option>
+<option value="1" selected>1x</option>
+<option value="1.25">1.25x</option>
+<option value="1.5">1.5x</option>
+<option value="1.75">1.75x</option>
+<option value="2">2x</option>
+</select>
+</div>
 <div id="challenge-banner" style="display:none;margin-top:12px;padding:12px 16px;border-radius:12px;background:#FFF3E6;border:1.5px solid var(--amber);text-align:center;font-size:13px">
 <span style="font-weight:800;color:var(--amber-dark)">🎯 Mission:</span> <span id="challenge-mission" style="color:var(--ink)">Add 4 orders, then <b>serve from the front 4 times</b> in order to keep <span id="stars">★★★★★</span></span> <span id="challenge-status" style="font-weight:700;color:var(--muted)">— not started</span>
 </div>
@@ -230,7 +244,7 @@ var orders=[
 {emoji:'🍔',name:'Burger',time:'8:05'},
 {emoji:'🍜',name:'Noodles',time:'8:07'}
 ];
-var queue=[],ops=0,idx=0,mode='manual',autoTimer=null,autoStepIdx=0;
+var speed=1;var queue=[],ops=0,idx=0,mode='manual',autoTimer=null,autoStepIdx=0;
 var rail=document.getElementById('rail');
 function renderQ(){
 document.getElementById('q-size').textContent=queue.length;
@@ -295,7 +309,7 @@ document.getElementById('btn-challenge').disabled=true;
 document.getElementById('q-mode').textContent='Automatic';
 document.getElementById('game-hint').textContent='Automatic Mode — watch orders served first come, first served. Press ⏸ Stop Auto to take over.';
 resetQ();
-autoTimer=setInterval(autoTick,1100);
+autoTimer=setInterval(autoTick,1200/speed);
 }
 function stopAuto(){
 clearInterval(autoTimer);mode='manual';
@@ -315,8 +329,12 @@ if(autoStepIdx<4){var o=orders[autoStepIdx%orders.length];queue.push(o);ops++;do
 else{var o2=queue.shift();ops++;document.getElementById('game-hint').textContent='Auto · served '+o2.name+' — first come, first served.';}
 renderQ();
 autoStepIdx=(autoStepIdx+1)%8;
+if(autoStepIdx===0){stopAuto();return;}
 }
 document.getElementById('btn-auto').addEventListener('click',function(){if(mode==='auto'){stopAuto();}else{startAuto();}});
+function setSpeed(m){speed=Math.round(m*100)/100;if(mode==='auto'){clearInterval(autoTimer);autoTimer=setInterval(autoTick,1200/speed);}}
+document.getElementById('speed-select').addEventListener('change',function(){setSpeed(parseFloat(this.value));});
+document.getElementById('speed-select').value='1';setSpeed(1);
 setStep(1);renderQ();document.getElementById('game-hint').textContent='Start: press + New Order to put the first order at the back of the line.';
 })();
 </script>
