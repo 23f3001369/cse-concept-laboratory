@@ -497,6 +497,139 @@
             color: var(--faint)
         }
 
+        .how-to {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            text-align: center;
+            background: var(--card-bg);
+            border: 1.5px dashed var(--primary);
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 12.5px;
+            color: var(--muted)
+        }
+
+        .how-to b {
+            font-family: 'Poppins', sans-serif;
+            font-size: 11px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--primary-deep)
+        }
+
+        .how-to code {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            color: var(--primary-dark);
+            background: rgba(74, 155, 209, .1);
+            padding: 1px 6px;
+            border-radius: 6px;
+            font-size: 11.5px
+        }
+
+        .hold-status {
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary-deep);
+            background: rgba(255, 255, 255, .55);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 9px 12px
+        }
+
+        .mini-chain {
+            display: flex;
+            gap: 4px;
+            justify-content: center;
+            flex-wrap: wrap;
+            align-items: center;
+            margin: 16px auto 4px
+        }
+
+        .mini-note {
+            position: relative;
+            background: #fff;
+            border: 2px solid var(--glass-border);
+            border-radius: 9px;
+            padding: 11px 8px 6px;
+            width: 108px;
+            text-align: center
+        }
+
+        .mini-note b {
+            display: block;
+            font-family: 'Poppins', sans-serif;
+            font-size: 11px;
+            color: var(--ink);
+            line-height: 1.2
+        }
+
+        .mini-note span {
+            font-size: 9.5px;
+            color: var(--faint);
+            font-weight: 600
+        }
+
+        .mini-note.here {
+            border-color: var(--amber);
+            box-shadow: 0 0 0 3px rgba(234, 140, 54, .25)
+        }
+
+        .mini-note.tail-mini {
+            border-color: var(--amber-dark)
+        }
+
+        .mini-arrow {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--primary-dark);
+            flex-shrink: 0
+        }
+
+        .move-list {
+            list-style: none;
+            margin: 10px 0 0;
+            padding: 0;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 9px
+        }
+
+        .move-list li {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 11px;
+            padding: 10px 13px;
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.55
+        }
+
+        .move-list b {
+            color: var(--primary-deep)
+        }
+
+        .cost-legend {
+            display: inline-flex;
+            gap: 6px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 14px
+        }
+
+        .cost-chip {
+            font-size: 10.5px;
+            font-weight: 800;
+            color: var(--muted);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 999px;
+            padding: 3px 10px
+        }
+
         .toast {
             position: fixed;
             bottom: 24px;
@@ -736,20 +869,47 @@
                 <span class="eyebrow" style="display:inline-flex;margin:0 auto 12px;">Chapter 2 · The Briefing</span>
                 <h1>One Link at a Time</h1>
             </div>
-            <div class="card" style="text-align:center;max-width:640px;margin:0 auto">
-                <p style="margin-bottom:14px">Meera works only from the note she's currently holding. She can do
-                    exactly three things:</p>
-                <ul class="rules-list">
-                    <li><b>Move to the next note</b> — follow the line at the bottom of the note in your hand.</li>
-                    <li><b>Add a delivery</b> — clip a new note right after the one you're holding (2 lines get
-                        rewritten).</li>
-                    <li><b>Cancel the next stop</b> — unclip the note after yours; your note now points to the one
-                        after that (1 line rewritten).</li>
-                    <li class="ok">Walk the <b>whole chain, from the first note to the last</b>, add one delivery,
-                        cancel one stop — with <b>3 line rewrites or fewer</b>.</li>
-                    <li class="ok">The first note is the <b>Head</b>. The last note is the <b>Tail</b> — it points
-                        nowhere.</li>
+            <div class="card" style="text-align:center;max-width:680px;margin:0 auto">
+                <p style="color:var(--muted);font-size:14.5px">You hold <b style="color:var(--primary-deep)">one note
+                        at a time</b>. That note shows a drop, and at its bottom one line: <i>which note comes
+                        next</i>. Each note is only ever connected to the one after it — that is the whole route.</p>
+
+                <div class="mini-chain">
+                    <div class="mini-note here"><b>Sunrise Colony</b><span>in your hand 🛵</span></div>
+                    <span class="mini-arrow">➜</span>
+                    <div class="mini-note"><b>Hill View</b><span>points to next</span></div>
+                    <span class="mini-arrow">➜</span>
+                    <div class="mini-note tail-mini"><b>Dock End</b><span>TAIL · points nowhere</span></div>
+                </div>
+                <p style="font-size:12px;color:var(--faint);margin-top:2px">In the game, every white card works exactly
+                    like these — that's all there is to the route.</p>
+
+                <h4 style="font-family:'Poppins',sans-serif;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--primary-dark);margin:22px 0 2px">Your three moves</h4>
+                <ul class="move-list">
+                    <li><b>➡️ Move to the next note</b> — put down the note you hold, pick up the note it points to.
+                        Nothing changes; you just walk forward.</li>
+                    <li><b>➕ Add a delivery</b> — a new note clips in <i>right after</i> the one you hold. Two lines
+                        change: yours now points to the new note, and the new note points to whatever yours used to
+                        point to.</li>
+                    <li><b>✖ Cancel the next stop</b> — the note <i>directly after</i> the one you hold is taken out.
+                        One line changes: yours now skips straight past it.</li>
                 </ul>
+
+                <h4 style="font-family:'Poppins',sans-serif;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--primary-dark);margin:22px 0 2px">Your mission</h4>
+                <ul class="move-list">
+                    <li><b>1 · Walk the chain.</b> Start at the Head (first note) and keep moving until you reach the
+                        Tail (last note).</li>
+                    <li><b>2 · Add one delivery.</b> Press ➕ while stopped at any note.</li>
+                    <li><b>3 · Cancel one stop.</b> Press ✖ to drop the note right after yours.</li>
+                </ul>
+
+                <div class="cost-legend">
+                    <span class="cost-chip">Add = 2 rewrites</span><span class="cost-chip">Cancel = 1 rewrite</span><span
+                        class="cost-chip">Move = free</span>
+                </div>
+                <p style="font-size:14px;color:var(--primary-deep);font-weight:600;margin-top:10px">Do all three jobs
+                    with <b>3 rewrites or fewer</b>. Tap ▶ Auto Route in the game to watch Meera do one round for
+                    you first.</p>
             </div>
             <div class="section-nav"><button class="btn ghost" id="btn-briefing-back">⬅ Back</button><button class="btn"
                     id="btn-briefing-start">Start the Run ▶</button></div>
@@ -759,20 +919,30 @@
             <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 3
                 · The Run</span>
             <h2 class="section-title">Work the Chain</h2>
-            <p class="section-sub">Each note points only to the next one. Move, add, cancel — and reach the Tail.</p>
+            <p class="section-sub">Every card is one note: its name plus who it points to. Follow the arrows from the
+                Head, and use the buttons (or click the next note card) to do the three jobs.</p>
             <div class="game-shell">
                 <div class="stats">
                     <span class="stat">Stops: <strong id="s-stops">5</strong></span>
-                    <span class="stat">Line rewrites: <strong id="s-edits">0</strong>/3</span>
+                    <span class="stat">Rewrites used: <strong id="s-edits">0</strong>/3</span>
                     <span class="stat">Mode: <strong id="s-mode">Manual</strong></span>
                 </div>
-                <div class="route-head"><span>📋 The Route — Head ➜ Tail</span><span class="sub" id="route-sub">Start:
-                        press ➡️ Move Next to leave the Head.</span></div>
+                <div class="how-to">
+                    <b>How to play</b>
+                    <span>You hold the <b>🛵 "you are here"</b> note. Three buttons, three moves:</span>
+                    <span><code>➡️ Move</code> go to the note yours points to · <code>➕ Add</code> clip a new note
+                        right after yours · <code>✖ Cancel</code> remove the note right after yours</span>
+                    <span>Mission: <b>walk Head ➜ Tail + add 1 + cancel 1</b>, using 3 rewrites or fewer (Add = 2,
+                        Cancel = 1).</span>
+                </div>
+                <div class="route-head"><span>📋 The Route — Head ➜ Tail</span><span class="sub" id="route-sub">Each
+                        card shows its note and what it points to. Start: press ➡️ Move.</span></div>
                 <div class="route" id="route"></div>
+                <div class="hold-status" id="hold-status"></div>
                 <div class="section-nav" style="margin-top:14px">
-                    <button class="btn pulse" id="btn-next">➡️ Move Next</button>
-                    <button class="btn ghost small" id="btn-add">➕ Add Delivery</button>
-                    <button class="btn ghost small" id="btn-cut">✖ Cancel Next</button>
+                    <button class="btn pulse" id="btn-next">➡️ Move to Next Note</button>
+                    <button class="btn ghost small" id="btn-add">➕ Add Delivery After Me</button>
+                    <button class="btn ghost small" id="btn-cut">✖ Cancel Note After Me</button>
                 </div>
                 <div class="section-nav" style="margin-top:4px">
                     <button class="btn ghost small" id="btn-hint">💡 Hint</button>
@@ -795,8 +965,8 @@
                 <div id="mission-banner"
                     style="margin-top:14px;padding:14px 16px;border-radius:12px;background:#FFF3E6;border:1.5px solid var(--glass-border);text-align:center;font-size:13px">
                     <span style="font-weight:800;color:var(--amber-dark)">🎯 Mission:</span> <span id="mission-text"
-                        style="color:var(--ink)">Walk Head ➜ Tail, add 1 delivery, cancel 1 stop — with <b>3 line
-                            rewrites or fewer</b>.</span>
+                        style="color:var(--ink)">Walk Head ➜ Tail, add 1 delivery, cancel 1 stop — with <b>3 rewrites or
+                            fewer</b> (Add = 2, Cancel = 1).</span>
                     <span id="mission-status" style="font-weight:700;color:var(--muted)">— in progress</span>
                     <div style="margin-top:8px;font-size:12.5px;color:var(--muted)">
                         <span id="chk-walk">◻ Walk Head ➜ Tail</span> ·
@@ -1014,8 +1184,11 @@
                 document.getElementById('chk-add').textContent = (flags.ins ? '✔' : '◻') + ' Add 1 delivery';
                 document.getElementById('chk-cancel').textContent = (flags.del ? '✔' : '◻') + ' Cancel 1 stop';
                 document.getElementById('route-sub').textContent = (round <= 1)
-                    ? 'Start: press ➡️ Move Next to leave the Head.'
-                    : 'Press ➡️ Move Next to follow the line to the next note.';
+                    ? 'Each card shows its note and who it points to. Start: press ➡️ Move to leave the Head.'
+                    : 'Follow the arrows — you can only go to the note your card points at.';
+                var curName = route[cur];
+                var nxt = (cur < route.length - 1) ? route[cur + 1] : null;
+                document.getElementById('hold-status').textContent = '🛵 You are holding: "' + curName + '" (note ' + (cur + 1) + ' of ' + route.length + ')' + (nxt ? ' — it points to ➜ "' + nxt + '".' : ' — this is the Tail: it points nowhere.');
                 var r = document.getElementById('route'); r.innerHTML = '';
                 for (var i = 0; i < route.length; i++) {
                     (function (i) {
@@ -1047,7 +1220,7 @@
                 if (i === cur + 1) { doMove(); return; }
                 if (cur >= route.length - 1) { toast('This is the Tail — it points nowhere.'); return; }
                 toast('You can only move to the next note — no jumping ahead!');
-                hintText('No jumping: from here you can only follow the line to ' + route[cur + 1] + '. Keep pressing ➡️ Move Next.');
+                hintText('No jumping: from here you can only follow the line to ' + route[cur + 1] + '. Keep pressing ➡️ Move to Next Note.');
             }
 
             function doMove() {
@@ -1142,7 +1315,7 @@
             function hint() {
                 if (done) { toast('Mission done — press New Round to play again.'); return; }
                 if (!flags.ins) {
-                    if (cur < 1) toast('New orders are waiting — but first, press ➡️ Move Next to get at least one note in.');
+                    if (cur < 1) toast('New orders are waiting — but first, press ➡️ Move to Next Note to get at least one note in.');
                     else toast('Press ➕ Add Delivery — clip the new stop right after "' + route[cur] + '".');
                     return;
                 }
@@ -1151,7 +1324,7 @@
                     else toast('Press ✖ Cancel Next — drop "' + route[cur + 1] + '" with a single line rewrite.');
                     return;
                 }
-                if (!flags.walked) toast('Keep pressing ➡️ Move Next until you reach the Tail.');
+                if (!flags.walked) toast('Keep pressing ➡️ Move to Next Note until you reach the Tail.');
                 else toast('All jobs done' + (edits <= 3 ? ' — mission complete!' : ' but over 3 rewrites — try New Round.'));
             }
 
@@ -1167,7 +1340,7 @@
                 mode = 'manual';
                 document.getElementById('mission-done').style.display = 'none';
                 document.getElementById('mission-status').textContent = '— in progress';
-                document.getElementById('mission-text').innerHTML = 'Walk Head ➜ Tail, add 1 delivery, cancel 1 stop — with <b>3 line rewrites or fewer</b>.';
+                document.getElementById('mission-text').innerHTML = 'Walk Head ➜ Tail, add 1 delivery, cancel 1 stop — with <b>3 rewrites or fewer</b> (Add = 2, Cancel = 1).';
                 var gh = document.getElementById('game-hint'); if (gh) { gh.style.display = 'none'; gh.textContent = ''; }
                 render();
             }
