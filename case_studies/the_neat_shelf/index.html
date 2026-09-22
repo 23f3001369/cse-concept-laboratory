@@ -33,6 +33,7 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;
 .btn.secondary{background:#fff;color:var(--primary-dark);border:1.5px solid var(--primary);box-shadow:none}
 .btn.ghost{background:transparent;color:var(--primary-dark);box-shadow:none;border:1.5px solid var(--primary);padding:10px 16px}
 .btn.small{padding:9px 18px;font-size:13px}
+.btn.on{box-shadow:0 0 0 3px var(--primary-deep);background:rgba(74,155,209,.12)}
 .section-nav{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:26px}
 .problem-card{text-align:left;max-width:680px;margin:20px auto 0}.problem-card p{margin:0 0 14px;font-size:15.5px}.problem-card b{color:var(--primary-deep)}
 .rules-list{list-style:none;margin:20px auto 0;padding:0;max-width:560px;display:flex;flex-direction:column;gap:8px}
@@ -151,6 +152,19 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;
 <button class="btn ghost small" id="btn-next">＋ Take Next Jar</button>
 <button class="btn ghost small" id="btn-reset">↺ New Round</button>
 </div>
+<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:6px;align-items:center">
+<span style="font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)">Speed</span>
+<select id="speed-select" title="Playback speed" style="padding:7px 10px;border:1.5px solid var(--primary);border-radius:8px;background:var(--card-bg);color:var(--primary-dark);font-weight:800;font-size:12.5px;cursor:pointer">
+<option value="0.25">0.25x</option>
+<option value="0.5">0.5x</option>
+<option value="0.75">0.75x</option>
+<option value="1" selected>1x</option>
+<option value="1.25">1.25x</option>
+<option value="1.5">1.5x</option>
+<option value="1.75">1.75x</option>
+<option value="2">2x</option>
+</select>
+</div>
 <p style="text-align:center;font-size:12.5px;color:var(--muted);margin-top:8px">Two ways to play: <b>manual</b> — take each jar yourself and tap its gap; or press <b>▶ Auto Fill</b> to watch it slot in by itself.</p>
 <div id="mission-banner" style="display:none;margin-top:12px;padding:12px 16px;border-radius:12px;background:#FFF3E6;border:1.5px solid var(--amber);text-align:center;font-size:13px">
 <span style="font-weight:800;color:var(--amber-dark)">🎯 Mission:</span> <span id="mission-text" style="color:var(--ink)">Arrange all 6 jars in height order with <b>0 slips</b>.</span> <span id="mission-status" style="font-weight:700;color:var(--muted)">— in progress</span>
@@ -236,7 +250,7 @@ document.getElementById('btn-cases-back').addEventListener('click',()=>showSecti
 document.getElementById('btn-cases-home').addEventListener('click',()=>window.location.href='../../');
 document.getElementById('btn-cases-finish').addEventListener('click',()=>{newRound();showSection('sec-puzzle');});
 var JAR_COLORS=['#4A9BD1','#EA8C36','#7C5CB8','#4B7A4A','#D9714F','#4A7D8C','#C96F1F','#3A6EA5'];
-var bag=[],shelf=[],held=null,slips=0,moves=0,done=false;
+var speed=1;var bag=[],shelf=[],held=null,slips=0,moves=0,done=false,round=0;
 function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
 function jarHeight(h){return 26+h*11;}
 function render(){
@@ -247,7 +261,7 @@ document.getElementById('shelf-sub').textContent=held!==null?('Holding jar '+hel
 var shelfEl=document.getElementById('shelf');shelfEl.innerHTML='';
 function makeGap(idx){
 var g=document.createElement('div');g.className='gap';
-if(held!==null){var cc=0;for(var kk=0;kk<shelf.length;kk++){if(shelf[kk]<held)cc++;}if(idx===cc)g.className+=' gap-target';}
+if(held!==null&&round===1){var cc=0;for(var kk=0;kk<shelf.length;kk++){if(shelf[kk]<held)cc++;}if(idx===cc)g.className+=' gap-target';}
 g.innerHTML='<span>↓</span>';
 g.addEventListener('click',function(){tryPlace(idx);});
 shelfEl.appendChild(g);
@@ -324,26 +338,30 @@ if(done){return;}
 if(held===null){
 if(!bag.length){return;}
 takeNext();
-setTimeout(autoStep,650);
+setTimeout(autoStep,1200/speed);
 }else{
 var s=0;for(var kk=0;kk<shelf.length;kk++){if(shelf[kk]<held)s++;}
 tryPlace(s);
-setTimeout(autoStep,700);
+setTimeout(autoStep,1200/speed);
 }
 }
 function newRound(){
+round++;
 bag=shuffle([3,4,5,6,7,8].slice());shelf=[];held=null;slips=0;moves=0;done=false;
 document.getElementById('mission-done').style.display='none';
 document.getElementById('mission-banner').style.display='block';
 document.getElementById('mission-status').textContent='— in progress';
 document.getElementById('mission-text').innerHTML='Arrange all 6 jars in height order with <b>0 slips</b>.';
 document.getElementById('btn-next').textContent='＋ Take Next Jar';
-document.getElementById('game-hint').textContent='Tap the dashed gaps. The one where nothing is out of order is the right spot.';
+document.getElementById('game-hint').textContent=round===1?'Tap the dashed gaps. The one where nothing is out of order is the right spot (it blinks green).':'No hint this round — find the right gap yourself.';
 render();
 }
 document.getElementById('btn-next').addEventListener('click',takeNext);
 document.getElementById('btn-reset').addEventListener('click',newRound);
 document.getElementById('btn-auto').addEventListener('click',function(){if(!done){document.getElementById('btn-auto').disabled=true;autoStep();}});
+function setSpeed(m){speed=Math.round(m*100)/100;}
+document.getElementById('speed-select').addEventListener('change',function(){setSpeed(parseFloat(this.value));});
+document.getElementById('speed-select').value='1';setSpeed(1);
 setStep(1);newRound();
 })();
 </script>
