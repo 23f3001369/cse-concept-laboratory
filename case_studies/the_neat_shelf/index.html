@@ -51,12 +51,14 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;
 .gap{width:14px;height:64px;align-self:flex-end;margin:0 2px;border-radius:8px;border:2px dashed var(--primary);display:flex;align-items:center;justify-content:center;color:var(--primary);transition:.15s;cursor:pointer;flex-shrink:0}
 .gap:hover{background:rgba(74,155,209,.18);transform:scale(1.08)}
 .gap.correct{background:rgba(75,122,74,.18);border-color:var(--success);color:var(--success)}
+.gap-target{border-color:var(--success);color:var(--success);background:rgba(75,122,74,.15);border-style:solid;animation:gapPulse .75s ease-in-out infinite}
 .gap span{font-size:9px;font-weight:800;letter-spacing:.04em}
 .held-zone{display:flex;align-items:center;justify-content:center;gap:14px;min-height:84px;border:1.5px dashed var(--glass-border);background:#FFF9F2;border-radius:14px;padding:10px 14px}
 .held-zone .placeholder{color:var(--faint);font-size:13px}
 .jar-held{width:56px;border-radius:10px 10px 5px 5px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:10px;color:#fff;font-weight:800;font-size:15px;box-shadow:0 14px 26px -12px rgba(201,111,31,.65);animation:bob 1s ease-in-out infinite}
 .jar-held::after{content:"";display:block;height:6px;width:100%;border-radius:3px;background:rgba(255,255,255,.5);margin-top:6px}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes gapPulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(75,122,74,.35)}50%{transform:scale(1.12);box-shadow:0 0 0 8px rgba(75,122,74,0)}}
 @keyframes jarShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
 .held-shake{animation:jarShake .3s ease}
 .box{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;padding:12px 8px;background:#F7FAFD;border:1px dashed var(--glass-border);border-radius:12px}
@@ -149,6 +151,7 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;
 <button class="btn ghost small" id="btn-next">＋ Take Next Jar</button>
 <button class="btn ghost small" id="btn-reset">↺ New Round</button>
 </div>
+<p style="text-align:center;font-size:12.5px;color:var(--muted);margin-top:8px">Two ways to play: <b>manual</b> — take each jar yourself and tap its gap; or press <b>▶ Auto Fill</b> to watch it slot in by itself.</p>
 <div id="mission-banner" style="display:none;margin-top:12px;padding:12px 16px;border-radius:12px;background:#FFF3E6;border:1.5px solid var(--amber);text-align:center;font-size:13px">
 <span style="font-weight:800;color:var(--amber-dark)">🎯 Mission:</span> <span id="mission-text" style="color:var(--ink)">Arrange all 6 jars in height order with <b>0 slips</b>.</span> <span id="mission-status" style="font-weight:700;color:var(--muted)">— in progress</span>
 <div id="mission-done" style="display:none;margin-top:12px;padding:12px 14px;border-radius:10px;background:rgba(75,122,74,.12);border:1.5px solid var(--success);font-weight:800;color:var(--success);font-size:14px">✅ Mission Completed</div>
@@ -223,7 +226,7 @@ function showSection(id){document.querySelectorAll('.section').forEach(s=>s.clas
 document.getElementById('btn-puzzle-continue').addEventListener('click',()=>showSection('sec-briefing'));
 document.getElementById('btn-briefing-back').addEventListener('click',()=>showSection('sec-puzzle'));
 document.getElementById('btn-briefing-start').addEventListener('click',()=>showSection('sec-search'));
-document.getElementById('btn-search-back').addEventListener('click',()=>showSection('sec-briefing'));
+document.getElementById('btn-search-back').addEventListener('click',()=>{if(confirm('Going back will reset your current progress. Do you want to continue?')){newRound();showSection('sec-briefing');}});
 document.getElementById('btn-search-continue').addEventListener('click',()=>showSection('sec-notes'));
 document.getElementById('btn-notes-back').addEventListener('click',()=>showSection('sec-search'));
 document.getElementById('btn-notes-continue').addEventListener('click',()=>showSection('sec-method'));
@@ -243,7 +246,9 @@ document.getElementById('s-moves').textContent=moves;
 document.getElementById('shelf-sub').textContent=held!==null?('Holding jar '+held+' — tap the gap where it belongs'):(shelf.length?('Neat so far — '+(bag.length?('take the next jar ('+bag[0]+')'):'every jar placed')):'Empty shelf — take the first jar');
 var shelfEl=document.getElementById('shelf');shelfEl.innerHTML='';
 function makeGap(idx){
-var g=document.createElement('div');g.className='gap';g.innerHTML='<span>↓</span>';
+var g=document.createElement('div');g.className='gap';
+if(held!==null){var cc=0;for(var kk=0;kk<shelf.length;kk++){if(shelf[kk]<held)cc++;}if(idx===cc)g.className+=' gap-target';}
+g.innerHTML='<span>↓</span>';
 g.addEventListener('click',function(){tryPlace(idx);});
 shelfEl.appendChild(g);
 }
