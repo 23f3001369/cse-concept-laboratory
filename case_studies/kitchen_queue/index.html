@@ -135,6 +135,7 @@ code{font-family:inherit;font-weight:700;color:var(--primary-deep);background:rg
 </div>
 <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px">
 <button class="btn ghost small" id="btn-auto">▶ Auto Rush</button>
+<button class="btn ghost small" id="btn-pause" disabled>⏸ Pause</button>
 <button class="btn ghost small" id="btn-enq">+ New Order</button>
 <button class="btn ghost small" id="btn-deq">✓ Serve Front</button>
 <button class="btn ghost small" id="btn-reset">Reset</button>
@@ -260,7 +261,7 @@ var orders=[
 {emoji:'🍔',name:'Burger',time:'8:05'},
 {emoji:'🍜',name:'Noodles',time:'8:07'}
 ];
-var speed=1;var queue=[],ops=0,idx=0,mode='manual',autoTimer=null,autoStepIdx=0;
+var speed=1;var queue=[],ops=0,idx=0,mode='manual',autoTimer=null,autoStepIdx=0,paused=false;
 var rail=document.getElementById('rail');
 function renderQ(){
 document.getElementById('q-size').textContent=queue.length;
@@ -268,6 +269,8 @@ document.getElementById('q-ops').textContent=ops;
 document.getElementById('q-front').textContent=queue.length?queue[0].name:'·';
 document.getElementById('q-rear').textContent=queue.length?queue[queue.length-1].name:'·';
 document.getElementById('kitchen-sub').textContent=queue.length?('Front: '+queue[0].name+' • Rear: '+queue[queue.length-1].name):'Empty, new order will be rear';
+document.getElementById('btn-pause').disabled=mode!=='auto';
+document.getElementById('btn-pause').textContent=paused?'▶ Resume':'⏸ Pause';
 rail.innerHTML='';
 if(!queue.length){rail.innerHTML='<span style="color:var(--faint);margin:auto">No orders, click + New Order</span>';document.getElementById('btn-enq').classList.toggle('pulse',!challengeOn&&mode!=='auto');return;}
 queue.forEach(function(o,i){
@@ -316,7 +319,7 @@ document.getElementById('btn-enq').addEventListener('click',doEnq);
 document.getElementById('btn-deq').addEventListener('click',doDeq);
 document.getElementById('btn-reset').addEventListener('click',resetQ);
 function startAuto(){
-mode='auto';autoStepIdx=0;
+mode='auto';paused=false;autoStepIdx=0;
 document.getElementById('btn-auto').textContent='⏸ Stop Auto';
 document.getElementById('btn-enq').disabled=true;
 document.getElementById('btn-deq').disabled=true;
@@ -328,7 +331,7 @@ resetQ();
 autoTimer=setInterval(autoTick,1200/speed);
 }
 function stopAuto(){
-clearInterval(autoTimer);mode='manual';
+clearInterval(autoTimer);mode='manual';paused=false;
 document.getElementById('btn-auto').textContent='▶ Auto Mode';
 document.getElementById('btn-enq').disabled=false;
 document.getElementById('btn-deq').disabled=false;
@@ -339,7 +342,7 @@ document.getElementById('game-hint').textContent='Manual Mode: press + New Order
 renderQ();
 }
 function autoTick(){
-if(mode!=='auto')return;
+if(mode!=='auto'||paused)return;
 if(autoStepIdx===0)resetQ();
 if(autoStepIdx<4){var o=orders[autoStepIdx%orders.length];queue.push(o);ops++;document.getElementById('game-hint').textContent='Auto · + '+o.name+' joins the back of the line.';}
 else{var o2=queue.shift();ops++;document.getElementById('game-hint').textContent='Auto · served '+o2.name+': first come, first served.';}
@@ -348,6 +351,8 @@ autoStepIdx=(autoStepIdx+1)%8;
 if(autoStepIdx===0){stopAuto();return;}
 }
 document.getElementById('btn-auto').addEventListener('click',function(){if(mode==='auto'){stopAuto();}else{startAuto();}});
+function togglePause(){if(mode!=='auto')return;paused=!paused;document.getElementById('btn-pause').textContent=paused?'▶ Resume':'⏸ Pause';document.getElementById('game-hint').textContent=paused?'Paused: the line is frozen. Press ▶ Resume to keep serving from here.':'Resumed: continuing from where you left off.';}
+document.getElementById('btn-pause').addEventListener('click',togglePause);
 function setSpeed(m){speed=Math.round(m*100)/100;if(mode==='auto'){clearInterval(autoTimer);autoTimer=setInterval(autoTick,1200/speed);}}
 document.getElementById('speed-select').addEventListener('change',function(){setSpeed(parseFloat(this.value));});
 document.getElementById('speed-select').value='1';setSpeed(1);

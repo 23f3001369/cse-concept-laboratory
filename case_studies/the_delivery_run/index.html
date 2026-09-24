@@ -1002,6 +1002,7 @@
                 <div class="section-nav" style="margin-top:4px">
                     <button class="btn ghost small" id="btn-hint">💡 Hint</button>
                     <button class="btn ghost small" id="btn-auto">▶ Auto Route</button>
+                    <button class="btn ghost small" id="btn-pause" disabled>⏸ Pause</button>
                     <button class="btn ghost small" id="btn-reset">↺ New Round</button>
                 </div>
                 <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:6px;align-items:center">
@@ -1224,7 +1225,7 @@
             var route = [], pending = [], cur = 0;
             var edits = 0, insCount = 0, delCount = 0;
             var flags = { walked: false, ins: false, del: false };
-            var mode = 'manual', autoTimer = null, done = false, round = 0, firstAction = false;
+            var mode = 'manual', autoTimer = null, done = false, round = 0, firstAction = false, paused = false;
 
             function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
             function toast(m) { var t = document.getElementById('toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1800); }
@@ -1285,6 +1286,8 @@
                 document.getElementById('btn-hint').disabled = done;
                 document.getElementById('btn-auto').disabled = done;
                 document.getElementById('btn-auto').textContent = (mode === 'auto') ? '⏸ Stop Auto' : '▶ Auto Route';
+                document.getElementById('btn-pause').disabled = done || mode !== 'auto';
+                document.getElementById('btn-pause').textContent = paused ? '▶ Resume' : '⏸ Pause';
                 document.getElementById('btn-next').classList.toggle('pulse', firstAction && mode === 'manual' && !done);
             }
 
@@ -1356,19 +1359,21 @@
             function startAuto() {
                 if (done) return;
                 mode = 'auto';
+                paused = false;
                 toast('Auto: walking the route and making the changes for you.');
                 render();
                 autoStep();
             }
             function stopAuto() {
                 if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
+                paused = false;
                 if (mode === 'auto') { mode = 'manual'; render(); }
             }
             function scheduleNext() {
-                if (mode === 'auto' && !done) autoTimer = setTimeout(autoStep, 1200 / speed);
+                if (mode === 'auto' && !done && !paused) autoTimer = setTimeout(autoStep, 1200 / speed);
             }
             function autoStep() {
-                if (done || mode !== 'auto') return;
+                if (done || mode !== 'auto' || paused) return;
                 if (!flags.ins) {
                     if (cur < 1) { doMove(); scheduleNext(); return; }
                     doInsert(); scheduleNext(); return;
@@ -1424,6 +1429,8 @@
             document.getElementById('btn-cut').addEventListener('click', doDelete);
             document.getElementById('btn-hint').addEventListener('click', hint);
             document.getElementById('btn-auto').addEventListener('click', function () { if (mode === 'auto') stopAuto(); else startAuto(); });
+            function togglePause() { if (mode !== 'auto' || done) return; paused = !paused; var b = document.getElementById('btn-pause'); b.textContent = paused ? '▶ Resume' : '⏸ Pause'; if (paused) { if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; } hintText('Paused: the route is frozen. Press ▶ Resume to keep going from here.'); } else { hintText('Resumed: continuing from where you left off.'); autoStep(); } }
+            document.getElementById('btn-pause').addEventListener('click', togglePause);
             document.getElementById('btn-reset').addEventListener('click', function () { stopAuto(); newRound(); });
             function setSpeed(m) { speed = Math.round(m * 100) / 100; }
             document.getElementById('speed-select').addEventListener('change', function () { setSpeed(parseFloat(this.value)); });
