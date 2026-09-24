@@ -6,34 +6,32 @@
     <script>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag('js', new Date()); gtag('config', 'G-9M9C5T1Y9R');</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rohan's Planter Patch — The Swap</title>
+    <title>Rohan's Planter Patch: The Swap</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
         rel="stylesheet">
     <style>
         :root {
-            --bg-1: #F2F7EE;
-            --bg-2: #E9F1E4;
-            --bg-2b: #E2EDDC;
-            --bg-3: #DDE9D3;
-            --bg-4: #CFE0C3;
-            --ink: #1F2E22;
-            --muted: #5A6E56;
-            --faint: #8CA184;
-            --primary: #5A9B5C;
-            --primary-dark: #3E7A44;
-            --primary-deep: #295536;
+            --bg-1: #FDF1E9;
+            --bg-2: #EDF3FA;
+            --bg-2b: #E0EBF7;
+            --bg-3: #E4EEFA;
+            --bg-4: #D6E6F7;
+            --ink: #1F2E37;
+            --muted: #54666D;
+            --faint: #93A5AB;
+            --primary: #4A9BD1;
+            --primary-dark: #2B6FA3;
+            --primary-deep: #1B4A66;
             --amber: #EA8C36;
             --amber-dark: #C96F1F;
             --danger: #D9714F;
             --success: #4B7A4A;
-            --ink: #1F2E22;
-            --primary-deep: #295536;
-            --card-bg: rgba(255, 255, 255, .72);
-            --glass-border: #D2E3C8;
+            --card-bg: #fff;
+            --glass-border: #D9E5F2;
             --glass-bg: rgba(255, 255, 255, .4);
-            --shadow-card: 0 14px 34px -18px rgba(41, 85, 54, .35);
-            --shadow-btn: 0 16px 28px -12px rgba(62, 122, 68, .5);
+            --shadow-card: 0 14px 34px -18px rgba(23, 50, 77, .35);
+            --shadow-btn: 0 16px 28px -12px rgba(43, 111, 163, .5);
             --radius: 18px
         }
 
@@ -155,7 +153,7 @@
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             border-color: var(--primary-dark);
             color: #fff;
-            box-shadow: 0 0 0 4px rgba(90, 155, 92, .25)
+            box-shadow: 0 0 0 4px rgba(74, 155, 209, .25)
         }
 
         .step-item.active .step-label {
@@ -716,6 +714,15 @@
                 transform: translate3d(var(--sway, 40px), 105vh, 0) rotate(720deg)
             }
         }
+
+        code {
+            font-family: inherit;
+            font-weight: 700;
+            color: var(--primary-deep);
+            background: rgba(74, 155, 209, .08);
+            padding: 1px 6px;
+            border-radius: 6px
+        }
     </style>
 </head>
 
@@ -742,14 +749,13 @@
                 <h1>One patch, six pots, only two hands.</h1>
             </div>
             <div class="card problem-card">
-                <p>Rohan has a seed tray with <b>6 potted seedlings, all different heights</b> — the shortest at 3, the
-                    tallest at 8. Right now they sit mixed up in the tray, one seedling per spot, in a neat 2-row grid…
-                    well, a neat <b>line of six spots</b>.</p>
+                <p>Rohan has a seed tray with <b>6 potted seedlings, all different heights</b>: the shortest at 3, the
+                    tallest at 8. Right now they sit mixed up in the tray, lined up in six spots.</p>
                 <p>He wants the shortest seedling in the <b>first spot</b>, the tallest in the <b>last spot</b>. But he
-                    has a rule for himself: he may <b>only lift the whole tray's worth of pots two at a time and trade
-                        their spots</b> — a swap. Each swap costs effort, so he wants as <b>few swaps</b> as possible.
+                    has a rule for himself: he may <b>only lift two pots at a time and trade their spots</b>: a swap.
+                    Each swap costs effort, so he wants as <b>few swaps</b> as possible.
                 </p>
-                <p>Here's the clever bit — the moment a seedling lands in the spot where it belongs <i>for good</i>,
+                <p>One clever bit: the moment a seedling lands in the spot where it belongs <i>for good</i>,
                     that spot is <b>done</b>. Trading that pot again would be wasted effort.</p>
             </div>
             <div class="section-nav"><button class="btn" id="btn-puzzle-continue">Continue to the Briefing ➜</button>
@@ -762,12 +768,12 @@
                 <h1>A Swap at a Time</h1>
             </div>
             <div class="card" style="text-align:center;max-width:640px;margin:0 auto">
-                <p style="margin-bottom:14px">She wants the pots in height order in the tray — shortest in spot 1,
+                <p style="margin-bottom:14px">He wants the pots in height order in the tray: shortest in spot 1,
                     tallest in spot 6.</p>
                 <ul class="rules-list">
                     <li>One move = swap the spots of <b>any two pots</b>.</li>
                     <li>You may swap the same pot many times, but every swap counts.</li>
-                    <li class="ok">When a pot reaches its forever-spot, it locks — leave it alone from then on.</li>
+                    <li class="ok">When a pot reaches its forever-spot, it locks, so leave it alone from then on.</li>
                     <li class="ok">Goal: all 6 spots locked using <b>5 swaps or fewer</b>.</li>
                 </ul>
             </div>
@@ -779,19 +785,20 @@
             <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 3
                 · The Patch</span>
             <h2 class="section-title">Lock Every Spot</h2>
-            <p class="section-sub">Tap one pot, then tap another — they trade spots. A pot that locks is done forever.
-            </p>
+            <p class="section-sub">Tap one pot, then tap another, and they trade spots. A pot that locks is done
+                forever.</p>
             <div class="game-shell">
                 <div class="stats">
                     <span class="stat">Swaps: <strong id="s-swaps">0</strong>/5</span><span class="stat">Locked: <strong
                             id="s-locked">0</strong>/6</span>
                 </div>
-                <div class="patch-head"><span>🪴 The Tray — spots 1 → 6</span><span class="sub" id="patch-sub">Tap a
+                <div class="patch-head"><span>🪴 The Tray: spots 1 → 6</span><span class="sub" id="patch-sub">Tap a
                         pot, then tap the pot to swap with it</span></div>
                 <div class="patch" id="patch"></div>
                 <div class="section-nav" style="margin-top:14px">
                     <button class="btn ghost small" id="btn-hint">💡 Hint</button>
-                    <button class="btn ghost small" id="btn-auto">▶ Auto Swap</button>
+                    <button class="btn ghost small" id="btn-auto">▶ Start Auto</button>
+                    <button class="btn ghost small" id="btn-pause" disabled>⏸ Pause</button>
                     <button class="btn ghost small" id="btn-reset">↺ New Round</button>
                 </div>
                 <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:6px;align-items:center">
@@ -811,12 +818,12 @@
                     style="margin-top:14px;padding:14px 16px;border-radius:12px;background:#FFF3E6;border:1.5px solid var(--glass-border);text-align:center;font-size:13px">
                     <span style="font-weight:800;color:var(--amber-dark)">🎯 Mission:</span> <span id="mission-text"
                         style="color:var(--ink)">Lock all 6 seeds in height order with <b>5 swaps or fewer</b>.</span>
-                    <span id="mission-status" style="font-weight:700;color:var(--muted)">— in progress</span>
+                    <span id="mission-status" style="font-weight:700;color:var(--muted)">· in progress</span>
                     <div id="mission-done"
                         style="display:none;margin-top:12px;padding:12px 14px;border-radius:10px;background:rgba(75,122,74,.12);border:1.5px solid var(--success);font-weight:800;color:var(--success);font-size:14px">
                         ✅ Mission Completed</div>
                 </div>
-                <p style="text-align:center;margin-top:12px;font-size:13px;color:var(--primary-deep);background:rgba(90,155,92,.08);border:1px dashed var(--glass-border);border-radius:10px;padding:10px 14px;display:none"
+                <p style="text-align:center;margin-top:12px;font-size:13px;color:var(--primary-deep);background:rgba(74,155,209,.08);border:1px dashed var(--glass-border);border-radius:10px;padding:10px 14px;display:none"
                     id="game-hint"></p>
                 <div class="section-nav" style="margin-top:16px">
                     <button class="btn ghost small" id="btn-search-back">⬅ Back</button>
@@ -829,9 +836,8 @@
             <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 4
                 · Case Notes</span>
             <h2 class="section-title">What did you notice?</h2>
-            <p class="section-sub">No single right answer — just what you saw on the tray.</p>
-            <div class="card" style="max-width:760px;margin:0 auto">
-                <div class="qgrid">
+            <p class="section-sub">No single right answer, just what you saw on the tray.</p>
+            <div class="qgrid">
                     <div class="qcard"><span class="q-num">01 · First swap</span><span class="q-text">Which pot had to
                             reach spot 1, and how could you tell it was the shortest before you moved anything?</span>
                     </div>
@@ -845,12 +851,11 @@
                             the spots of two pots. Compared to sliding a new jar between neighbours, what did a swap NOT
                             have to do?</span></div>
                     <div class="qcard"><span class="q-num">05 · Almost sorted</span><span class="q-text">If the tray
-                            already sat in perfect order, how many swaps would you need — and why?</span></div>
+                            already sat in perfect order, how many swaps would you need, and why?</span></div>
                     <div class="qcard"><span class="q-num">06 · Two hands</span><span class="q-text">Where else do you
-                            pull out the smallest thing first and set it aside — medals, cards, seeds, even washing up
+                            pull out the smallest thing first and set it aside: medals, cards, seeds, even washing up
                             plates one by one?</span></div>
                 </div>
-            </div>
             <div class="section-nav"><button class="btn ghost" id="btn-notes-back">⬅ Back</button><button class="btn"
                     id="btn-notes-continue">Continue to The Method ➜</button></div>
         </section>
@@ -866,27 +871,28 @@
             </div>
             <div class="learning-flow" style="margin-top:10px">
                 <h4>Definition</h4>
-                <p><strong>Selection Sort — find the smallest of what's left, put it in its final spot, lock it,
+                <p><strong>Selection Sort: find the smallest of what's left, put it in its final spot, lock it,
                         repeat.</strong> Each round you scan the remaining pots, take the shortest one, and place it
                     where it will live from now on.</p>
                 <p>In the game you did this with a <b>swap</b>: the shortest unlocked pot traded spots with the first
                     unlocked spot. Because every other pot was already in the right place or still waiting, the swap
                     locked the smallest for good.</p>
                 <h4>Mechanism</h4>
-                <p><code>find-minimum</code> — look through the remaining and remember the smallest; <code>swap</code>
+                <p><code>find-minimum</code>: look through the remaining and remember the smallest; <code>swap</code>
                     it into the front of the unsorted part so it locks. The "sorted prefix" grows by one each round, and
                     every item moves <b>at most once</b>.</p>
                 <h4>Vocabulary</h4>
-                <p><code>pass</code> — one scan of the remaining items, <code>minimum</code> — the smallest remaining
-                    item, <code>swap</code> — trade the spots of two items, <code>sorted prefix</code> — the neat part
-                    you've already built, <code>O(n²)</code> — repeats n passes, each scanning up to n items.</p>
+                <p><code>pass</code>: one scan of the remaining items, <code>minimum</code>: the smallest
+                    remaining item, <code>swap</code>: trade the spots of two items, <code>sorted prefix</code>: the
+                    neat part you've already built, <code>O(n²)</code>: repeats n passes, each scanning up to n
+                    items.</p>
             </div>
             <div class="comp" style="max-width:640px;margin:40px auto 28px;text-align:left">
                 <div class="compare-cards">
-                    <div class="compare-card"><span class="compare-title">Shelf — you slid jars into the gap</span><span
-                            class="compare-sub">One jar in hand, neighbours shuffled sideways to make room — each new
+                    <div class="compare-card"><span class="compare-title">Shelf: you slid jars into the gap</span><span
+                            class="compare-sub">One jar in hand, neighbours shuffled sideways to make room, and each new
                             jar moved into place among the others.</span></div>
-                    <div class="compare-card"><span class="compare-title">Tray — you swapped pots in place</span><span
+                    <div class="compare-card"><span class="compare-title">Tray: you swapped pots in place</span><span
                             class="compare-sub">Two pots traded spots at once; nothing else brushed against anything.
                             Locked pots never moved again.</span></div>
                 </div>
@@ -895,21 +901,21 @@
                     <div class="kl-grid">
                         <div class="kl-item"><span class="kl-icon">🔍</span>
                             <div><b>Scan Everything First</b>
-                                <p>To be sure the smallest, you must peek at every remaining item — even ones already
+                                <p>To be sure you found the smallest, you must peek at every remaining item, even ones already
                                     neat. That repeat scan is the work.</p>
                             </div>
                         </div>
                         <div class="kl-item"><span class="kl-icon">🔄</span>
                             <div><b>Minimal Swaps</b>
-                                <p>Each item is placed exactly once, straight into its final spot — at most n−1 swaps,
+                                <p>Each item is placed exactly once, straight into its final spot, at most n−1 swaps,
                                     never misplacing a locked pot.</p>
                             </div>
                         </div>
                         <div class="kl-item"><span class="kl-icon">🧩</span>
                             <div><b>Where You'll See It</b>
                                 <p>Picking the smallest mango first, arranging medals on a shelf, sorting cards by
-                                    pulling the lowest — handy when moving an item is the expensive part, so you want
-                                    each move to be final.</p>
+                                    pulling the lowest first, handy when moving an item is the expensive part, so you
+                                    want each move to be final.</p>
                             </div>
                         </div>
                     </div>
@@ -926,27 +932,25 @@
                 · New Cases</span>
             <h2 class="section-title">Try on your own</h2>
             <p class="section-sub">Work it out in your head.</p>
-            <div class="card" style="max-width:760px;margin:0 auto">
-                <div class="qgrid">
-                    <div class="qcard"><span class="q-num">01 · First swap</span><span class="q-text">Tray reads 5, 8,
-                            3, 7, 6, 4. Which pot first locks into spot 1 — and which pot does it trade spots
-                            with?</span></div>
-                    <div class="qcard"><span class="q-num">02 · Second spot</span><span class="q-text">After 3 is locked
-                            in spot 1, the leftover is 5, 8, 7, 6, 4. Look for the shortest — which goes to spot 2, from
-                            where?</span></div>
-                    <div class="qcard"><span class="q-num">03 · Fewer spots left</span><span class="q-text">Each swap
-                            locks one more spot. If a tray has just Solving 3 pots left unsorted, how many swaps
-                            remain?</span></div>
-                    <div class="qcard"><span class="q-num">04 · Locked ahead</span><span class="q-text">A pot already in
-                            its final spot at the very start — do you ever swap it? How would you spot it without
-                            touching it?</span></div>
-                    <div class="qcard"><span class="q-num">05 · Nearly sorted</span><span class="q-text">Tray already
-                            reads 3, 4, 5, 6, 7, 8. How many swaps did you make, and how many passes did you 'nearly'
-                            skip?</span></div>
-                    <div class="qcard"><span class="q-num">06 · Bigger the other way</span><span class="q-text">What if
-                            you instead put the tallest into spot 6, then the next tallest into spot 5 — does that also
-                            work? Which end builds first?</span></div>
-                </div>
+            <div class="qgrid">
+                <div class="qcard"><span class="q-num">01 · First swap</span><span class="q-text">Tray reads 5, 8, 3, 7,
+                        6, 4. Selection sort's first pass finds the minimum and swaps it into spot 1. Which pot locks
+                        first, and which two spots trade?</span></div>
+                <div class="qcard"><span class="q-num">02 · Swap total</span><span class="q-text">For any tray of 6 pots,
+                        selection sort finishes in at most 5 swaps. Why can it never need a 6th swap, even though there
+                        are 6 spots?</span></div>
+                <div class="qcard"><span class="q-num">03 · Selection vs shelf</span><span class="q-text">Insertion sort
+                        slides each new item sideways into a gap, like jars on a shelf. When is swapping pots in place,
+                        the selection sort way, a better move than all that sliding?</span></div>
+                <div class="qcard"><span class="q-num">04 · Reverse order</span><span class="q-text">Tray reads 8, 7, 6,
+                        5, 4, 3, perfect reverse order. How many swaps does selection sort need, and how many passes does
+                        it still scan through?</span></div>
+                <div class="qcard"><span class="q-num">05 · Locked already</span><span class="q-text">Halfway through,
+                        the pot in spot 4 already holds the right value. Does selection sort ever swap it? How can you
+                        tell, without touching it, that it is safe to leave alone?</span></div>
+                <div class="qcard"><span class="q-num">06 · Why O(n²)</span><span class="q-text">Locking spot 1 scans all
+                        6 pots, spot 2 scans the 5 that remain, and so on. If the tray doubled to 12 pots, why does the
+                        work grow by about four times instead of two?</span></div>
             </div>
             <div class="section-nav"><button class="btn ghost" id="btn-cases-back">⬅ Back</button><button class="btn"
                     id="btn-cases-home">🏠 Back to CSE Lab</button><button class="btn" id="btn-cases-finish">Restart
@@ -956,7 +960,7 @@
     </div>
     <div class="modal-overlay" id="modal-back-warn">
         <div class="modal-box">
-            <div class="modal-eyebrow">Wait —</div>
+            <div class="modal-eyebrow">Wait</div>
             <p>Going back will reset your current progress on this page.</p>
             <p class="modal-punch">Do you want to continue?</p>
             <div class="modal-actions">
@@ -971,7 +975,7 @@
             "use strict";
             var STEP_FOR = { 'sec-puzzle': 1, 'sec-briefing': 2, 'sec-search': 3, 'sec-notes': 4, 'sec-method': 5, 'sec-cases': 6 };
             function setStep(n) { for (var i = 1; i <= 6; i++) { var el = document.getElementById('step-' + i); el.classList.remove('active', 'done'); if (i < n) el.classList.add('done'); if (i === n) el.classList.add('active'); } }
-            function showSection(id) { document.querySelectorAll('.section').forEach(s => s.classList.remove('active-view')); document.getElementById(id).classList.add('active-view'); setStep(STEP_FOR[id] || 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+            function showSection(id) { if (id !== 'sec-search') stopAuto(); document.querySelectorAll('.section').forEach(s => s.classList.remove('active-view')); document.getElementById(id).classList.add('active-view'); setStep(STEP_FOR[id] || 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }
             document.getElementById('btn-puzzle-continue').addEventListener('click', () => showSection('sec-briefing'));
             document.getElementById('btn-briefing-back').addEventListener('click', () => showSection('sec-puzzle'));
             document.getElementById('btn-briefing-start').addEventListener('click', () => showSection('sec-search'));
@@ -997,7 +1001,7 @@
             document.getElementById('btn-cases-home').addEventListener('click', () => window.location.href = '../../');
             document.getElementById('btn-cases-finish').addEventListener('click', () => { newRound(); showSection('sec-puzzle'); });
             var COL = ['#4A9BD1', '#EA8C36', '#7C5CB8', '#4B7A4A', '#D9714F', '#4A7D8C', '#C96F1F', '#3E6A5C'];
-            var speed = 1; var pots = [], sel = null, swaps = 0, done = false;
+            var speed = 1; var pots = [], sel = null, swaps = 0, done = false; var autoOn = false, paused = false, autoTimer = null;
             function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
             function hpx(h) { return 26 + h * 11; }
             function isLocked(i) { return pots[i] === i + 3; }
@@ -1008,7 +1012,7 @@
                 var lc = 0; for (var i = 0; i < pots.length; i++) { if (isLocked(i)) lc++; }
                 document.getElementById('s-locked').textContent = lc;
                 var f = firstUnlocked();
-                document.getElementById('patch-sub').textContent = (sel === null) ? 'Start: tap any pot to pick it up, then tap the pot you want to swap with.' : 'Picked up — now tap the spot/pot to swap with it.';
+                document.getElementById('patch-sub').textContent = (sel === null) ? 'Start: tap any pot to pick it up, then tap the pot you want to swap with.' : 'Picked up, now tap the spot/pot to swap with it.';
                 var p = document.getElementById('patch'); p.innerHTML = '';
                 for (var i = 0; i < pots.length; i++) {
                     (function (i) {
@@ -1022,6 +1026,8 @@
                 }
                 document.getElementById('btn-hint').disabled = done;
                 document.getElementById('btn-auto').disabled = done;
+                document.getElementById('btn-auto').textContent = autoOn ? '⏸ Stop Auto' : '▶ Start Auto';
+                document.getElementById('btn-pause').disabled = done || !autoOn;
             }
             function toast(m) { var t = document.getElementById('toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1800); }
             function confetti() {
@@ -1048,15 +1054,15 @@
                     document.getElementById('mission-done').style.display = 'block';
                     document.getElementById('mission-status').textContent = '✓ Complete!';
                     toast('🎉 Mission completed!'); confetti();
-                    document.getElementById('game-hint').style.display = 'block'; document.getElementById('game-hint').textContent = '🎉 All 6 locked in ' + swaps + ' swap' + (swaps === 1 ? '' : 's') + ' — every seed moved at most once! Press New Round to try again.';
+                    document.getElementById('game-hint').style.display = 'block'; document.getElementById('game-hint').textContent = '🎉 All 6 locked in ' + swaps + ' swap' + (swaps === 1 ? '' : 's') + ', every seed moved at most once! Press New Round to try again.';
                 } else {
                     document.getElementById('mission-status').textContent = 'Locked in ' + swaps + ' swaps';
-                    document.getElementById('game-hint').style.display = 'block'; document.getElementById('game-hint').textContent = 'All 6 locked after ' + swaps + ' swap' + (swaps > 1 ? 's' : '') + ' — try to keep it to 5 with New Round!';
+                    document.getElementById('game-hint').style.display = 'block'; document.getElementById('game-hint').textContent = 'All 6 locked after ' + swaps + ' swap' + (swaps > 1 ? 's' : '') + ', try to keep it to 5 with New Round!';
                 }
             }
             function onPotClick(i) {
                 if (done) return;
-                if (isLocked(i)) { toast('This pot is already locked — leave it in its final spot.'); return; }
+                if (isLocked(i)) { toast('This pot is already locked, leave it in its final spot.'); return; }
                 if (sel === null) { sel = i; render(); return; }
                 if (sel === i) { sel = null; render(); return; }
                 var a = sel; sel = null;
@@ -1086,23 +1092,29 @@
                 if (nb) { nb.style.transition = 'transform .85s cubic-bezier(.3,.65,.4,1)'; nb.style.transform = 'translate(0,0)'; }
                 if (after) setTimeout(after, 880);
             }
+            function scheduleNext() { if (autoOn && !paused && !done) autoTimer = setTimeout(autoStep, 1200 / speed); }
             function autoStep() {
-                if (done) return;
+                if (done || !autoOn || paused) return;
+                if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
                 var f = firstUnlocked(); if (f < 0) { finish(); render(); return; }
                 var mi = minUnlockedIdx(f);
-                var a = f, b = mi;
-                var came = pots[a];
+                var a = f, b = mi, came = pots[a];
                 animateSwap(a, b, function () {
+                    if (!autoOn) return;
                     document.getElementById('game-hint').style.display = 'block'; document.getElementById('game-hint').textContent = 'Auto: moved pot ' + came + ' into spot ' + (f + 1) + ' and locked it.';
                     if (lockedCount() === 6) { finish(); return; }
-                    setTimeout(autoStep, 1200 / speed);
+                    scheduleNext();
                 });
             }
+            function startAuto() { if (done) return; autoOn = true; paused = false; document.getElementById('btn-auto').textContent = '⏸ Stop Auto'; document.getElementById('btn-pause').disabled = false; document.getElementById('btn-pause').textContent = '⏸ Pause'; autoStep(); }
+            function stopAuto() { autoOn = false; paused = false; if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; } document.getElementById('btn-auto').textContent = '▶ Start Auto'; document.getElementById('btn-pause').disabled = true; document.getElementById('btn-pause').textContent = '⏸ Pause'; }
+            function togglePause() { if (!autoOn) return; paused = !paused; var b = document.getElementById('btn-pause'); b.textContent = paused ? '▶ Resume' : '⏸ Pause'; if (paused) { if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; } } else { autoStep(); } }
             function toast2(m) { var t = document.getElementById('toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1600); }
-            function hint() { var h = document.getElementById('game-hint'); if (h && swaps > 0) { h.style.display = 'block'; } var f = firstUnlocked(); if (f < 0) { toast('All locked — nothing left to move.'); return; } var mi = minUnlockedIdx(f); toast('The shortest not locked is ' + pots[mi] + ' \u2014 swap it into spot ' + (f + 1) + '.'); }
-            function newRound() { pots = shuffle([3, 4, 5, 6, 7, 8].slice()); sel = null; swaps = 0; done = false; document.getElementById('mission-done').style.display = 'none'; document.getElementById('mission-status').textContent = '— in progress'; document.getElementById('mission-text').innerHTML = 'Lock all 6 seeds in height order with <b>5 swaps or fewer</b>.'; var gh = document.getElementById('game-hint'); if (gh) { gh.style.display = 'none'; gh.textContent = ''; } render(); }
+            function hint() { var h = document.getElementById('game-hint'); if (h && swaps > 0) { h.style.display = 'block'; } var f = firstUnlocked(); if (f < 0) { toast('All locked, nothing left to move.'); return; } var mi = minUnlockedIdx(f); toast('The shortest not locked is ' + pots[mi] + '. Swap it into spot ' + (f + 1) + '.'); }
+            function newRound() { stopAuto(); pots = shuffle([3, 4, 5, 6, 7, 8].slice()); sel = null; swaps = 0; done = false; document.getElementById('mission-done').style.display = 'none'; document.getElementById('mission-status').textContent = '· in progress'; document.getElementById('mission-text').innerHTML = 'Lock all 6 seeds in height order with <b>5 swaps or fewer</b>.'; var gh = document.getElementById('game-hint'); if (gh) { gh.style.display = 'none'; gh.textContent = ''; } render(); }
             document.getElementById('btn-hint').addEventListener('click', hint);
-            document.getElementById('btn-auto').addEventListener('click', function () { if (!done) { toast('Auto-swapping the shortest into the first empty spot.'); autoStep(); } });
+            document.getElementById('btn-auto').addEventListener('click', function () { if (autoOn) stopAuto(); else startAuto(); });
+            document.getElementById('btn-pause').addEventListener('click', togglePause);
             function setSpeed(m) { speed = Math.round(m * 100) / 100; }
             document.getElementById('speed-select').addEventListener('change', function () { setSpeed(parseFloat(this.value)); });
             document.getElementById('speed-select').value = '1'; setSpeed(1);

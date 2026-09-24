@@ -6,7 +6,7 @@
     <script>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag('js', new Date()); gtag('config', 'G-9M9C5T1Y9R');</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meera's Delivery Run — A Linked Lists Case Study</title>
+    <title>Meera's Delivery Run: A Linked Lists Case Study</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
         rel="stylesheet">
@@ -519,7 +519,7 @@
         }
 
         .how-to code {
-            font-family: 'Inter', sans-serif;
+            font-family: inherit;
             font-weight: 700;
             color: var(--primary-dark);
             background: rgba(74, 155, 209, .1);
@@ -889,6 +889,15 @@
                 transform: translate3d(var(--sway, 40px), 105vh, 0) rotate(720deg)
             }
         }
+
+        code {
+            font-family: inherit;
+            font-weight: 700;
+            color: var(--primary-deep);
+            background: rgba(74, 155, 209, .08);
+            padding: 1px 6px;
+            border-radius: 6px
+        }
     </style>
 </head>
 
@@ -915,13 +924,13 @@
                 <h1>Five drops, no map, just a chain of notes.</h1>
             </div>
             <div class="card problem-card">
-                <p>Meera delivers parcels across town on her scooter. Her route isn't a map — it's a
+                <p>Meera delivers parcels across town on her scooter. Her route isn't a map. It's a
                     <b>stack of paper notes clipped to her handlebar</b>. Each note has one drop on it, and at the
                     bottom, a line that says which note comes <i>next</i>. The first note is where she starts; the
                     last note just says "done" and points at nothing.</p>
-                <p>Halfway through the run, a customer texts: "add my flat upstairs — it's on the way" — a
+                <p>Halfway through the run, a customer texts: "add my flat upstairs, it's on the way", a
                     <b>new stop</b> that belongs somewhere in the middle of the chain. Another texts: "nobody's
-                    home, skip me" — a stop that has to <b>come out</b>.</p>
+                    home, skip me", a stop that has to <b>come out</b>.</p>
                 <p>There's no numbered street list to re-clip. Just the chain of notes, one pointing to the next.
                     How does Meera change the route <b>without losing her place or the stops behind her</b>?</p>
             </div>
@@ -937,33 +946,20 @@
             <div class="card" style="text-align:center;max-width:680px;margin:0 auto">
                 <p style="color:var(--muted);font-size:14.5px">You hold <b style="color:var(--primary-deep)">one note
                         at a time</b>. That note shows a drop, and at its bottom one line: <i>which note comes
-                        next</i>. Each note is only ever connected to the one after it — that is the whole route.</p>
-
-                <div class="mini-chain">
-                    <div class="mini-note here"><b>Sunrise Colony</b><span>in your hand 🛵</span></div>
-                    <span class="mini-arrow">➜</span>
-                    <div class="mini-note"><b>Hill View</b><span>points to next</span></div>
-                    <span class="mini-arrow">➜</span>
-                    <div class="mini-note tail-mini"><b>Dock End</b><span>TAIL · points nowhere</span></div>
-                </div>
-                <p style="font-size:12px;color:var(--faint);margin-top:2px">In the game, every white card works exactly
-                    like these — that's all there is to the route.</p>
+                        next</i>. Each note is only ever connected to the one after it. That is the whole route.</p>
 
                 <h4 style="font-family:'Poppins',sans-serif;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--primary-dark);margin:22px 0 2px">Your three moves</h4>
                 <ul class="move-list">
-                    <li><b>➡️ Move to the next note</b> — put down the note you hold, pick up the note it points to.
-                        Nothing changes; you just walk forward.</li>
-                    <li><b>➕ Add a delivery</b> — a new note clips in <i>right after</i> the one you hold. Two lines
-                        change: yours now points to the new note, and the new note points to whatever yours used to
-                        point to.</li>
-                    <li><b>✖ Cancel the next stop</b> — the note <i>directly after</i> the one you hold is taken out.
-                        One line changes: yours now skips straight past it.</li>
+                    <li><b>➡️ Move to the next note.</b> Put down the note you hold and pick up the one it points
+                        to.</li>
+                    <li><b>➕ Add a delivery.</b> Clip a new note in right after the one you hold.</li>
+                    <li><b>✖ Cancel the next stop.</b> Take out the note right after yours.</li>
                 </ul>
 
                 <h4 style="font-family:'Poppins',sans-serif;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--primary-dark);margin:22px 0 2px">Your mission</h4>
                 <ul class="move-list">
-                    <li><b>1 · Walk the chain.</b> Start at the Head (first note) and keep moving until you reach the
-                        Tail (last note).</li>
+                    <li><b>1 · Walk the chain.</b> Start at the first note and keep moving forward until you reach the
+                        last note.</li>
                     <li><b>2 · Add one delivery.</b> Press ➕ while stopped at any note.</li>
                     <li><b>3 · Cancel one stop.</b> Press ✖ to drop the note right after yours.</li>
                 </ul>
@@ -973,8 +969,7 @@
                         class="cost-chip">Move = free</span>
                 </div>
                 <p style="font-size:14px;color:var(--primary-deep);font-weight:600;margin-top:10px">Do all three jobs
-                    with <b>3 rewrites or fewer</b>. Tap ▶ Auto Route in the game to watch Meera do one round for
-                    you first.</p>
+                    with <b>3 rewrites or fewer</b>.</p>
             </div>
             <div class="section-nav"><button class="btn ghost" id="btn-briefing-back">⬅ Back</button><button class="btn"
                     id="btn-briefing-start">Start the Run ▶</button></div>
@@ -985,7 +980,7 @@
                 · The Run</span>
             <h2 class="section-title">Work the Chain</h2>
             <p class="section-sub">Every card is one note: its name plus who it points to. Follow the arrows from the
-                Head, and use the buttons (or click the next note card) to do the three jobs.</p>
+                start, and use the buttons (or click the next note card) to do the three jobs.</p>
             <div class="game-shell">
                 <div class="stats">
                     <span class="stat">Stops: <strong id="s-stops">5</strong></span>
@@ -993,14 +988,9 @@
                     <span class="stat">Mode: <strong id="s-mode">Manual</strong></span>
                 </div>
                 <div class="how-to">
-                    <b>How to play</b>
-                    <span>You hold the <b>🛵 "you are here"</b> note. Three buttons, three moves:</span>
-                    <span><code>➡️ Move</code> go to the note yours points to · <code>➕ Add</code> clip a new note
-                        right after yours · <code>✖ Cancel</code> remove the note right after yours</span>
-                    <span>Mission: <b>walk Head ➜ Tail + add 1 + cancel 1</b>, using 3 rewrites or fewer (Add = 2,
-                        Cancel = 1).</span>
+                    <span>Hold one note. ➡️ moves you forward, ➕ clips a new note in right after yours, ✖ removes the next note. Mission: walk start ➜ end, add 1, cancel 1 in ≤3 rewrites.</span>
                 </div>
-                <div class="route-head"><span>📋 The Route — Head ➜ Tail</span><span class="sub" id="route-sub">Each
+                <div class="route-head"><span>📋 The Route: Start ➜ End</span><span class="sub" id="route-sub">Each
                         card shows its note and what it points to. Start: press ➡️ Move.</span></div>
                 <div class="route" id="route"></div>
                 <div class="hold-status" id="hold-status"></div>
@@ -1030,11 +1020,11 @@
                 <div id="mission-banner"
                     style="margin-top:14px;padding:14px 16px;border-radius:12px;background:#FFF3E6;border:1.5px solid var(--glass-border);text-align:center;font-size:13px">
                     <span style="font-weight:800;color:var(--amber-dark)">🎯 Mission:</span> <span id="mission-text"
-                        style="color:var(--ink)">Walk Head ➜ Tail, add 1 delivery, cancel 1 stop — with <b>3 rewrites or
+                        style="color:var(--ink)">Walk Start ➜ End, add 1 delivery, cancel 1 stop with <b>3 rewrites or
                             fewer</b> (Add = 2, Cancel = 1).</span>
-                    <span id="mission-status" style="font-weight:700;color:var(--muted)">— in progress</span>
+                    <span id="mission-status" style="font-weight:700;color:var(--muted)">· in progress</span>
                     <div style="margin-top:8px;font-size:12.5px;color:var(--muted)">
-                        <span id="chk-walk">◻ Walk Head ➜ Tail</span> ·
+                        <span id="chk-walk">◻ Walk Start ➜ End</span> ·
                         <span id="chk-add">◻ Add 1 delivery</span> ·
                         <span id="chk-cancel">◻ Cancel 1 stop</span>
                     </div>
@@ -1055,28 +1045,26 @@
             <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 4
                 · Case Notes</span>
             <h2 class="section-title">What did you notice?</h2>
-            <p class="section-sub">No single right answer — just what you saw on the route.</p>
-            <div class="card" style="max-width:760px;margin:0 auto">
-                <div class="qgrid">
-                    <div class="qcard"><span class="q-num">01 · No jumping</span><span class="q-text">Standing at the
-                            Head, could you peek at the 4th note without passing notes 2 and 3? What did you actually
-                            have to do to get there?</span></div>
-                    <div class="qcard"><span class="q-num">02 · The add</span><span class="q-text">When you clipped the
-                            new note into the middle, which notes' "next" lines had to change? How many — and did any
-                            <i>other</i> note notice?</span></div>
-                    <div class="qcard"><span class="q-num">03 · The cancel</span><span class="q-text">When you pulled a
-                            note out of the middle, where did the note after it go? Did the chain break, or did
-                            somebody start pointing at it instead?</span></div>
-                    <div class="qcard"><span class="q-num">04 · The Tail</span><span class="q-text">The last note's
-                            "next" line pointed at nothing. What would go haywire if it pointed at some random note
-                            instead?</span></div>
-                    <div class="qcard"><span class="q-num">05 · Same run, twice</span><span class="q-text">The three
-                            jobs — move, add, cancel — each took a different amount of line-rewriting. Which felt
-                            <i>local</i> (only nearby notes changed) and which forced you to walk?</span></div>
-                    <div class="qcard"><span class="q-num">06 · Beyond the run</span><span class="q-text">Where else do
-                            things only ever point to "what comes next" — playlists, chat threads, your browser's back
-                            button?</span></div>
-                </div>
+            <p class="section-sub">No single right answer. Just what you saw on the route.</p>
+            <div class="qgrid">
+                <div class="qcard"><span class="q-num">01 · No jumping</span><span class="q-text">Standing at the
+                        start note, could you peek at the 4th note without passing notes 2 and 3? What did you
+                        actually have to do to get there?</span></div>
+                <div class="qcard"><span class="q-num">02 · The add</span><span class="q-text">When you clipped the
+                        new note into the middle, which notes' "next" lines had to change? How many, and did any
+                        <i>other</i> note notice?</span></div>
+                <div class="qcard"><span class="q-num">03 · The cancel</span><span class="q-text">When you pulled a
+                        note out of the middle, where did the note after it go? Did the chain break, or did
+                        somebody start pointing at it instead?</span></div>
+                <div class="qcard"><span class="q-num">04 · The end note</span><span class="q-text">The last note's
+                        "next" line pointed at nothing. What would go haywire if it pointed at some random note
+                        instead?</span></div>
+                <div class="qcard"><span class="q-num">05 · Same run, twice</span><span class="q-text">The three
+                        jobs, move, add and cancel, each took a different amount of line-rewriting. Which felt
+                        <i>local</i> (only nearby notes changed) and which forced you to walk?</span></div>
+                <div class="qcard"><span class="q-num">06 · Beyond the run</span><span class="q-text">Where else do
+                        things only ever point to "what comes next": playlists, chat threads, your browser's back
+                        button?</span></div>
             </div>
             <div class="section-nav"><button class="btn ghost" id="btn-notes-back">⬅ Back</button><button class="btn"
                     id="btn-notes-continue">Continue to The Method ➜</button></div>
@@ -1094,53 +1082,53 @@
             <div class="learning-flow" style="margin-top:10px">
                 <h4>Definition</h4>
                 <p><strong>A linked list is a chain of stops where each stop stores its own data plus a link to the
-                        next stop — and you can only reach a stop by following links from the start.</strong></p>
+                        next stop. You can only reach a stop by following links from the start.</strong></p>
                 <p>In the game, each note was one <b>stop</b>: it held the drop's name and a line pointing to the next
                     note. Moving was <b>traversal</b>. Adding a delivery <b>inserted</b> a stop by rewiring two lines.
                     Cancelling <b>deleted</b> a stop by rewiring one line. The Head is the entry point; the Tail's link
                     is empty.</p>
                 <h4>Mechanism</h4>
-                <p><code>traverse</code> — from the Head, follow <code>next</code> until you reach the stop you want
+                <p><code>traverse</code>: from the Head, follow <code>next</code> until you reach the stop you want
                     (or the Tail). <code>insert</code> after stop <i>P</i>: point the new stop at <i>P</i>'s old next,
-                    then point <i>P</i> at the new stop — <b>2 rewrites</b>. <code>delete</code> the stop after
-                    <i>P</i>: point <i>P</i> directly at that stop's next — <b>1 rewrite</b>. Nothing else in the
+                    then point <i>P</i> at the new stop, <b>2 rewrites</b>. <code>delete</code> the stop after
+                    <i>P</i>: point <i>P</i> directly at that stop's next, <b>1 rewrite</b>. Nothing else in the
                     chain ever changes.</p>
                 <h4>Vocabulary</h4>
-                <p><code>node</code> — one stop (data + link), <code>head</code> — the first node, entry point,
-                    <code>tail</code> — the last node, its link is null, <code>next</code> — the link to the following
-                    node, <code>traversal</code> — walking the chain node by node, <code>insertion /
-                        deletion</code> — local rewiring of links, <code>O(n)</code> — reaching the k-th node takes up
+                <p><code>node</code>: one stop (data + link), <code>head</code>: the first node, entry point,
+                    <code>tail</code>: the last node, its link is null, <code>next</code>: the link to the following
+                    node, <code>traversal</code>: walking the chain node by node, <code>insertion /
+                        deletion</code>: local rewiring of links, <code>O(n)</code>: reaching the k-th node takes up
                     to k steps.</p>
             </div>
             <div class="comp" style="max-width:640px;margin:40px auto 28px;text-align:left">
                 <div class="compare-cards">
                     <div class="compare-card"><span class="compare-title">One long numbered list</span><span
                             class="compare-sub">Slip a new stop in at position 3 and every stop after it gets
-                            renumbered — up to n shifts for one add.</span></div>
+                            renumbered, up to n shifts for one add.</span></div>
                     <div class="compare-card"><span class="compare-title">A chain of notes</span><span
-                            class="compare-sub">Add or cancel with 2 (or 1) line rewrites — the rest of the route
+                            class="compare-sub">Add or cancel with 2 (or 1) line rewrites, the rest of the route
                             never notices, wherever the change lands.</span></div>
                 </div>
                 <div class="key-learnings">
                     <h3>🔑 Key Learnings</h3>
                     <div class="kl-grid">
                         <div class="kl-item"><span class="kl-icon">🚶</span>
-                            <div><b>No Jumping — Only Walking</b>
+                            <div><b>No Jumping, Only Walking</b>
                                 <p>Each stop knows only where the next one is. Finding the 5th stop still costs 5
-                                    follows from the Head — distance on the chain is what costs, not physical
+                                    follows from the Head, distance on the chain is what costs, not physical
                                     distance on the map.</p>
                             </div>
                         </div>
                         <div class="kl-item"><span class="kl-icon">✂️</span>
                             <div><b>Changes Are Local</b>
-                                <p>Insert rewrites 2 links, delete rewrites 1 — no matter how long the chain is, and
+                                <p>Insert rewrites 2 links, delete rewrites 1, no matter how long the chain is, and
                                     no stop after the change has to move or renumber.</p>
                             </div>
                         </div>
                         <div class="kl-item"><span class="kl-icon">🧩</span>
                             <div><b>Where You'll See It</b>
                                 <p>Playlists (play-next splices a song in), chat and undo history, your browser's back
-                                    button, queues at a counter — anything that grows, shrinks, or changes in the
+                                    button, queues at a counter: anything that grows, shrinks, or changes in the
                                     middle often and rarely needs instant jump-to-number-500 access.</p>
                             </div>
                         </div>
@@ -1158,28 +1146,26 @@
                 · New Cases</span>
             <h2 class="section-title">Try on your own</h2>
             <p class="section-sub">Work it out in your head.</p>
-            <div class="card" style="max-width:760px;margin:0 auto">
-                <div class="qgrid">
-                    <div class="qcard"><span class="q-num">01 · Long walk</span><span class="q-text">You're holding
-                            note 2 of 6 and the new delivery belongs after note 5. How many "Move Next" steps come
-                            first, and which two lines get rewritten at the end?</span></div>
-                    <div class="qcard"><span class="q-num">02 · Cancelling the Head</span><span class="q-text">What if
-                            the <i>first</i> note itself is cancelled — which note becomes the new Head? And what if
-                            there was only one note to begin with?</span></div>
-                    <div class="qcard"><span class="q-num">03 · Cutting ahead</span><span class="q-text">You want the new
-                            delivery to be dropped off <i>first</i>, before the current Head. Which single line
-                            change does it, and what does the new note point at?</span></div>
-                    <div class="qcard"><span class="q-num">04 · Hundred-stop run</span><span class="q-text">A chain has
-                            100 stops and you need the very last one. Worst case, how many follows? Now: how many
-                            follows does it take to <i>cancel</i> stop 50, once you're standing at stop 49?</span></div>
-                    <div class="qcard"><span class="q-num">05 · The circle</span><span class="q-text">Imagine the Tail's
-                            line pointed all the way back to the Head instead of nowhere. What new trouble could a
-                            careless "Move Next" run into?</span></div>
-                    <div class="qcard"><span class="q-num">06 · Two ways to store</span><span class="q-text">A numbered
-                            street list can jump straight to stop 50 but renumbers everything on every add. A chain
-                            never renumbers but always walks. Which would Meera prefer — and when would the other one
-                            win?</span></div>
-                </div>
+            <div class="qgrid">
+                <div class="qcard"><span class="q-num">01 · Long walk</span><span class="q-text">You're holding
+                        note 2 of 6 and the new delivery belongs after note 5. How many traversal steps come first,
+                        and which two next links get rewritten at the end?</span></div>
+                <div class="qcard"><span class="q-num">02 · Cancelling the Head</span><span class="q-text">What if
+                        the <i>first</i> note itself is cancelled: which note becomes the new Head? And what if
+                        there was only one note to begin with?</span></div>
+                <div class="qcard"><span class="q-num">03 · Cutting ahead</span><span class="q-text">You want the new
+                        delivery to be dropped off <i>first</i>, before the current Head. Which single link
+                        change does it, and what does the new note point at?</span></div>
+                <div class="qcard"><span class="q-num">04 · Hundred-stop run</span><span class="q-text">A chain has
+                        100 stops and you need the very last one. Worst case, how many follows? Now: how many
+                        follows does it take to <i>cancel</i> stop 50, once you're standing at stop 49?</span></div>
+                <div class="qcard"><span class="q-num">05 · The circle</span><span class="q-text">Imagine the Tail's
+                        line pointed all the way back to the Head instead of nowhere. What new trouble could a
+                        careless "Move Next" run into?</span></div>
+                <div class="qcard"><span class="q-num">06 · Two ways to store</span><span class="q-text">A numbered
+                        street list can jump straight to stop 50 but renumbers everything on every add. A chain
+                        never renumbers but always walks. Which would Meera prefer, and when would the other one
+                        win?</span></div>
             </div>
             <div class="section-nav"><button class="btn ghost" id="btn-cases-back">⬅ Back</button><button class="btn"
                     id="btn-cases-home">🏠 Back to CSE Lab</button><button class="btn" id="btn-cases-finish">Restart
@@ -1190,7 +1176,7 @@
 
     <div class="modal-overlay" id="modal-back-warn">
         <div class="modal-box">
-            <div class="modal-eyebrow">Wait —</div>
+            <div class="modal-eyebrow">Wait:</div>
             <p>Going back will reset your current progress on this page.</p>
             <p class="modal-punch">Do you want to continue?</p>
             <div class="modal-actions">
@@ -1268,22 +1254,22 @@
                 document.getElementById('s-stops').textContent = route.length;
                 document.getElementById('s-edits').textContent = edits;
                 document.getElementById('s-mode').textContent = (mode === 'auto') ? 'Auto' : 'Manual';
-                document.getElementById('chk-walk').textContent = (flags.walked ? '✔' : '◻') + ' Walk Head ➜ Tail';
+                document.getElementById('chk-walk').textContent = (flags.walked ? '✔' : '◻') + ' Walk Start ➜ End';
                 document.getElementById('chk-add').textContent = (flags.ins ? '✔' : '◻') + ' Add 1 delivery';
                 document.getElementById('chk-cancel').textContent = (flags.del ? '✔' : '◻') + ' Cancel 1 stop';
                 document.getElementById('route-sub').textContent = (round <= 1)
-                    ? 'Each card shows its note and who it points to. Start: press ➡️ Move to leave the Head.'
-                    : 'Follow the arrows — you can only go to the note your card points at.';
+                    ? 'Each card shows its note and who it points to. Start: press ➡️ Move to leave the start.'
+                    : 'Follow the arrows: you can only go to the note your card points at.';
                 var curName = route[cur];
                 var nxt = (cur < route.length - 1) ? route[cur + 1] : null;
-                document.getElementById('hold-status').textContent = '🛵 You are holding: "' + curName + '" (note ' + (cur + 1) + ' of ' + route.length + ')' + (nxt ? ' — it points to ➜ "' + nxt + '".' : ' — this is the Tail: it points nowhere.');
+                document.getElementById('hold-status').textContent = '🛵 You are holding: "' + curName + '" (note ' + (cur + 1) + ' of ' + route.length + ')' + (nxt ? ', it points to ➜ "' + nxt + '".' : ', this is the end note: it points nowhere.');
                 var r = document.getElementById('route'); r.innerHTML = '';
                 for (var i = 0; i < route.length; i++) {
                     (function (i) {
                         if (i > 0) { var a = document.createElement('span'); a.className = 'arrow'; a.textContent = '➜'; r.appendChild(a); }
                         var d = document.createElement('div'); d.className = 'stop' + (i === cur ? ' here' : '');
-                        if (i === 0) { var th = document.createElement('span'); th.className = 'stop-tag head'; th.textContent = 'HEAD'; d.appendChild(th); }
-                        if (i === route.length - 1) { var tt = document.createElement('span'); tt.className = 'stop-tag tail'; tt.textContent = 'TAIL'; d.appendChild(tt); }
+                        if (i === 0) { var th = document.createElement('span'); th.className = 'stop-tag head'; th.textContent = 'START'; d.appendChild(th); }
+                        if (i === route.length - 1) { var tt = document.createElement('span'); tt.className = 'stop-tag tail'; tt.textContent = 'END'; d.appendChild(tt); }
                         var nm = document.createElement('span'); nm.className = 'stop-name'; nm.textContent = route[i]; d.appendChild(nm);
                         var nx = document.createElement('span'); nx.className = 'stop-next';
                         nx.textContent = (i < route.length - 1) ? ('→ next: ' + route[i + 1]) : '→ end of route';
@@ -1306,20 +1292,20 @@
                 if (done || mode === 'auto') return;
                 if (i === cur) { toast('You are already holding this note.'); return; }
                 if (i === cur + 1) { doMove(); return; }
-                if (cur >= route.length - 1) { toast('This is the Tail — it points nowhere.'); return; }
-                toast('You can only move to the next note — no jumping ahead!');
+                if (cur >= route.length - 1) { toast('This is the end note. It points nowhere.'); return; }
+                toast('You can only move to the next note. No jumping ahead!');
                 hintText('No jumping: from here you can only follow the line to ' + route[cur + 1] + '. Keep pressing ➡️ Move to Next Note.');
             }
 
             function doMove() {
-                if (cur >= route.length - 1) { toast('This is the Tail — it points nowhere.'); return; }
+                if (cur >= route.length - 1) { toast('This is the end note. It points nowhere.'); return; }
                 cur++; firstAction = false;
                 render();
                 if (cur === route.length - 1) {
-                    hintText('You reached the Tail — every stop walked, Head ➜ Tail ✔. Now add a delivery (➕) and cancel a stop (✖).');
+                    hintText('You reached the end note: every stop walked, start ➜ end ✔. Now add a delivery (➕) and cancel a stop (✖).');
                     if (allFlags()) finish();
                 } else {
-                    hintText('Now holding note ' + (cur + 1) + ' of ' + route.length + ' — "' + route[cur] + '". Its line points to ' + route[cur + 1] + '.');
+                    hintText('Now holding note ' + (cur + 1) + ' of ' + route.length + ': "' + route[cur] + '". Its line points to ' + route[cur + 1] + '.');
                 }
             }
 
@@ -1333,7 +1319,7 @@
                 render();
                 var el = document.querySelectorAll('.stop')[cur + 1];
                 if (el) el.classList.add('newborn');
-                hintText('Inserted "' + name + '" after "' + after + '" — 2 lines rewritten' + (oldNext ? (': "' + after + '" now points to "' + name + '", and "' + name + '" points to "' + oldNext + '".') : '.'));
+                hintText('Inserted "' + name + '" after "' + after + '", 2 lines rewritten' + (oldNext ? (': "' + after + '" now points to "' + name + '", and "' + name + '" points to "' + oldNext + '".') : '.'));
                 if (allFlags()) finish();
             }
 
@@ -1345,7 +1331,7 @@
                 route.splice(cur + 1, 1);
                 edits += 1; delCount++; flags.del = true; firstAction = false;
                 render();
-                hintText('Cancelled "' + removed + '" — 1 line rewritten: "' + after + '" now points straight to ' + (newNext ? ('"' + newNext + '".') : 'the end of the route.'));
+                hintText('Cancelled "' + removed + '", 1 line rewritten: "' + after + '" now points straight to ' + (newNext ? ('"' + newNext + '".') : 'the end of the route.'));
                 if (allFlags()) finish();
             }
 
@@ -1360,7 +1346,7 @@
                     document.getElementById('mission-status').textContent = '✓ Complete!';
                     toast('🎉 Mission completed!');
                     confetti();
-                    hintText('All three jobs done in ' + edits + ' line rewrite' + (edits === 1 ? '' : 's') + ' — the rest of the chain never moved. Press New Round to try again.');
+                    hintText('All three jobs done in ' + edits + ' line rewrite' + (edits === 1 ? '' : 's') + ', the rest of the chain never moved. Press New Round to try again.');
                 } else {
                     document.getElementById('mission-status').textContent = 'Done in ' + edits + ' rewrites';
                     hintText('All three jobs done, but in ' + edits + ' rewrites (best is 3: one insert = 2, one cancel = 1). Press New Round to try again.');
@@ -1392,7 +1378,7 @@
                     if (cur < target) { doMove(); scheduleNext(); return; }
                     if (cur < route.length - 1) { doDelete(); scheduleNext(); return; }
                     stopAuto();
-                    toast('Auto can\'t cancel a stop from the Tail — press ↺ New Round and try again.');
+                    toast('Auto can\'t cancel a stop from the end note, press ↺ New Round and try again.');
                     return;
                 }
                 if (cur < route.length - 1) { doMove(); scheduleNext(); return; }
@@ -1401,19 +1387,19 @@
             }
 
             function hint() {
-                if (done) { toast('Mission done — press New Round to play again.'); return; }
+                if (done) { toast('Mission done. Press New Round to play again.'); return; }
                 if (!flags.ins) {
-                    if (cur < 1) toast('New orders are waiting — but first, press ➡️ Move to Next Note to get at least one note in.');
-                    else toast('Press ➕ Add Delivery — clip the new stop right after "' + route[cur] + '".');
+                    if (cur < 1) toast('New orders are waiting, but first press ➡️ Move to Next Note to get at least one note in.');
+                    else toast('Press ➕ Add Delivery: clip the new stop right after "' + route[cur] + '".');
                     return;
                 }
                 if (!flags.del) {
-                    if (cur >= route.length - 1) toast('At the Tail there is no next note — move back... actually, start a New Round and cancel before the end.');
-                    else toast('Press ✖ Cancel Next — drop "' + route[cur + 1] + '" with a single line rewrite.');
+                    if (cur >= route.length - 1) toast('At the end note there is no next note: move back... actually, start a New Round and cancel before the end.');
+                    else toast('Press ✖ Cancel Next: drop "' + route[cur + 1] + '" with a single line rewrite.');
                     return;
                 }
-                if (!flags.walked) toast('Keep pressing ➡️ Move to Next Note until you reach the Tail.');
-                else toast('All jobs done' + (edits <= 3 ? ' — mission complete!' : ' but over 3 rewrites — try New Round.'));
+                if (!flags.walked) toast('Keep pressing ➡️ Move to Next Note until you reach the end note.');
+                else toast('All jobs done' + (edits <= 3 ? ', mission complete!' : ', but over 3 rewrites. Try New Round.'));
             }
 
             function newRound() {
@@ -1427,8 +1413,8 @@
                 if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
                 mode = 'manual';
                 document.getElementById('mission-done').style.display = 'none';
-                document.getElementById('mission-status').textContent = '— in progress';
-                document.getElementById('mission-text').innerHTML = 'Walk Head ➜ Tail, add 1 delivery, cancel 1 stop — with <b>3 rewrites or fewer</b> (Add = 2, Cancel = 1).';
+                document.getElementById('mission-status').textContent = '· in progress';
+                document.getElementById('mission-text').innerHTML = 'Walk Start ➜ End, add 1 delivery, cancel 1 stop with <b>3 rewrites or fewer</b> (Add = 2, Cancel = 1).';
                 var gh = document.getElementById('game-hint'); if (gh) { gh.style.display = 'none'; gh.textContent = ''; }
                 render();
             }
