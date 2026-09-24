@@ -1001,7 +1001,7 @@
             document.getElementById('btn-cases-home').addEventListener('click', () => window.location.href = '../../');
             document.getElementById('btn-cases-finish').addEventListener('click', () => { newRound(); showSection('sec-puzzle'); });
             var COL = ['#4A9BD1', '#EA8C36', '#7C5CB8', '#4B7A4A', '#D9714F', '#4A7D8C', '#C96F1F', '#3E6A5C'];
-            var speed = 1; var pots = [], sel = null, swaps = 0, done = false; var autoOn = false, paused = false, autoTimer = null;
+            var speed = 1; var pots = [], sel = null, swaps = 0, done = false; var autoOn = false, paused = false, autoTimer = null, animTimer = null;
             function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
             function hpx(h) { return 26 + h * 11; }
             function isLocked(i) { return pots[i] === i + 3; }
@@ -1090,7 +1090,7 @@
                 void patch.offsetWidth;
                 if (na) { na.style.transition = 'transform .85s cubic-bezier(.3,.65,.4,1)'; na.style.transform = 'translate(0,0)'; }
                 if (nb) { nb.style.transition = 'transform .85s cubic-bezier(.3,.65,.4,1)'; nb.style.transform = 'translate(0,0)'; }
-                if (after) setTimeout(after, 880);
+                if (after) animTimer = setTimeout(after, 880);
             }
             function scheduleNext() { if (autoOn && !paused && !done) autoTimer = setTimeout(autoStep, 1200 / speed); }
             function autoStep() {
@@ -1100,15 +1100,15 @@
                 var mi = minUnlockedIdx(f);
                 var a = f, b = mi, came = pots[a];
                 animateSwap(a, b, function () {
-                    if (!autoOn) return;
+                    if (!autoOn || paused) return;
                     document.getElementById('game-hint').style.display = 'block'; document.getElementById('game-hint').textContent = 'Auto: moved pot ' + came + ' into spot ' + (f + 1) + ' and locked it.';
                     if (lockedCount() === 6) { finish(); return; }
                     scheduleNext();
                 });
             }
             function startAuto() { if (done) return; autoOn = true; paused = false; document.getElementById('btn-auto').textContent = '⏸ Stop Auto'; document.getElementById('btn-pause').disabled = false; document.getElementById('btn-pause').textContent = '⏸ Pause'; autoStep(); }
-            function stopAuto() { autoOn = false; paused = false; if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; } document.getElementById('btn-auto').textContent = '▶ Start Auto'; document.getElementById('btn-pause').disabled = true; document.getElementById('btn-pause').textContent = '⏸ Pause'; }
-            function togglePause() { if (!autoOn) return; paused = !paused; var b = document.getElementById('btn-pause'); b.textContent = paused ? '▶ Resume' : '⏸ Pause'; if (paused) { if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; } } else { autoStep(); } }
+            function stopAuto() { autoOn = false; paused = false; if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; } if (animTimer) { clearTimeout(animTimer); animTimer = null; } document.getElementById('btn-auto').textContent = '▶ Start Auto'; document.getElementById('btn-pause').disabled = true; document.getElementById('btn-pause').textContent = '⏸ Pause'; }
+            function togglePause() { if (!autoOn) return; paused = !paused; var b = document.getElementById('btn-pause'); b.textContent = paused ? '▶ Resume' : '⏸ Pause'; var h = document.getElementById('game-hint'); h.style.display = 'block'; if (paused) { if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; } if (animTimer) { clearTimeout(animTimer); animTimer = null; } h.textContent = 'Paused: the tray is frozen. Press ▶ Resume to keep going from here.'; } else { h.textContent = 'Resumed: continuing from where you left off.'; autoStep(); } }
             function toast2(m) { var t = document.getElementById('toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1600); }
             function hint() { var h = document.getElementById('game-hint'); if (h && swaps > 0) { h.style.display = 'block'; } var f = firstUnlocked(); if (f < 0) { toast('All locked, nothing left to move.'); return; } var mi = minUnlockedIdx(f); toast('The shortest not locked is ' + pots[mi] + '. Swap it into spot ' + (f + 1) + '.'); }
             function newRound() { stopAuto(); pots = shuffle([3, 4, 5, 6, 7, 8].slice()); sel = null; swaps = 0; done = false; document.getElementById('mission-done').style.display = 'none'; document.getElementById('mission-status').textContent = '· in progress'; document.getElementById('mission-text').innerHTML = 'Lock all 6 seeds in height order with <b>5 swaps or fewer</b>.'; var gh = document.getElementById('game-hint'); if (gh) { gh.style.display = 'none'; gh.textContent = ''; } render(); }
