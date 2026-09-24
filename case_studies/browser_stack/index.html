@@ -144,6 +144,7 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;
 </div>
 <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px">
 <button class="btn ghost small" id="btn-auto">▶ Auto Surf</button>
+<button class="btn ghost small" id="btn-pause" disabled>⏸ Pause</button>
 <button class="btn ghost small" id="btn-visit">+ Visit Page</button>
 <button class="btn ghost small" id="btn-pop">← Back</button>
 <button class="btn ghost small" id="btn-reset">Reset</button>
@@ -271,7 +272,7 @@ var pages=[
 {url:'reddit.com/r/food',title:'Reddit · r/food',desc:'Homemade biryani • 342 upvotes',icon:'💬'},
 {url:'github.com/code',title:'GitHub · Code',desc:'Repo • 3 commits ahead',icon:'💻'}
 ];
-var speed=1;var stack=[],forward=[],ops=0,pIdx=0,mode='manual',autoTimer=null,autoStepIdx=0;
+var speed=1;var stack=[],forward=[],ops=0,pIdx=0,mode='manual',autoTimer=null,autoStepIdx=0,paused=false;
 function render(){
 document.getElementById('s-size').textContent=stack.length;
 document.getElementById('s-ops').textContent=ops;
@@ -282,6 +283,8 @@ document.getElementById('page-desc').textContent=stack.length?stack[stack.length
 document.getElementById('btn-back').disabled=stack.length===0;
 document.getElementById('btn-forward').disabled=forward.length===0;
 document.getElementById('btn-visit').classList.toggle('pulse',stack.length===0&&!challengeOn&&mode!=='auto');
+document.getElementById('btn-pause').disabled=mode!=='auto';
+document.getElementById('btn-pause').textContent=paused?'▶ Resume':'⏸ Pause';
 var h=document.getElementById('history');h.innerHTML='';
 if(!stack.length){h.innerHTML='<div class="history-empty">Empty. Visit a page to start your pile.</div>';return;}
 for(var i=stack.length-1;i>=0;i--){
@@ -355,7 +358,7 @@ document.getElementById('btn-back').addEventListener('click',doBack);
 document.getElementById('btn-forward').addEventListener('click',doForward);
 document.getElementById('btn-reset').addEventListener('click',reset);
 function startAuto(){
-mode='auto';autoStepIdx=0;
+mode='auto';paused=false;autoStepIdx=0;
 document.getElementById('btn-auto').textContent='⏸ Stop Auto';
 document.getElementById('btn-visit').disabled=true;
 document.getElementById('btn-pop').disabled=true;
@@ -367,7 +370,7 @@ reset();
 autoTimer=setInterval(autoTick,1200/speed);
 }
 function stopAuto(){
-clearInterval(autoTimer);mode='manual';
+clearInterval(autoTimer);mode='manual';paused=false;
 document.getElementById('btn-auto').textContent='▶ Auto Mode';
 document.getElementById('btn-visit').disabled=false;
 document.getElementById('btn-pop').disabled=false;
@@ -378,7 +381,7 @@ document.getElementById('game-hint').textContent='Manual Mode: press + Visit Pag
 render();
 }
 function autoTick(){
-if(mode!=='auto')return;
+if(mode!=='auto'||paused)return;
 if(autoStepIdx===0)reset();
 if(autoStepIdx<4){var pg=pages[autoStepIdx%pages.length];stack.push(pg);ops++;document.getElementById('game-hint').textContent='Auto · visited '+pg.title.split(' ·')[0]+' → now on top. Back would remove it.';}
 else{var v=stack.pop();forward.push(v);ops++;document.getElementById('game-hint').textContent='Auto · Back → returning to '+v.title.split(' ·')[0]+', the page seen just before it.';}
@@ -387,6 +390,8 @@ autoStepIdx=(autoStepIdx+1)%8;
 if(autoStepIdx===0){stopAuto();return;}
 }
 document.getElementById('btn-auto').addEventListener('click',function(){if(mode==='auto'){stopAuto();}else{startAuto();}});
+function togglePause(){if(mode!=='auto')return;paused=!paused;document.getElementById('btn-pause').textContent=paused?'▶ Resume':'⏸ Pause';document.getElementById('game-hint').textContent=paused?'Paused: the pile is frozen. Press ▶ Resume to keep going from here.':'Resumed: continuing from where you left off.';}
+document.getElementById('btn-pause').addEventListener('click',togglePause);
 function setSpeed(m){speed=Math.round(m*100)/100;if(mode==='auto'){clearInterval(autoTimer);autoTimer=setInterval(autoTick,1200/speed);}}
 document.getElementById('speed-select').addEventListener('change',function(){setSpeed(parseFloat(this.value));});
 document.getElementById('speed-select').value='1';setSpeed(1);
