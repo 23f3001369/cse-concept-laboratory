@@ -287,14 +287,50 @@ button{font-family:'Poppins',sans-serif;cursor:pointer;}
 /* ---- finalized lock-in celebration ---- */
 @keyframes lockPulse{0%{box-shadow:0 0 0 0 rgba(75,122,74,.6);}70%{box-shadow:0 0 0 14px rgba(75,122,74,0);}100%{box-shadow:0 0 0 0 rgba(75,122,74,0);}}
 .nb-chip.finalized.just-locked{animation:lockPulse 1s ease-out;}
+
+.cs-Laboratory-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  
+  /* Soft blue gradient matching your reference image */
+  background: linear-gradient(90deg, #82b9e7 0%, #3a7db8 100%);
+  
+  color: #ffffff;
+  text-decoration: none;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  
+  /* Pill shape */
+  border-radius: 50px;
+  
+  /* Subtle soft shadow */
+  box-shadow: 0 4px 12px rgba(58, 125, 184, 0.25);
+  transition: all 0.25s ease;
+}
+
+/* Hover effect */
+.cs-Laboratory-link:hover {
+  background: linear-gradient(90deg, #74ade0 0%, #2e6fa8 100%);
+  box-shadow: 0 6px 16px rgba(58, 125, 184, 0.35);
+  transform: translateY(-1px);
+}
+
+.cs-Laboratory-link:hover .arrow {
+  transform: translateX(-4px);
+}
+
+.arrow {
+  transition: transform 0.2s ease;
+  font-size: 16px;
+}
+
 </style>
 </head>
 <body>
 
-<div class="brand-bar">
-  <div class="brand-badge"><img src="../../assets/iitropar.png" alt="IIT Ropar logo"></div>
-  <div class="brand-badge"><img src="../../assets/vicharanashala.png" alt="Vicharanshala logo"></div>
-</div>
 
 <div class="wrap">
 
@@ -416,7 +452,7 @@ button{font-family:'Poppins',sans-serif;cursor:pointer;}
 
       <div class="reveal" id="reveal">
         <div style="font-size:52px;">🎉🔧🎉</div>
-        <h2>This strategy is called Quick Sort!</h2>
+        
         <p>You just built it with your own hands — head to the Key Learnings chapter for the full recap. 🛠️</p>
       </div>
     </div>
@@ -467,6 +503,9 @@ button{font-family:'Poppins',sans-serif;cursor:pointer;}
 
   <!-- ================= SECTION 5: EXERCISE WORKBOOK ================= -->
   <section class="section" id="sec-workbook">
+    <a href="../../index.html" class="cs-Laboratory-link">
+    <strong>← Back to CSE Concept Laboratory</strong>
+  </a>
     <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 5 · Exercise Workbook</span>
     <h2 class="section-title">Put the idea to the test</h2>
     <p class="section-sub">New situations to think through using what you just discovered.</p>

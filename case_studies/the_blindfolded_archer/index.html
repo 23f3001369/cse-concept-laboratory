@@ -344,19 +344,50 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:12.5px;}
 }
 #restart-btn .r-spin{display:inline-block;transition:transform .4s;}
 #restart-btn:hover .r-spin{transform:rotate(180deg);}
+
+.cs-Laboratory-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  
+  /* Soft blue gradient matching your reference image */
+  background: linear-gradient(90deg, #82b9e7 0%, #3a7db8 100%);
+  
+  color: #ffffff;
+  text-decoration: none;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  
+  /* Pill shape */
+  border-radius: 50px;
+  
+  /* Subtle soft shadow */
+  box-shadow: 0 4px 12px rgba(58, 125, 184, 0.25);
+  transition: all 0.25s ease;
+}
+
+/* Hover effect */
+.cs-Laboratory-link:hover {
+  background: linear-gradient(90deg, #74ade0 0%, #2e6fa8 100%);
+  box-shadow: 0 6px 16px rgba(58, 125, 184, 0.35);
+  transform: translateY(-1px);
+}
+
+.cs-Laboratory-link:hover .arrow {
+  transform: translateX(-4px);
+}
+
+.arrow {
+  transition: transform 0.2s ease;
+  font-size: 16px;
+}
 </style>
 </head>
 <body>
 <canvas id="confetti-canvas"></canvas>
 
-<div class="brand-bar">
-  <div class="brand-badge">
-    <img src="../../assets/iitropar.png" alt="IIT Ropar logo">
-  </div>
-  <div class="brand-badge">
-    <img src="../../assets/vicharanashala.png" alt="Vicharanshala logo">
-  </div>
-</div>
 
 <div class="wrap">
 
@@ -533,11 +564,11 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:12.5px;}
     <p class="section-sub">Sit with these for a moment. There's no single correct wording, just think them through in your own words.</p>
     <div class="card">
       <div class="qgrid">
-        <div class="qcard"><span class="q-num">Q1 · Exploring Nearby First</span><span class="q-text">Why did checking all nearby rooms before moving farther away make the search more systematic?</span></div>
-        <div class="qcard"><span class="q-num">Q2 · Keeping the Order</span><span class="q-text">When several rooms were waiting to be explored, why was it useful to check them in the order they were discovered?</span></div>
-        <div class="qcard"><span class="q-num">Q3 · Changing the Strategy</span><span class="q-text">What would become harder or less reliable if you always explored the newest discovered room first instead?</span></div>
-        <div class="qcard"><span class="q-num">Q4 · Finding the Shortest Route</span><span class="q-text">Why does checking closer rooms first help you find the shortest route?</span></div>
-        <div class="qcard"><span class="q-num">Q5 · Discovering the Strategy</span><span class="q-text">Based on what you experienced in the game, what rules would you give another person so they could repeat the same search successfully?</span></div>
+        <div class="qcard"><span class="q-num">Q1 . </span><span class="q-text">After a missed shot, how did you decide what to try next?</span></div>
+        <div class="qcard"><span class="q-num">Q2 · </span><span class="q-text">When a shot went past or fell short of the target, how did that help you decide how to adjust your next shot?</span></div>
+        <div class="qcard"><span class="q-num">Q3 · </span><span class="q-text">How did your strategy change from your first few shots to your later shots?</span></div>
+        <div class="qcard"><span class="q-num">Q4 · </span><span class="q-text">What was your most important learning from this exercise?</span></div>
+        <div class="qcard"><span class="q-num">Q5 · </span><span class="q-text">If you had to play the game again with a new hidden target, what would you do differently in your first few attempts?</span></div>
       </div>
 
       <div class="section-nav">
@@ -617,23 +648,27 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:12.5px;}
 
   <!-- ================= CHAPTER 6: NEW TARGETS (Exercise) ================= -->
   <section class="section" id="sec-workbook">
+    <a href="../../index.html" class="cs-Laboratory-link">
+    <strong>← Back to CSE Concept Laboratory</strong>
+  </a>
     <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 6 · New Targets</span>
     <h2 class="section-title">Put the idea to the test</h2>
     <p class="section-sub">New situations to think through using what you just discovered.</p>
     <div class="card">
       <div class="qgrid">
-        <div class="qcard"><span class="q-num">1 · New Problem</span><span class="q-text">A rescue team needs to find the nearest safe room in a building. The building has many connected rooms, and moving through each corridor takes one step. How could you organize the search so that nearby rooms are checked before farther rooms?</span></div>
-        <div class="qcard"><span class="q-num">2 · Recognize the Pattern</span><span class="q-text">A search starts from one location and explores all locations one step away before moving to locations two steps away. What features of a problem would make this type of search useful?</span></div>
-        <div class="qcard"><span class="q-num">3 · Choose an Approach</span><span class="q-text">You need to find a target in a graph where every connection has the same cost. Would you prefer to explore one path deeply or explore locations level by level? Explain your choice.</span></div>
-        <div class="qcard"><span class="q-num">4 · Spot the Misconception</span><span class="q-text">Someone says, "BFS always gives the shortest path because it visits every vertex." What is wrong with this reasoning?</span></div>
-        <div class="qcard"><span class="q-num">5 · Change the Constraints</span><span class="q-text">BFS is being used to find the shortest route, but now different connections can have different costs. How might this change your choice of search strategy?</span></div>
-        <div class="qcard"><span class="q-num">6 · Compare Efficiency</span><span class="q-text">Two searches explore the same graph. One explores locations level by level, while the other follows one path as far as possible before backtracking. What factors would you examine to decide which search is more suitable for a particular problem?</span></div>
-        <div class="qcard"><span class="q-num">7 · Unfamiliar Application</span><span class="q-text">A communication network has several starting points where an alert is detected at the same time. The company wants to know how quickly the alert could reach every other device. How could a level-by-level search help, and what would determine how efficiently it works?</span></div>
+        <div class="qcard"><span class="q-num">1 · Route Planning</span><span class="q-text">A delivery system keeps adjusting a route to reduce the total travel time. After each change, the travel time improves, but sometimes the system changes the route too much and becomes worse. How could the idea of making smaller changes near a good solution help?</span></div>
+        <div class="qcard"><span class="q-num">2 · Image Processing</span><span class="q-text">An image-editing system is trying to adjust several settings to make a blurry image clearer. Some changes improve the image while others make it worse. How could it use the results of previous changes to decide what to change next?</span></div>
+        <div class="qcard"><span class="q-num">3 · Recommendation Systems</span><span class="q-text">A movie recommendation system wants to improve how accurately it predicts which movies a user will like. It can change several settings, but changing them randomly does not consistently improve the predictions. How could a step-by-step improvement approach help?</span></div>
+        <div class="qcard"><span class="q-num">4 · Robotics</span><span class="q-text">A robot arm needs to move its hand to a specific position. Its first movements are far from the target, but later movements get closer. Why might large adjustments be useful at first and smaller adjustments be better near the target?</span></div>
+        <div class="qcard"><span class="q-num">5 · Business Pricing</span><span class="q-text">A company wants to find a product price that gives the highest profit. Changing the price changes the profit, but the best price is not known beforehand. How could the company gradually adjust the price to search for a better one?</span></div>
+        <div class="qcard"><span class="q-num">6 · Process Ordering</span><span class="q-text">Arrange these actions in the correct order: measure the error, calculate the direction of change, update the parameters, and repeat the process. Explain why your order makes sense?</span></div>
+        <div class="qcard"><span class="q-num">7 · Concept Application</span><span class="q-text">A model keeps making predictions that are far from the correct answers. How would Gradient Descent help the model improve over repeated updates?</span></div>
+        <div class="qcard"><span class="q-num">8 · Compare & Contrast</span><span class="q-text">Two training methods are available: one uses the entire dataset before making an update, while the other uses one example at a time. How would their behavior differ during training?</span></div>
       </div>
 
       <div class="section-nav">
         <button class="btn ghost back-btn" id="workbook-back">⬅ Back to the Fletcher's Workshop</button>
-        <button class="btn" id="workbook-finish">🏁 Finish ➜</button>
+        <button class="btn" id="workbook-finish">Restart from Beginning  ➜</button>
       </div>
     </div>
   </section>

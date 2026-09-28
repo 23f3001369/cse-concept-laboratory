@@ -225,6 +225,11 @@ img{max-width:100%;}
 }
 .back-link:hover{text-decoration:underline;}
 
+/* ---- topics covered ---- */
+.topic-pills{display:flex;flex-wrap:wrap;gap:10px;}
+.topic-pill{font-size:14px;font-weight:500;padding:8px 16px;border-radius:999px;border:1px solid var(--border);background:#fff;color:var(--muted);}
+.topics-note{margin-top:30px;color:var(--muted);font-size:15px;max-width:66ch;}
+
 /* ---- contribute strip ---- */
 .contribute-strip{text-align:center;}
 .contribute-strip h2{max-width:38ch;margin:0 auto;}
@@ -263,6 +268,7 @@ footer::before{content:"";display:block;height:4px;background:linear-gradient(90
     <a href="#goal">Goal</a>
     <a href="#case-studies">Case Studies</a>
     <a href="#contribute">Contribute</a>
+    <a href="#topics">Topics</a>
     <a href="get-in-touch.html" class="nav-cta">Get in Touch</a>
   </nav>
   <div class="brand-badge"><img src="assets/iitropar.png" alt="IIT Ropar logo"></div>
@@ -412,17 +418,18 @@ footer::before{content:"";display:block;height:4px;background:linear-gradient(90
         <span class="num">08</span><h3>Junction Street</h3><span class="go">Open case study →</span>
       </a>
 
+      <a class="case-row" href="case_studies/the_blindfolded_archer/">
+        <span class="num">09</span><h3>The Blindfolded Archer</h3><span class="go">Open case study →</span>
+      </a>
+
       <div class="case-row case-row--soon">
-        <span class="num">09</span><h3>Nuts-and-Bolts</h3><span class="go">Coming Soon...</span>
+        <span class="num">10</span><h3>Nuts-and-Bolts</h3><span class="go">Coming Soon...</span>
       </div>
 
       <div class="case-row case-row--soon">
-        <span class="num">10</span><h3>Operation Padlock</h3><span class="go">Coming Soon...</span>
+        <span class="num">11</span><h3>Operation Padlock</h3><span class="go">Coming Soon...</span>
       </div>
 
-      <div class="case-row case-row--soon">
-        <span class="num">11</span><h3>The Blindfolded Archer</h3><span class="go">Coming Soon...</span>
-      </div>
     </div>
   </div>
 </section>
@@ -433,6 +440,44 @@ footer::before{content:"";display:block;height:4px;background:linear-gradient(90
     <h2>Want to contribute a case study?</h2>
     <p class="lede">Got an idea for making a tricky CSE concept click? Students are welcome to design and build their own case study for this library.</p>
     <a class="cta-btn" href="contribute.html">Learn more &rarr;</a>
+  </div>
+</section>
+
+<section class="section" id="topics">
+  <div class="wrap">
+    <div class="cases-heading">
+      <div class="section-label" style="text-align:center;">Before you start</div>
+      <h2>Topics already taken up</h2>
+      <p class="lede">These are the CS topics already being worked on. If you're picking a topic to contribute, try to pick one that isn't listed here yet.</p>
+    </div>
+
+    <div class="topic-pills" style="justify-content:center;margin-top:40px;">
+      <span class="topic-pill">Bubble Sort</span>
+      <span class="topic-pill">DFS</span>
+      <span class="topic-pill">BFS</span>
+      <span class="topic-pill">Quick Sort</span>
+      <span class="topic-pill">Recursion</span>
+      <span class="topic-pill">Binary Search</span>
+      <span class="topic-pill">Stack</span>
+      <span class="topic-pill">Queue</span>
+      <span class="topic-pill">Divide and Conquer</span>
+      <span class="topic-pill">Dijkstra's Algorithm</span>
+      <span class="topic-pill">Linked List</span>
+      <span class="topic-pill">Gradient Descent</span>
+      <span class="topic-pill">Synchronization</span>
+      <span class="topic-pill">Leaky Bucket</span>
+      <span class="topic-pill">Overfitting</span>
+      <span class="topic-pill">Concurrency / Parallelism</span>
+      <span class="topic-pill">API</span>
+      <span class="topic-pill">Load Balancing</span>
+      <span class="topic-pill">Cryptography or Asymmetric Cryptographic Key</span>
+      <span class="topic-pill">Deadlock</span>
+      <span class="topic-pill">Insertion Sort</span>
+      <span class="topic-pill">Selection Sort</span>
+      <span class="topic-pill">Priority queue</span>
+    </div>
+
+    <p class="topics-note" style="text-align:center;margin-left:auto;margin-right:auto;">Don't see your topic here at all? That's fine too, reach out on the <a href="contribute.html">contribute page</a> and we'll help you fit it into the library.</p>
   </div>
 </section>
 
@@ -453,6 +498,7 @@ footer::before{content:"";display:block;height:4px;background:linear-gradient(90
           <li><a href="#philosophy">Philosophy</a></li>
           <li><a href="#case-studies">Case Studies</a></li>
           <li><a href="#contribute">Contribute</a></li>
+          <li><a href="#topics">Topics Covered</a></li>
           <li><a href="get-in-touch.html">Get in Touch</a></li>
         </ul>
       </div>

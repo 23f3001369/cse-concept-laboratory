@@ -33,7 +33,7 @@ This approach is designed to carry across many areas of Computer Science, includ
 - Databases
 - Distributed Systems
 - Artificial Intelligence
-- ...and other abstract CS concepts
+- ...and other CS concepts
 
 ## Teaching Philosophy
 
@@ -55,10 +55,10 @@ Explore the live case studies here: [vicharanashala.github.io/cse-concept-labora
 | 05 | The Griddle | ✅ Available |
 | 06 | Missing Homework | ✅ Available |
 | 07 | The Milk Problem | ✅ Available |
-| 08 | Nuts-and-Bolts | 🚧 Coming soon |
-| 09 | Operation Padlock | 🚧 Coming soon |
-| 10 | Junction Street | 🚧 Coming soon |
-| 11 | The Blindfolded Archer | 🚧 Coming soon |
+| 08 | Junction Street | ✅ Available  |
+| 09 | The Blindfolded Archer | ✅ Available |
+| 10 | Nuts-and-Bolts | 🚧 Coming soon |
+| 11 | Operation Padlock | 🚧 Coming soon |
 
 ## Repository Structure
 
@@ -91,14 +91,14 @@ Got an idea for making a tricky CS concept click? Students and contributors are 
  
 2. **Create a new branch** for your case study or fix (e.g. `case-study/your-topic-name`).
  
-3. **Use the starter template** — download the case study template from our [Contribution Page](https://vicharanashala.github.io/cse-concept-laboratory/contribute.html) and use it as the starting point for your case study.  
+3. **Use the starter template**: download the case study template from our [Contribution Page](https://vicharanashala.github.io/cse-concept-laboratory/contribute.html) and use it as the starting point for your case study.  
    Place your completed case study inside `case_studies/your_case_study_name/`. Each case study should remain self-contained within its own folder.
  
-4. **Follow the learning journey structure** — Think About the Problem → The Story → Play the Game → Reflection → Key Learning → Exercise — and keep to our [teaching philosophy](https://github.com/vicharanashala/cse-concept-laboratory#teaching-philosophy).
+4. **Follow the learning journey structure** : Think About the Problem → The Story → Play the Game → Reflection → Key Learning → Exercise and keep to our [teaching philosophy](https://github.com/vicharanashala/cse-concept-laboratory#teaching-philosophy).
  
-5. **Test locally** — open your case study file in a browser and confirm that it renders correctly and that all links and assets work.
+5. **Test locally** : Open your case study file in a browser and confirm that it renders correctly and that all links and assets work.
  
-6. **Add your case study to the main index if required** — make sure the case study is correctly linked from the repository's global `index.html`.
+6. **Add your case study to the main index if required** : Make sure the case study is correctly linked from the repository's global `index.html`.
  
 7. **Fill out the PR template exactly** as provided when you open the pull request. Incomplete or modified PR templates will not be reviewed.
  
@@ -111,7 +111,7 @@ Got an idea for making a tricky CS concept click? Students and contributors are 
    - Please allow a **minimum of two weeks** for review and merging.
    - You may be asked to make revisions before the PR is accepted.
  
-10. **Be patient during review** — maintainers will review the contribution and may request changes before acceptance.
+10. **Be patient during review** : Maintainers will review the contribution and may request changes before acceptance.
 
 ## Get in Touch
 
@@ -119,4 +119,4 @@ Have questions, feedback, or ideas? Visit the [Get in Touch](https://github.com/
 
 ## License
 
-© 2026 Vicharanashala Lab for Education Design, IIT Ropar — All Rights Reserved.
+© 2026 Vicharanashala Lab for Education Design, IIT Ropar, All Rights Reserved.
