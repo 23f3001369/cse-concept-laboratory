@@ -871,21 +871,16 @@
             </div>
             <div class="learning-flow" style="margin-top:10px">
                 <h4>Definition</h4>
-                <p><strong>Selection Sort: find the smallest of what's left, put it in its final spot, lock it,
-                        repeat.</strong> Each round you scan the remaining pots, take the shortest one, and place it
-                    where it will live from now on.</p>
-                <p>In the game you did this with a <b>swap</b>: the shortest unlocked pot traded spots with the first
-                    unlocked spot. Because every other pot was already in the right place or still waiting, the swap
-                    locked the smallest for good.</p>
+                <p><strong>Selection Sort: find the smallest remaining, swap it into its final spot, lock it,
+                        repeat.</strong> Like the game, one scan, one swap, one locked pot each round.</p>
                 <h4>Mechanism</h4>
-                <p><code>find-minimum</code>: look through the remaining and remember the smallest; <code>swap</code>
-                    it into the front of the unsorted part so it locks. The "sorted prefix" grows by one each round, and
-                    every item moves <b>at most once</b>.</p>
+                <p><code>find-minimum</code>: scan the unsorted part and remember the smallest; <code>swap</code> it
+                    to the front so it locks. The sorted prefix grows by one each round, and every item moves
+                    <b>at most once</b>.</p>
                 <h4>Vocabulary</h4>
-                <p><code>pass</code>: one scan of the remaining items, <code>minimum</code>: the smallest
-                    remaining item, <code>swap</code>: trade the spots of two items, <code>sorted prefix</code>: the
-                    neat part you've already built, <code>O(n²)</code>: repeats n passes, each scanning up to n
-                    items.</p>
+                <p><code>pass</code>: one scan of the rest, <code>minimum</code>: the smallest remaining item,
+                    <code>swap</code>: trade two spots, <code>sorted prefix</code>: the locked part,
+                    <code>O(n²)</code>: n passes, each scanning up to n items.</p>
             </div>
             <div class="comp" style="max-width:640px;margin:40px auto 28px;text-align:left">
                 <div class="compare-cards">
@@ -961,8 +956,8 @@
     <div class="modal-overlay" id="modal-back-warn">
         <div class="modal-box">
             <div class="modal-eyebrow">Wait</div>
-            <p>Going back will reset your current progress on this page.</p>
-            <p class="modal-punch">Do you want to continue?</p>
+            <p>Leaving this chapter resets your current progress on this page.</p>
+            <p class="modal-punch">Do you want to leave?</p>
             <div class="modal-actions">
                 <button class="btn ghost" id="modal-back-cancel">Stay Here</button>
                 <button class="btn btn-danger" id="modal-back-confirm">Go Back</button>
@@ -979,20 +974,25 @@
             document.getElementById('btn-puzzle-continue').addEventListener('click', () => showSection('sec-briefing'));
             document.getElementById('btn-briefing-back').addEventListener('click', () => showSection('sec-puzzle'));
             document.getElementById('btn-briefing-start').addEventListener('click', () => showSection('sec-search'));
-            document.getElementById('btn-search-back').addEventListener('click', () => {
+            var leaveTarget = 'sec-briefing';
+            function openWarn(next, label, question) {
+                leaveTarget = next;
+                document.getElementById('modal-back-confirm').textContent = label;
+                document.querySelector('.modal-punch').textContent = question;
                 document.getElementById('modal-back-warn').classList.add('show');
-            });
+            }
+            document.getElementById('btn-search-back').addEventListener('click', () => openWarn('sec-briefing', 'Go Back', 'Do you want to go back?'));
             document.getElementById('modal-back-cancel').addEventListener('click', () => {
                 document.getElementById('modal-back-warn').classList.remove('show');
             });
             document.getElementById('modal-back-confirm').addEventListener('click', () => {
                 document.getElementById('modal-back-warn').classList.remove('show');
-                newRound(); showSection('sec-briefing');
+                newRound(); showSection(leaveTarget);
             });
             document.getElementById('modal-back-warn').addEventListener('click', (e) => {
                 if (e.target === document.getElementById('modal-back-warn')) document.getElementById('modal-back-warn').classList.remove('show');
             });
-            document.getElementById('btn-search-continue').addEventListener('click', () => showSection('sec-notes'));
+            document.getElementById('btn-search-continue').addEventListener('click', () => openWarn('sec-notes', 'Continue', 'Do you want to continue?'));
             document.getElementById('btn-notes-back').addEventListener('click', () => showSection('sec-search'));
             document.getElementById('btn-notes-continue').addEventListener('click', () => showSection('sec-method'));
             document.getElementById('btn-method-back').addEventListener('click', () => showSection('sec-notes'));

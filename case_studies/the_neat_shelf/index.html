@@ -236,8 +236,8 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;
 <div class="modal-overlay" id="modal-back-warn">
 <div class="modal-box">
 <div class="modal-eyebrow">Wait:</div>
-<p>Going back will reset your current progress on this page.</p>
-<p class="modal-punch">Do you want to continue?</p>
+<p>Leaving this chapter resets your current progress on this page.</p>
+<p class="modal-punch">Do you want to leave?</p>
 <div class="modal-actions">
 <button class="btn ghost" id="modal-back-cancel">Stay Here</button>
 <button class="btn btn-danger" id="modal-back-confirm">Go Back</button>
@@ -253,11 +253,11 @@ function showSection(id){if(id!=='sec-search')stopAuto();document.querySelectorA
 document.getElementById('btn-puzzle-continue').addEventListener('click',()=>showSection('sec-briefing'));
 document.getElementById('btn-briefing-back').addEventListener('click',()=>showSection('sec-puzzle'));
 document.getElementById('btn-briefing-start').addEventListener('click',()=>showSection('sec-search'));
-document.getElementById('btn-search-back').addEventListener('click',()=>document.getElementById('modal-back-warn').classList.add('show'));
+var leaveTarget='sec-briefing';function openWarn(next,label,q){leaveTarget=next;document.getElementById('modal-back-confirm').textContent=label;document.querySelector('.modal-punch').textContent=q;document.getElementById('modal-back-warn').classList.add('show');}document.getElementById('btn-search-back').addEventListener('click',()=>openWarn('sec-briefing','Go Back','Do you want to go back?'));
 document.getElementById('modal-back-cancel').addEventListener('click',()=>{document.getElementById('modal-back-warn').classList.remove('show');});
-document.getElementById('modal-back-confirm').addEventListener('click',()=>{document.getElementById('modal-back-warn').classList.remove('show');newRound();showSection('sec-briefing');});
+document.getElementById('modal-back-confirm').addEventListener('click',()=>{document.getElementById('modal-back-warn').classList.remove('show');newRound();showSection(leaveTarget);});
 document.getElementById('modal-back-warn').addEventListener('click',(e)=>{if(e.target===document.getElementById('modal-back-warn'))document.getElementById('modal-back-warn').classList.remove('show');});
-document.getElementById('btn-search-continue').addEventListener('click',()=>showSection('sec-notes'));
+document.getElementById('btn-search-continue').addEventListener('click',()=>openWarn('sec-notes','Continue','Do you want to continue?'));
 document.getElementById('btn-notes-back').addEventListener('click',()=>showSection('sec-search'));
 document.getElementById('btn-notes-continue').addEventListener('click',()=>showSection('sec-method'));
 document.getElementById('btn-method-back').addEventListener('click',()=>showSection('sec-notes'));

@@ -1082,23 +1082,18 @@
             </div>
             <div class="learning-flow" style="margin-top:10px">
                 <h4>Definition</h4>
-                <p><strong>A linked list is a chain of stops where each stop stores its own data plus a link to the
-                        next stop. You can only reach a stop by following links from the start.</strong></p>
-                <p>In the game, each note was one <b>stop</b>: it held the drop's name and a line pointing to the next
-                    note. Moving was <b>traversal</b>. Adding a delivery <b>inserted</b> a stop by rewiring two lines.
-                    Cancelling <b>deleted</b> a stop by rewiring one line. The Head is the entry point; the Tail's link
-                    is empty.</p>
+                <p><strong>A linked list is a chain of stops where each stop holds its own data plus a link to the
+                        next stop, and you reach any stop only by following links from the start.</strong></p>
                 <h4>Mechanism</h4>
-                <p><code>traverse</code>: from the Head, follow <code>next</code> until you reach the stop you want
-                    (or the Tail). <code>insert</code> after stop <i>P</i>: point the new stop at <i>P</i>'s old next,
-                    then point <i>P</i> at the new stop, <b>2 rewrites</b>. <code>delete</code> the stop after
-                    <i>P</i>: point <i>P</i> directly at that stop's next, <b>1 rewrite</b>. Nothing else in the
-                    chain ever changes.</p>
+                <p><code>traverse</code>: from the Head, follow <code>next</code> until you reach the stop you want.
+                    <code>insert</code> after stop <i>P</i>: point the new stop at <i>P</i>'s old next, then point
+                    <i>P</i> at the new stop, <b>2 rewrites</b>. <code>delete</code> the stop after <i>P</i>: point
+                    <i>P</i> directly at that stop's next, <b>1 rewrite</b>.</p>
                 <h4>Vocabulary</h4>
-                <p><code>node</code>: one stop (data + link), <code>head</code>: the first node, entry point,
-                    <code>tail</code>: the last node, its link is null, <code>next</code>: the link to the following
-                    node, <code>traversal</code>: walking the chain node by node, <code>insertion /
-                        deletion</code>: local rewiring of links, <code>O(n)</code>: reaching the k-th node takes up
+                <p><code>node</code>: one stop (data + link), <code>head</code>: the first stop, entry point,
+                    <code>tail</code>: the last stop, its link is null, <code>next</code>: the link to the following
+                    stop, <code>traversal</code>: walking the chain stop by stop, <code>insertion /
+                        deletion</code>: local rewiring of links, <code>O(n)</code>: reaching the k-th stop takes up
                     to k steps.</p>
             </div>
             <div class="comp" style="max-width:640px;margin:40px auto 28px;text-align:left">
@@ -1178,8 +1173,8 @@
     <div class="modal-overlay" id="modal-back-warn">
         <div class="modal-box">
             <div class="modal-eyebrow">Wait:</div>
-            <p>Going back will reset your current progress on this page.</p>
-            <p class="modal-punch">Do you want to continue?</p>
+            <p>Leaving this chapter resets your current progress on this page.</p>
+            <p class="modal-punch">Do you want to leave?</p>
             <div class="modal-actions">
                 <button class="btn ghost" id="modal-back-cancel">Stay Here</button>
                 <button class="btn btn-danger" id="modal-back-confirm">Go Back</button>
@@ -1197,20 +1192,25 @@
             document.getElementById('btn-puzzle-continue').addEventListener('click', () => showSection('sec-briefing'));
             document.getElementById('btn-briefing-back').addEventListener('click', () => showSection('sec-puzzle'));
             document.getElementById('btn-briefing-start').addEventListener('click', () => showSection('sec-search'));
-            document.getElementById('btn-search-back').addEventListener('click', () => {
+            var leaveTarget = 'sec-briefing';
+            function openWarn(next, label, question) {
+                leaveTarget = next;
+                document.getElementById('modal-back-confirm').textContent = label;
+                document.querySelector('.modal-punch').textContent = question;
                 document.getElementById('modal-back-warn').classList.add('show');
-            });
+            }
+            document.getElementById('btn-search-back').addEventListener('click', () => openWarn('sec-briefing', 'Go Back', 'Do you want to go back?'));
             document.getElementById('modal-back-cancel').addEventListener('click', () => {
                 document.getElementById('modal-back-warn').classList.remove('show');
             });
             document.getElementById('modal-back-confirm').addEventListener('click', () => {
                 document.getElementById('modal-back-warn').classList.remove('show');
-                stopAuto(); newRound(); showSection('sec-briefing');
+                stopAuto(); newRound(); showSection(leaveTarget);
             });
             document.getElementById('modal-back-warn').addEventListener('click', (e) => {
                 if (e.target === document.getElementById('modal-back-warn')) document.getElementById('modal-back-warn').classList.remove('show');
             });
-            document.getElementById('btn-search-continue').addEventListener('click', () => showSection('sec-notes'));
+            document.getElementById('btn-search-continue').addEventListener('click', () => openWarn('sec-notes', 'Continue', 'Do you want to continue?'));
             document.getElementById('btn-notes-back').addEventListener('click', () => showSection('sec-search'));
             document.getElementById('btn-notes-continue').addEventListener('click', () => showSection('sec-method'));
             document.getElementById('btn-method-back').addEventListener('click', () => showSection('sec-notes'));
