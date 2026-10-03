@@ -1,15 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-9M9C5T1Y9R"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-9M9C5T1Y9R');
-</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Last Mile — A Dijkstra's Algorithm Case Study</title>
@@ -104,6 +95,7 @@
     font-family:'Poppins',sans-serif; font-weight:600; font-size:14.5px;
     padding:13px 28px; border-radius:999px; border:none; cursor:pointer;
     display:inline-flex; align-items:center; gap:8px; white-space:nowrap;
+    text-decoration:none;
     transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
   }
   .btn-primary{
@@ -294,9 +286,9 @@
       100%{ opacity:1; transform:translateY(0); }
     }
   }
-  .confetti-layer{
-    position:absolute; left:0; right:0; top:0; height:0;
-    overflow:visible; pointer-events:none; z-index:5;
+  .cg-confetti-overlay{
+    position:fixed; left:0; right:0; top:0; height:0;
+    overflow:visible; pointer-events:none; z-index:300;
   }
   .confetti-piece{
     position:absolute; top:0; left:50%; border-radius:2px;
@@ -318,6 +310,180 @@
   .page3-footer{
     display:flex; justify-content:space-between; align-items:center;
     width:100%; gap:16px; flex-wrap:wrap; padding-top:8px; border-top:1px solid var(--panel-border);
+  }
+
+  /* ---------- page 3 city-walk game ---------- */
+  #cityGame{ display:flex; flex-direction:column; gap:14px; }
+
+  .cg-steps{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .cg-step{
+    display:flex; align-items:center; gap:8px; padding:6px 14px 6px 6px; border-radius:999px;
+    background:#fff; border:1.5px solid var(--panel-border);
+    transition:border-color .2s ease, background .2s ease;
+  }
+  .cg-step-circle{
+    width:24px; height:24px; border-radius:50%; flex:0 0 auto;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Poppins',sans-serif; font-weight:700; font-size:12px;
+    background:var(--bg); color:var(--text-faint); border:2px solid var(--panel-border);
+    transition:background .2s ease, color .2s ease, border-color .2s ease;
+  }
+  .cg-step-text{ font-size:12.5px; font-weight:600; color:var(--text-dim); white-space:nowrap; }
+  .cg-step.active{ border-color:var(--blue); background:rgba(74,155,209,0.08); }
+  .cg-step.active .cg-step-circle{
+    background:linear-gradient(135deg, var(--blue), var(--blue-dark)); color:#fff; border-color:transparent;
+    box-shadow:0 3px 8px rgba(43,111,163,.35);
+  }
+  .cg-step.active .cg-step-text{ color:var(--blue-dark); }
+  .cg-step.done .cg-step-circle{ background:var(--success-border); color:#fff; border-color:transparent; }
+  .cg-step.done .cg-step-text{ color:var(--success-text); }
+  .cg-step-line{ width:18px; height:2px; background:var(--panel-border); flex:0 0 auto; }
+  .cg-newcity-btn{ margin-left:auto; }
+  @media (max-width:760px){ .cg-newcity-btn{ margin-left:0; width:100%; } }
+
+  #cgBanner{ transition:background .2s ease; }
+
+  .cg-legend{ display:flex; flex-wrap:wrap; gap:14px; font-size:12.5px; color:var(--text-dim); }
+  .cg-legend span{ display:inline-flex; align-items:center; gap:6px; }
+  .cg-dot{ width:10px; height:10px; border-radius:50%; display:inline-block; }
+  .cg-dot.cg-src{ background:var(--success-border); }
+  .cg-dot.cg-dst{ background:var(--error-border); }
+  .cg-dot.cg-cur{ background:var(--orange-base); }
+  .cg-dot.cg-vis{ background:var(--blue-dark); }
+  .cg-dot.cg-def{ background:#fff; border:2px solid var(--blue-dark); }
+
+  .cg-mapcard{ padding:0; overflow:hidden; width:100%; position:relative; }
+  .cg-below-row{ display:grid; grid-template-columns:1fr 1fr; gap:20px; width:100%; }
+  @media (max-width:760px){ .cg-below-row{ grid-template-columns:1fr; } }
+
+  /* floating corner controls, pinned over the map regardless of scroll */
+  .cg-map-controls{
+    position:absolute; top:14px; right:14px; z-index:6;
+    display:flex; flex-direction:column; align-items:flex-end; gap:8px;
+    pointer-events:none;
+  }
+  .cg-map-controls > *{ pointer-events:auto; }
+  .cg-mode-toggle{
+    display:flex; gap:3px; padding:4px;
+    background:rgba(255,255,255,0.94); backdrop-filter:blur(6px);
+    border:1px solid var(--panel-border); border-radius:999px;
+    box-shadow:0 8px 20px rgba(23,50,77,0.16);
+  }
+  .cg-mode-btn{
+    font-family:'Poppins',sans-serif; font-weight:600; font-size:12px;
+    padding:8px 14px; border-radius:999px; border:none; cursor:pointer; white-space:nowrap;
+    background:transparent; color:var(--text-dim);
+    transition:background .15s ease, color .15s ease;
+  }
+  .cg-mode-btn.active{
+    background:linear-gradient(135deg, var(--blue), var(--blue-dark)); color:#fff;
+    box-shadow:0 4px 10px rgba(43,111,163,0.3);
+  }
+  .cg-mode-btn:disabled{ opacity:.4; cursor:not-allowed; }
+  .cg-clear-btn{
+    font-family:'Poppins',sans-serif; font-weight:600; font-size:12px;
+    padding:8px 15px; border-radius:999px; border:1.5px solid var(--panel-border); cursor:pointer;
+    background:rgba(255,255,255,0.94); backdrop-filter:blur(6px); color:var(--text-dim);
+    box-shadow:0 8px 20px rgba(23,50,77,0.12);
+    transition:border-color .15s ease, color .15s ease, transform .1s ease;
+  }
+  .cg-clear-btn:hover{ border-color:var(--orange); color:var(--orange); }
+  .cg-clear-btn:active{ transform:scale(0.96); }
+
+  #mapWrap{ position:relative; overflow:auto; height:560px; background:var(--bg); }
+  #mapWrap::-webkit-scrollbar{ height:10px; width:10px; }
+  #mapWrap::-webkit-scrollbar-thumb{ background:var(--panel-border); border-radius:6px; }
+  #mapSvg{ display:block; }
+  .road{ stroke:var(--panel-border); stroke-width:3; fill:none; transition:filter .15s ease, stroke .15s ease, stroke-width .15s ease; }
+  .road-walked{ stroke:var(--blue); stroke-width:4.5; fill:none; opacity:.95; }
+  .road-best{ stroke:var(--orange-base); stroke-width:3; fill:none; stroke-dasharray:6 5; opacity:.95; }
+  .road-available{ stroke:var(--blue); stroke-width:4.5; fill:none; opacity:.95; animation:cgRoadPulse 1.6s ease-in-out infinite; }
+  .road-hover{ filter:drop-shadow(0 0 5px rgba(43,111,163,.65)); }
+  .road-label{ font-family:'Inter',sans-serif; font-size:9px; fill:var(--text-faint); pointer-events:none; user-select:none; }
+  .node-group{ cursor:pointer; }
+  .node-circle{
+    fill:#fff; stroke:var(--blue-dark); stroke-width:2;
+    transform-box:fill-box; transform-origin:center;
+    transition:fill .15s ease, stroke .15s ease, transform .15s ease, filter .15s ease;
+  }
+  .node-group:hover .node-circle{ stroke:var(--orange); stroke-width:3; transform:scale(1.18); filter:drop-shadow(0 0 6px rgba(234,140,54,.55)); }
+  .node-label{
+    font-family:'Inter',sans-serif; font-size:10px; fill:var(--text-dim); pointer-events:none; user-select:none;
+    text-anchor:middle; font-weight:600;
+  }
+  .node-group.is-source .node-circle{ fill:var(--success-border); stroke:var(--success-text); }
+  .node-group.is-dest .node-circle{ fill:var(--error-border); stroke:var(--error-text); }
+  .node-group.is-current .node-circle{ fill:var(--orange-base); stroke:var(--orange); animation:cgPulse 1.4s ease-in-out infinite; }
+  .node-group.is-visited .node-circle{ fill:var(--blue-dark); stroke:var(--blue-dark); }
+  .node-group.is-visited .node-label{ fill:#fff; }
+  .node-group.is-reachable .node-circle{
+    stroke:var(--blue); stroke-width:4.5;
+    animation:cgReachablePulse 1.6s ease-in-out infinite;
+  }
+  .node-group.is-reachable .node-label{ fill:var(--blue-dark); font-weight:700; }
+  .node-group.is-disabled{ cursor:not-allowed; }
+  .node-group.is-disabled .node-circle{ opacity:.32; }
+  @media (prefers-reduced-motion:no-preference){
+    @keyframes cgPulse{
+      0%{ filter:drop-shadow(0 0 0px rgba(234,140,54,.7)); }
+      50%{ filter:drop-shadow(0 0 10px rgba(234,140,54,.65)); }
+      100%{ filter:drop-shadow(0 0 0px rgba(234,140,54,.7)); }
+    }
+    @keyframes cgReachablePulse{
+      0%{ filter:drop-shadow(0 0 0px rgba(74,155,209,.75)); stroke-width:4.5; }
+      50%{ filter:drop-shadow(0 0 9px rgba(74,155,209,.65)); stroke-width:5.5; }
+      100%{ filter:drop-shadow(0 0 0px rgba(74,155,209,.75)); stroke-width:4.5; }
+    }
+    @keyframes cgRoadPulse{
+      0%{ opacity:.6; }
+      50%{ opacity:1; }
+      100%{ opacity:.6; }
+    }
+  }
+  @media (prefers-reduced-motion:reduce){
+    .node-group.is-current .node-circle{ animation:none; }
+    .node-group.is-reachable .node-circle{ animation:none; }
+    .road-available{ animation:none; opacity:.95; }
+  }
+
+  .cg-row{ display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; font-size:14px; color:var(--text); }
+  .cg-timeval{ font-family:'Poppins',sans-serif; font-weight:800; font-size:22px; color:var(--blue-dark); }
+  .cg-timeval.cg-bad{ color:var(--error-text); }
+  .cg-timeval.cg-good{ color:var(--success-text); }
+
+  .cg-nextwrap{ margin:6px 0 14px; padding:12px; border-radius:12px; background:rgba(74,155,209,0.08); border:1.5px dashed var(--blue); }
+  .cg-next-label{ font-size:12px; font-weight:700; color:var(--blue-dark); margin-bottom:9px; }
+  .cg-next-buttons{ display:flex; flex-wrap:wrap; gap:8px; }
+  .cg-next-btn{
+    font-family:'Poppins',sans-serif; font-weight:700; font-size:13px;
+    padding:9px 14px; border-radius:999px; border:none; cursor:pointer;
+    background:linear-gradient(135deg, var(--blue), var(--blue-dark)); color:#fff;
+    box-shadow:0 4px 10px rgba(43,111,163,0.3);
+    display:inline-flex; align-items:center; gap:6px;
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .cg-next-btn:hover{ transform:translateY(-2px); box-shadow:0 8px 16px rgba(43,111,163,0.4); }
+  .cg-next-btn:active{ transform:translateY(0); }
+  .cg-next-btn .cg-next-time{ font-size:11px; font-weight:600; opacity:.85; }
+  .cg-next-btn.is-dest{ background:linear-gradient(135deg, var(--orange-base), var(--orange)); box-shadow:0 4px 10px rgba(168,93,26,0.3); }
+  .cg-next-btn.is-dest:hover{ box-shadow:0 8px 16px rgba(168,93,26,0.4); }
+
+  .cg-pathlist{ list-style:none; margin:0 0 10px; padding:0; font-size:13px; max-height:160px; overflow-y:auto; display:flex; flex-direction:column; gap:4px; }
+  .cg-pathlist li{
+    padding:7px 10px; border-radius:8px; background:var(--bg); color:var(--text);
+    display:flex; justify-content:space-between; gap:8px;
+  }
+  .cg-pathlist .step-time{ color:var(--text-faint); font-size:11.5px; }
+  .cg-btnrow{ display:flex; gap:10px; }
+  .cg-btnrow .btn{ flex:1; }
+  .cg-status{ font-size:13.5px; line-height:1.55; color:var(--text-dim); min-height:20px; }
+  .cg-status.win{ color:var(--success-text); font-weight:600; }
+  .cg-status.lose{ color:var(--error-text); font-weight:600; }
+  .cg-reveal{ font-size:12.5px; color:var(--text-dim); margin-top:8px; }
+  @media (max-width:640px){
+    #mapWrap{ height:420px; }
+    .cg-map-controls{ top:8px; right:8px; }
+    .cg-mode-btn{ padding:6px 10px; font-size:11px; }
   }
 
   /* ---------- reflect / exercise grid ---------- */
@@ -343,7 +509,7 @@
   .grid-question{ font-size:15px; color:var(--text); line-height:1.6; }
   .exercise-kicker{ margin-bottom:0; }
 
-  .grid-footer{ display:flex; justify-content:flex-end; width:100%; }
+  .grid-footer{ display:flex; justify-content:flex-end; align-items:center; gap:12px; width:100%; flex-wrap:wrap; }
   .grid-footer.left{ justify-content:flex-start; }
 
   /* ---------- page 5 ---------- */
@@ -414,9 +580,8 @@
       <span class="kicker">Interactive Case Study</span>
       <h1>The Last Mile</h1>
       <p class="problem-tagline">The hardest part of any delivery is the very last stretch.</p>
-      <p>You're helping a small delivery courier get across town as fast as possible. The city map between the depot and the customer's street has close to twenty different roads, and every single one has its own drive time depending on traffic, stoplights, and distance.</p>
-      <p>Some routes look short on the map but are slow in real life. Others loop around but save whole minutes at a light. With this many roads branching off each other, there's no way to just eyeball the fastest path — and guessing wrong costs the courier real time on every single delivery.</p>
-      <p>You need a way to know, for certain, exactly which sequence of roads gets there quickest — before the van even leaves the depot.</p>
+      <p>Your courier needs the fastest way from the depot to a customer across town — but the map has dozens of roads, each with its own drive time. Guess wrong, and every delivery runs long.</p>
+      <p>The same problem shows up everywhere: a GPS app picking a route, a flight connecting through airports, a data packet hopping across a network. Every time, there are too many paths to just eyeball the fastest one.</p>
       <button class="btn btn-primary" id="toPage2Btn" type="button">Continue</button>
     </div>
   </section>
@@ -425,14 +590,13 @@
   <section class="screen" id="page2" data-page="1">
     <div class="setup-wrap">
       <h2>How this works</h2>
-      <p style="color:var(--text-dim); font-size:15px;">Next, you'll work with a small map of the courier's city — eight locations connected by roads, each labeled with its drive time in minutes.</p>
+      <p style="color:var(--text-dim); font-size:15px;">A whole city of locations, connected by streets — each labeled with its walking time in minutes.</p>
       <div class="callout">
-        <span class="kicker">Before you start</span>
+        <span class="kicker">Goal: walk from your start to your destination as fast as possible</span>
         <ul class="rules-list">
-          <li><span class="rule-text">You'll first watch a guided walkthrough. Click <strong>Next Step</strong> and watch the map find its way, one location at a time — always moving to whichever unvisited location is currently fastest to reach.</span></li>
-          <li><span class="rule-text">After that, you'll drive it yourself. Click the location you think should be visited next, based on the running distance table.</span></li>
-          <li><span class="rule-text">Pick correctly and the route updates in real time. Pick the wrong location and you'll get a hint pointing you back to the table — no penalty, just try again.</span></li>
-          <li><span class="rule-text">Watch the side panel as you go — it keeps a running tally of the shortest known time to reach every location on the map, updated live as new roads are discovered.</span></li>
+          <li><span class="rule-text"><strong>Drop two pins:</strong> tap a location on the map for your start, then tap another for your destination.</span></li>
+          <li><span class="rule-text"><strong>Walk it yourself:</strong> click a connected (highlighted) location to take a step. Keep going until you reach your destination.</span></li>
+          <li><span class="rule-text"><strong>Compare:</strong> once you arrive, see your time against the optimal route Dijkstra's algorithm would have taken — or reveal it early if you get stuck.</span></li>
         </ul>
       </div>
       <button class="btn btn-primary" id="toPage3Btn" type="button">Begin</button>
@@ -443,76 +607,82 @@
   <section class="screen" id="page3" data-page="2">
     <div class="demo-heading">
       <h2>Find the fastest route</h2>
-      <p>This is the courier's map: the depot on the left, the customer's street (Market) on the right, and six streets in between. Every road is labeled with its drive time in minutes.</p>
+      <p>This is your city: dozens of locations connected by streets, each labeled with its walking time in minutes. Tap a location on the map to set your start, tap another for your destination, then walk your way across town — try to beat Dijkstra's optimal time.</p>
     </div>
 
-    <div class="tab-bar" role="tablist" aria-label="Demo mode">
-      <button class="tab-btn active" id="tabPhase1" type="button" role="tab" aria-selected="true">Guided Walkthrough</button>
-      <button class="tab-btn locked" id="tabPhase2" type="button" role="tab" aria-selected="false" aria-disabled="true">Try It Yourself 🔒</button>
-    </div>
-
-    <div class="banner" id="demoBanner">
-      <span id="bannerText"><strong>Guided Walkthrough:</strong>&nbsp; Click "Next Step" to watch the map find the fastest route, one location at a time.</span>
-    </div>
-
-    <div class="demo-layout">
-      <div class="demo-main">
-        <div class="graph-card card">
-          <svg id="graph" viewBox="0 0 1000 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Map of eight locations connected by roads with drive times">
-            <!-- edges (drawn first, under nodes) -->
-            <g id="edgesGroup"></g>
-            <!-- nodes -->
-            <g id="nodesGroup"></g>
-          </svg>
+    <div id="cityGame">
+      <div class="cg-steps" id="cgSteps">
+        <div class="cg-step active" id="cgStep1">
+          <span class="cg-step-circle">1</span>
+          <span class="cg-step-text" id="cgStep1Text">Set your start</span>
         </div>
-
-        <div class="phase-controls" id="phase1Controls">
-          <button class="btn btn-primary" id="nextStepBtn" type="button">Next Step →</button>
-          <button class="btn btn-secondary" id="replayPhase1Btn" type="button" style="display:none;">Replay Guided Demo</button>
-          <span class="hint-text" id="phase1Hint"></span>
+        <div class="cg-step-line"></div>
+        <div class="cg-step" id="cgStep2">
+          <span class="cg-step-circle">2</span>
+          <span class="cg-step-text" id="cgStep2Text">Set destination</span>
         </div>
-        <div class="phase-controls" id="phase2Controls" style="display:none;">
-          <span class="hint-text">Click a location on the map that you think Dijkstra should visit next.</span>
+        <div class="cg-step-line"></div>
+        <div class="cg-step" id="cgStep3">
+          <span class="cg-step-circle">3</span>
+          <span class="cg-step-text" id="cgStep3Text">Walk there</span>
         </div>
+        <button class="btn btn-secondary btn-small cg-newcity-btn" id="newCityBtn" type="button">New City Map</button>
+      </div>
 
-        <div class="route-found-box" id="routeFoundBox" style="display:none;">
-          <div class="confetti-layer" id="confettiLayer" aria-hidden="true"></div>
-          <h3>Route found! 🎉</h3>
-          <p id="routeFoundText">You made it to Market.</p>
-          <div class="modal-stats" id="routeFoundStats"></div>
-          <div class="modal-actions">
-            <button class="btn btn-secondary" id="playAgainBtn" type="button">Play Again</button>
-            <button class="btn btn-primary" id="modalNextBtn" type="button">Next: What You Learned →</button>
+      <div class="banner" id="cgBanner">
+        <span id="cgBannerText">👉 <strong>Tap any location on the map below</strong> to set where you're starting from.</span>
+      </div>
+
+      <div class="cg-legend">
+        <span><i class="cg-dot cg-src"></i>Start</span>
+        <span><i class="cg-dot cg-dst"></i>Destination</span>
+        <span><i class="cg-dot cg-cur"></i>You are here</span>
+        <span><i class="cg-dot cg-vis"></i>Visited</span>
+        <span><i class="cg-dot cg-def"></i>Unvisited</span>
+      </div>
+
+      <div class="graph-card card cg-mapcard">
+        <div class="cg-map-controls">
+          <div class="cg-mode-toggle" role="group" aria-label="Pin placement mode">
+            <button type="button" class="cg-mode-btn active" id="modeStartBtn">📍 Start</button>
+            <button type="button" class="cg-mode-btn" id="modeDestBtn">🏁 Destination</button>
           </div>
+          <button type="button" class="cg-clear-btn" id="clearOrChangeBtn">✕ Clear pins</button>
+        </div>
+        <div id="mapWrap">
+          <svg id="mapSvg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="City map of locations connected by streets with walking times"></svg>
         </div>
       </div>
 
-      <div class="side-panel">
-        <div class="status-card card">
-          <h3>Shortest time known so far</h3>
-          <table class="dist-table">
-            <thead>
-              <tr><th>Location</th><th>Time</th><th>Via</th><th>Status</th></tr>
-            </thead>
-            <tbody id="distTableBody"></tbody>
-          </table>
+      <div class="cg-below-row">
+        <div class="status-card card" id="playCard" style="display:none;">
+          <h3>Your Walk</h3>
+          <div class="cg-row"><span>Your elapsed time</span><b><span class="cg-timeval" id="yourTime">0</span> min</b></div>
+          <div class="cg-row" id="optimalRow" style="display:none;"><span>Optimal time</span><b><span class="cg-timeval cg-good" id="optTime">0</span> min</b></div>
+
+          <div class="cg-nextwrap" id="nextStepsWrap" style="display:none;">
+            <div class="cg-next-label">👣 Where to next? Tap one:</div>
+            <div class="cg-next-buttons" id="nextStepsButtons"></div>
+          </div>
+
+          <ol class="cg-pathlist" id="pathList"></ol>
+          <div class="cg-btnrow">
+            <button class="btn btn-secondary btn-small" id="undoBtn" type="button">Undo</button>
+            <button class="btn btn-destructive btn-small" id="resetBtn" type="button">Reset walk</button>
+          </div>
         </div>
 
-        <div class="narrator-card card">
-          <h3>What's happening</h3>
-          <div class="log-panel visible-log" id="logPhase1"><p class="log-empty">Click "Next Step" below to begin.</p></div>
-          <div class="log-panel" id="logPhase2"><p class="log-empty">Click a location on the map to make your first move.</p></div>
-        </div>
-
-        <div class="stats-row" id="statsRow" style="display:none;">
-          <span>Correct picks: <b id="statCorrect">0</b></span>
-          <span>Wrong tries: <b id="statWrong">0</b></span>
+        <div class="narrator-card card" id="narratorCard">
+          <h3>Play-by-play</h3>
+          <div class="cg-status" id="status">Your move-by-move route will show up here once you begin walking.</div>
+          <button class="btn btn-secondary btn-small" id="giveUpBtn" type="button" style="display:none; margin-top:10px;">Reveal shortest path</button>
+          <div class="cg-reveal" id="revealBest"></div>
         </div>
       </div>
     </div>
 
     <div class="page3-footer">
-      <span class="hint-text">You can move on whenever you're ready — you don't need to finish the demo first.</span>
+      <span class="hint-text">Edge weight = walking time in minutes. You can move on whenever you're ready.</span>
       <button class="btn btn-primary" id="toPage4Btn" type="button">Next →</button>
     </div>
   </section>
@@ -524,11 +694,11 @@
       <p>Before we name what you just did, sit with what you noticed.</p>
     </div>
     <div class="card-grid">
-      <div class="grid-card"><div class="grid-badge">1</div><p class="grid-question">When the map moved to a new location, was it always the one physically nearest to the depot — or the one with the shortest known travel time?</p></div>
-      <div class="grid-card"><div class="grid-badge">2</div><p class="grid-question">Why did Pine St's time get updated after Oak St was visited, even though Pine St was already reachable straight from the depot?</p></div>
-      <div class="grid-card"><div class="grid-badge">3</div><p class="grid-question">Once a location was marked visited, its shortest time never changed again after that. Why do you think that held true?</p></div>
-      <div class="grid-card"><div class="grid-badge">4</div><p class="grid-question">If one road's drive time had been much longer, would the final route have changed? Which part of it, and why?</p></div>
-      <div class="grid-card"><div class="grid-badge">5</div><p class="grid-question">What would go wrong if you only ever checked the roads leading out of the depot, instead of every road discovered so far?</p></div>
+      <div class="grid-card"><div class="grid-badge">1</div><p class="grid-question">When you were choosing which location to visit next, what helped you decide where to go?</p></div>
+      <div class="grid-card"><div class="grid-badge">2</div><p class="grid-question">Did you always choose the road with the smallest time shown on it? What happened when you did?</p></div>
+      <div class="grid-card"><div class="grid-badge">3</div><p class="grid-question">When you reached a location through different routes, how did you decide which route to keep?</p></div>
+      <div class="grid-card"><div class="grid-badge">4</div><p class="grid-question">As you visited more locations, how did the times you had already found help you choose your next move?</p></div>
+      <div class="grid-card"><div class="grid-badge">5</div><p class="grid-question">What did you notice about the way the fastest route was built from one location to another?</p></div>
     </div>
     <div class="grid-footer"><button class="btn btn-primary" id="toPage5Btn" type="button">Next</button></div>
   </section>
@@ -584,31 +754,59 @@
     <div class="card-grid">
       <div class="grid-card">
         <div class="grid-badge">1</div>
-        <span class="kicker exercise-kicker">A faster shortcut</span>
-        <p class="grid-question">A new road opens, connecting the depot directly to a location three streets away, cutting that stretch's time in half. Which entries in the distance table would need to be rechecked, and why?</p>
+        <span class="kicker exercise-kicker">Delivery routing</span>
+        <p class="grid-question">A delivery rider needs to travel from a warehouse to a customer through several roads with different travel times. How could Dijkstra's approach help the rider determine the route with the least total travel time?</p>
       </div>
       <div class="grid-card">
         <div class="grid-badge">2</div>
-        <span class="kicker exercise-kicker">Already visited</span>
-        <p class="grid-question">A location has already been marked visited with a shortest time of 8 minutes. A moment later, a much faster road leading to it is discovered. Should its time be updated? Why or why not?</p>
+        <span class="kicker exercise-kicker">Worked example</span>
+        <p class="grid-question">Consider the following road network: A–B = 4, A–C = 2, B–C = 1, B–D = 5, C–D = 8. Starting from A, apply Dijkstra's algorithm step by step and determine the shortest path from A to D and its total cost.</p>
       </div>
       <div class="grid-card">
         <div class="grid-badge">3</div>
-        <span class="kicker exercise-kicker">A tie on the map</span>
-        <p class="grid-question">Two unvisited locations both currently show a shortest known time of 6 minutes. Does it matter which one gets visited first? What would you check to decide?</p>
+        <span class="kicker exercise-kicker">Equal-weight roads</span>
+        <p class="grid-question">Suppose every road in a network takes exactly the same amount of time to travel. Would Dijkstra's algorithm still be necessary? Which simpler approach could be used instead, and why would it produce the same shortest path?</p>
       </div>
       <div class="grid-card">
         <div class="grid-badge">4</div>
-        <span class="kicker exercise-kicker">Unreachable ground</span>
-        <p class="grid-question">One location has no roads connecting it to anywhere the algorithm has explored so far. What does its entry in the distance table look like, and when — if ever — does that change?</p>
+        <span class="kicker exercise-kicker">Updating distances</span>
+        <p class="grid-question">While finding a shortest path, a location may first be reached through one route and later through another shorter route. How does Dijkstra's algorithm handle this change, and why is updating the previously found distance important?</p>
       </div>
       <div class="grid-card">
         <div class="grid-badge">5</div>
-        <span class="kicker exercise-kicker">Picking the wrong turn</span>
-        <p class="grid-question">Someone suggests always driving to whichever neighboring location looks physically closest on the map, instead of checking the distance table. Where would that plan break down?</p>
+        <span class="kicker exercise-kicker">Negative weights</span>
+        <p class="grid-question">A network contains some connections with negative costs, such as receiving a reward for taking a particular connection. Why can Dijkstra's algorithm fail to find the correct shortest path in this situation? What algorithm could be used instead, and what efficiency trade-off does it involve?</p>
+      </div>
+      <div class="grid-card">
+        <div class="grid-badge">6</div>
+        <span class="kicker exercise-kicker">All-pairs paths</span>
+        <p class="grid-question">A company has 100 warehouses and wants to know the shortest route between every pair of warehouses, rather than from one warehouse to all others. How does this change the problem, and which algorithm could be used to solve all-pairs shortest paths?</p>
+      </div>
+      <div class="grid-card">
+        <div class="grid-badge">7</div>
+        <span class="kicker exercise-kicker">Ant colony approaches</span>
+        <p class="grid-question">Dijkstra's algorithm systematically builds shortest paths using the costs already found, while ant colony-based approaches discover paths through repeated exploration and reinforcement. How do these two approaches differ in the way they find good paths, and what might be an advantage of using repeated exploration?</p>
+      </div>
+      <div class="grid-card">
+        <div class="grid-badge">8</div>
+        <span class="kicker exercise-kicker">Relaxing a road</span>
+        <p class="grid-question">You have reached location B with a current travel time of 10 minutes. Later, you find a route to B through location C that takes 4 minutes to reach C and 3 more minutes from C to B. What should happen to B's recorded travel time, and why?</p>
+      </div>
+      <div class="grid-card">
+        <div class="grid-badge">9</div>
+        <span class="kicker exercise-kicker">Why relax at all</span>
+        <p class="grid-question">While exploring a graph, Dijkstra's algorithm repeatedly checks whether reaching a neighbouring location through the current location gives a shorter route than the one already known. Why is this step necessary for finding the overall shortest paths?</p>
+      </div>
+      <div class="grid-card">
+        <div class="grid-badge">10</div>
+        <span class="kicker exercise-kicker">Bellman-Ford trade-off</span>
+        <p class="grid-question">Dijkstra's algorithm may give an incorrect result when a graph contains negative-weight connections. Bellman-Ford can handle such connections but requires more computation. Why does the presence of negative weights change which algorithm should be used, and what efficiency trade-off is involved?</p>
       </div>
     </div>
-    <div class="grid-footer"><button class="btn btn-destructive" id="restartBtn" type="button">Restart the Whole Journey</button></div>
+    <div class="grid-footer">
+      <a class="btn btn-secondary" href="../../" id="homeBtn">Home</a>
+      <button class="btn btn-destructive" id="restartBtn" type="button">Restart the Whole Journey</button>
+    </div>
   </section>
 
 </div>
@@ -624,6 +822,11 @@
     </div>
   </div>
 </div>
+
+<!-- Non-blocking confetti overlay for the city walk game — sits above
+     everything but never intercepts clicks, so the map stays fully visible
+     and usable while it plays. -->
+<div class="cg-confetti-overlay" id="confettiLayer" aria-hidden="true"></div>
 
 <script>
 (function(){
@@ -671,13 +874,6 @@
   }
 
   function nodeName(id){ return NODE_MAP[id] ? NODE_MAP[id].name : id; }
-
-  var EDGE_LOOKUP = {};
-  EDGES.forEach(function(e){
-    EDGE_LOOKUP[e.a + '|' + e.b] = e.id;
-    EDGE_LOOKUP[e.b + '|' + e.a] = e.id;
-  });
-  function findEdgeId(aId, bId){ return EDGE_LOOKUP[aId + '|' + bId] || null; }
 
   function randomInt(min, max){ return Math.floor(Math.random() * (max - min + 1)) + min; }
 
@@ -758,6 +954,22 @@
     return path;
   }
 
+  // Visiting the start node itself (distance 0) isn't a real decision — it's the
+  // given starting point. This pre-applies that trivial first step so the
+  // resulting state starts from the first real fork in the road. Used by
+  // page 5's static path diagram to compute the full solved route.
+  function freshState(){
+    var dist = {}, prev = {}, visited = {};
+    NODES.forEach(function(n){ dist[n.id] = (n.id === START) ? 0 : Infinity; });
+    var steps = computeStepScript();
+    var first = steps[0];
+    visited[first.visit] = true;
+    first.relax.forEach(function(r){
+      dist[r.to] = r.newDist; prev[r.to] = r.from;
+    });
+    return { dist:dist, prev:prev, visited:visited, steps:steps, stepIndex:1, done:false };
+  }
+
   /* ============ page navigation ============ */
   var PAGE_LABELS = ['Problem','Setup','Explore','Reflect','Concept','Exercises'];
   var currentIndex = 0;
@@ -806,7 +1018,15 @@
   }
   function requestBack(){
     if(currentIndex === 0) return;
-    backModal.classList.add('active');
+    // The confirmation warning only matters where going back actually costs
+    // progress worth losing — the interactive game page. Every other page
+    // just steps back immediately.
+    if(currentIndex === 2){
+      backModal.classList.add('active');
+    } else {
+      currentIndex--;
+      renderNav();
+    }
   }
   function confirmBack(){
     if(currentIndex > 0) currentIndex--;
@@ -828,454 +1048,9 @@
   document.getElementById('restartBtn').addEventListener('click', function(){
     currentIndex = 0;
     randomizeGraphWeights();
-    buildGraphSVG();
-    resetPage3(true);
     buildPathDiagram();
     renderNav();
-  });
-
-  /* ============ page 3: graph rendering ============ */
-  var edgesGroup = document.getElementById('edgesGroup');
-  var nodesGroup = document.getElementById('nodesGroup');
-  var R = 30;
-
-  function buildGraphSVG(){
-    edgesGroup.innerHTML = '';
-    EDGES.forEach(function(e){
-      var na = NODE_MAP[e.a], nb = NODE_MAP[e.b];
-      var line = document.createElementNS('http://www.w3.org/2000/svg','line');
-      line.setAttribute('id', 'edge-' + e.id);
-      line.setAttribute('class', 'edge-line');
-      line.setAttribute('x1', na.x); line.setAttribute('y1', na.y);
-      line.setAttribute('x2', nb.x); line.setAttribute('y2', nb.y);
-      edgesGroup.appendChild(line);
-
-      var mx = (na.x + nb.x) / 2, my = (na.y + nb.y) / 2;
-      var bg = document.createElementNS('http://www.w3.org/2000/svg','rect');
-      bg.setAttribute('class','edge-weight-bg');
-      bg.setAttribute('x', mx - 16); bg.setAttribute('y', my - 14);
-      bg.setAttribute('width', 32); bg.setAttribute('height', 22); bg.setAttribute('rx', 6);
-      edgesGroup.appendChild(bg);
-
-      var wt = document.createElementNS('http://www.w3.org/2000/svg','text');
-      wt.setAttribute('class','edge-weight');
-      wt.setAttribute('x', mx); wt.setAttribute('y', my + 1);
-      wt.setAttribute('text-anchor','middle');
-      wt.textContent = e.w;
-      edgesGroup.appendChild(wt);
-    });
-
-    nodesGroup.innerHTML = '';
-    NODES.forEach(function(n){
-      var g = document.createElementNS('http://www.w3.org/2000/svg','g');
-      g.setAttribute('id', 'group-' + n.id);
-      g.setAttribute('class', 'node-group');
-      g.setAttribute('tabindex', '0');
-      g.setAttribute('role', 'button');
-      g.setAttribute('aria-label', n.name);
-
-      var nameLbl = document.createElementNS('http://www.w3.org/2000/svg','text');
-      nameLbl.setAttribute('class','node-name');
-      nameLbl.setAttribute('x', n.x); nameLbl.setAttribute('y', n.y - R - 14);
-      nameLbl.setAttribute('text-anchor','middle');
-      nameLbl.textContent = n.name;
-      g.appendChild(nameLbl);
-
-      var circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
-      circle.setAttribute('id', 'circle-' + n.id);
-      circle.setAttribute('class', 'node-circle');
-      circle.setAttribute('cx', n.x); circle.setAttribute('cy', n.y); circle.setAttribute('r', R);
-      g.appendChild(circle);
-
-      var idLbl = document.createElementNS('http://www.w3.org/2000/svg','text');
-      idLbl.setAttribute('id', 'idlbl-' + n.id);
-      idLbl.setAttribute('class','node-id off-node');
-      idLbl.setAttribute('x', n.x); idLbl.setAttribute('y', n.y + 6);
-      idLbl.setAttribute('text-anchor','middle');
-      idLbl.textContent = n.short;
-      g.appendChild(idLbl);
-
-      var distLbl = document.createElementNS('http://www.w3.org/2000/svg','text');
-      distLbl.setAttribute('id', 'dist-' + n.id);
-      distLbl.setAttribute('class','node-dist');
-      distLbl.setAttribute('x', n.x); distLbl.setAttribute('y', n.y + R + 26);
-      distLbl.setAttribute('text-anchor','middle');
-      distLbl.textContent = '∞';
-      g.appendChild(distLbl);
-
-      g.addEventListener('click', function(){ handleNodeActivate(n.id); });
-      g.addEventListener('keydown', function(e){
-        if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); handleNodeActivate(n.id); }
-      });
-
-      nodesGroup.appendChild(g);
-    });
-  }
-  buildGraphSVG();
-
-  /* ============ page 3: state ============ */
-  var phase1, phase2, phase3Unlocked, activeTab;
-
-  // Visiting the start node itself (distance 0) isn't a real decision — it's the
-  // given starting point. We pre-apply that trivial first step silently so both
-  // the guided walkthrough and the free-practice quiz begin at the first real
-  // fork in the road, not by asking the user to "pick" the depot.
-  function freshState(){
-    var dist = {}, prev = {}, visited = {};
-    NODES.forEach(function(n){ dist[n.id] = (n.id === START) ? 0 : Infinity; });
-    var steps = computeStepScript();
-    var initLog = [];
-    var first = steps[0];
-    visited[first.visit] = true;
-    initLog.push({ text:'Starting at ' + nodeName(first.visit) + ' — shortest known time: 0 min.', kind:'info' });
-    first.relax.forEach(function(r){
-      dist[r.to] = r.newDist; prev[r.to] = r.from;
-      initLog.push({ text:'Found a route to ' + nodeName(r.to) + ': ' + r.newDist + ' min, via ' + nodeName(first.visit) + '.', kind:'success' });
-    });
-    return { dist:dist, prev:prev, visited:visited, steps:steps, stepIndex:1, done:false, initLog:initLog };
-  }
-
-  function renderInitialLog(mode, state){
-    var panel = document.getElementById(mode === 'phase1' ? 'logPhase1' : 'logPhase2');
-    panel.innerHTML = '';
-    state.initLog.forEach(function(entry){
-      var p = document.createElement('p');
-      p.className = 'log-entry' + (entry.kind ? ' ' + entry.kind : '');
-      p.textContent = entry.text;
-      panel.appendChild(p);
-    });
-    var hint = document.createElement('p');
-    hint.className = 'log-entry';
-    hint.textContent = (mode === 'phase1')
-      ? 'Click "Next Step" below to keep going.'
-      : 'Your turn — click the location you think comes next.';
-    panel.appendChild(hint);
-  }
-
-  function resetPage3(fullReset){
-    phase1 = freshState();
-    phase2 = freshState();
-    phase2.stats = { correct:0, wrong:0 };
-    phase3Unlocked = false;
-    activeTab = 'phase1';
-
-    renderInitialLog('phase1', phase1);
-    renderInitialLog('phase2', phase2);
-    document.getElementById('statCorrect').textContent = '0';
-    document.getElementById('statWrong').textContent = '0';
-    document.getElementById('statsRow').style.display = 'none';
-    document.getElementById('replayPhase1Btn').style.display = 'none';
-    document.getElementById('nextStepBtn').style.display = 'inline-flex';
-    document.getElementById('nextStepBtn').disabled = false;
-    document.getElementById('phase1Hint').textContent = '';
-    document.getElementById('routeFoundBox').style.display = 'none';
-    document.getElementById('confettiLayer').innerHTML = '';
-
-    updateTabUI();
-    renderGraph();
-    renderTable();
-  }
-
-  function updateTabUI(){
-    var tab1 = document.getElementById('tabPhase1');
-    var tab2 = document.getElementById('tabPhase2');
-    tab1.classList.toggle('active', activeTab === 'phase1');
-    tab2.classList.toggle('active', activeTab === 'phase2');
-    tab2.classList.toggle('locked', !phase3Unlocked);
-    tab2.setAttribute('aria-disabled', phase3Unlocked ? 'false' : 'true');
-    tab2.textContent = phase3Unlocked ? 'Try It Yourself' : 'Try It Yourself 🔒';
-    tab1.setAttribute('aria-selected', activeTab === 'phase1' ? 'true' : 'false');
-    tab2.setAttribute('aria-selected', activeTab === 'phase2' ? 'true' : 'false');
-
-    document.getElementById('phase1Controls').style.display = (activeTab === 'phase1') ? 'flex' : 'none';
-    document.getElementById('phase2Controls').style.display = (activeTab === 'phase2' && !phase2.done) ? 'flex' : 'none';
-    document.getElementById('routeFoundBox').style.display = (activeTab === 'phase2' && phase2.done) ? 'block' : 'none';
-    document.getElementById('statsRow').style.display = (activeTab === 'phase2') ? 'flex' : 'none';
-
-    document.getElementById('logPhase1').classList.toggle('visible-log', activeTab === 'phase1');
-    document.getElementById('logPhase2').classList.toggle('visible-log', activeTab === 'phase2');
-
-    var bannerText = document.getElementById('bannerText');
-    if(activeTab === 'phase1'){
-      bannerText.innerHTML = '<strong>Guided Walkthrough:</strong>&nbsp; Click "Next Step" to watch the map find the fastest route, one location at a time.';
-    } else {
-      bannerText.innerHTML = '<strong>Try It Yourself:</strong>&nbsp; Click the location on the map you think Dijkstra should visit next.';
-    }
-  }
-
-  function setTab(mode){
-    if(mode === 'phase2' && !phase3Unlocked) return;
-    activeTab = mode;
-    updateTabUI();
-    renderGraph();
-    renderTable();
-  }
-  document.getElementById('tabPhase1').addEventListener('click', function(){ setTab('phase1'); });
-  document.getElementById('tabPhase2').addEventListener('click', function(){ setTab('phase2'); });
-
-  function currentState(){ return activeTab === 'phase1' ? phase1 : phase2; }
-
-  /* ============ page 3: rendering ============ */
-  function renderGraph(){
-    var state = currentState();
-    NODES.forEach(function(n){
-      var circle = document.getElementById('circle-' + n.id);
-      var idLbl = document.getElementById('idlbl-' + n.id);
-      var distLbl = document.getElementById('dist-' + n.id);
-      var group = document.getElementById('group-' + n.id);
-
-      var isVisited = !!state.visited[n.id];
-      circle.classList.toggle('visited', isVisited);
-      idLbl.classList.toggle('on-node', isVisited);
-      idLbl.classList.toggle('off-node', !isVisited);
-
-      distLbl.textContent = (state.dist[n.id] === Infinity) ? '∞' : (state.dist[n.id] + ' min');
-
-      var clickable = (activeTab === 'phase2') && phase3Unlocked && !phase2.done && !isVisited;
-      group.classList.toggle('clickable', clickable);
-      group.setAttribute('tabindex', clickable ? '0' : (activeTab === 'phase2' ? '-1' : '-1'));
-    });
-
-    EDGES.forEach(function(e){
-      var line = document.getElementById('edge-' + e.id);
-      var isConfirmed = false;
-      NODES.forEach(function(n){
-        if(state.visited[n.id] && state.prev[n.id]){
-          var confirmedEdgeId = findEdgeId(state.prev[n.id], n.id);
-          if(confirmedEdgeId === e.id) isConfirmed = true;
-        }
-      });
-      line.classList.toggle('path-edge', isConfirmed);
-    });
-  }
-
-  function renderTable(){
-    var state = currentState();
-    var body = document.getElementById('distTableBody');
-    body.innerHTML = '';
-    NODES.forEach(function(n){
-      var tr = document.createElement('tr');
-      var timeVal = (state.dist[n.id] === Infinity) ? '∞' : (state.dist[n.id] + ' min');
-      var viaVal = state.prev[n.id] ? nodeName(state.prev[n.id]) : '—';
-      var statusHtml = state.visited[n.id]
-        ? '<span class="status-visited">✓ Visited</span>'
-        : '<span class="status-pending">Not yet</span>';
-      tr.innerHTML = '<td>' + n.name + '</td><td>' + timeVal + '</td><td>' + viaVal + '</td><td>' + statusHtml + '</td>';
-      body.appendChild(tr);
-    });
-  }
-
-  function flashNode(id){
-    var group = document.getElementById('group-' + id);
-    group.classList.remove('flash');
-    void group.offsetWidth;
-    group.classList.add('flash');
-  }
-
-  function flashNodeWrong(id){
-    var group = document.getElementById('group-' + id);
-    group.classList.remove('flash-wrong');
-    void group.offsetWidth;
-    group.classList.add('flash-wrong');
-  }
-
-  // Animates the edge from "via" to the newly-confirmed node drawing in blue.
-  function drawEdgeCorrect(fromId, toId){
-    var edgeId = findEdgeId(fromId, toId);
-    if(!edgeId) return;
-    var line = document.getElementById('edge-' + edgeId);
-    if(!line) return;
-    line.classList.remove('draw-in');
-    void line.offsetWidth;
-    line.classList.add('draw-in');
-  }
-
-  // Briefly flashes an edge red for a wrong guess. Falls back to flashing the
-  // node itself if that location has no known "via" edge yet (still ∞).
-  function flashWrongGuess(fromId, toId){
-    if(fromId){
-      var edgeId = findEdgeId(fromId, toId);
-      if(edgeId){
-        var line = document.getElementById('edge-' + edgeId);
-        line.classList.remove('wrong-flash');
-        void line.offsetWidth;
-        line.classList.add('wrong-flash');
-        setTimeout(function(){ line.classList.remove('wrong-flash'); }, 900);
-        return;
-      }
-    }
-    flashNodeWrong(toId);
-  }
-
-  function log(mode, text, kind){
-    var panel = document.getElementById(mode === 'phase1' ? 'logPhase1' : 'logPhase2');
-    var empty = panel.querySelector('.log-empty');
-    if(empty) empty.remove();
-    var entry = document.createElement('p');
-    entry.className = 'log-entry' + (kind ? ' ' + kind : '');
-    entry.textContent = text;
-    panel.appendChild(entry);
-    panel.scrollTop = panel.scrollHeight;
-  }
-
-  /* ============ page 3: phase 1 (guided) ============ */
-  function phase1Next(){
-    if(phase1.stepIndex >= phase1.steps.length) return;
-    var step = phase1.steps[phase1.stepIndex];
-    phase1.visited[step.visit] = true;
-    phase1.dist[step.visit] = step.visitDist;
-    var visitName = nodeName(step.visit);
-
-    log('phase1', 'Visiting ' + visitName + ' — shortest known time so far: ' + step.visitDist + ' min.', 'info');
-    step.relax.forEach(function(r){
-      phase1.dist[r.to] = r.newDist;
-      phase1.prev[r.to] = r.from;
-      var msg = (r.oldDist === Infinity)
-        ? ('Found a route to ' + nodeName(r.to) + ': ' + r.newDist + ' min, via ' + visitName + '.')
-        : ('Found a faster route to ' + nodeName(r.to) + ': ' + r.oldDist + ' min → ' + r.newDist + ' min, via ' + visitName + '.');
-      log('phase1', msg, 'success');
-    });
-
-    phase1.stepIndex++;
-    renderGraph();
-    renderTable();
-    if(activeTab === 'phase1'){
-      flashNode(step.visit);
-      drawEdgeCorrect(phase1.prev[step.visit], step.visit);
-    }
-
-    if(phase1.stepIndex >= phase1.steps.length){
-      phase1.done = true;
-      var path = reconstructPath(phase1.prev, TARGET);
-      log('phase1', 'Every location the depot can reach has been visited. Fastest route to Market: ' + path.map(nodeName).join(' → ') + ' — ' + phase1.dist[TARGET] + ' minutes total.', 'success');
-      renderGraph();
-      document.getElementById('nextStepBtn').style.display = 'none';
-      document.getElementById('replayPhase1Btn').style.display = 'inline-flex';
-      document.getElementById('phase1Hint').textContent = 'Guided walkthrough complete.';
-      if(!phase3Unlocked){
-        phase3Unlocked = true;
-        updateTabUI();
-      }
-    }
-  }
-  document.getElementById('nextStepBtn').addEventListener('click', phase1Next);
-
-  document.getElementById('replayPhase1Btn').addEventListener('click', function(){
-    phase1 = freshState();
-    renderInitialLog('phase1', phase1);
-    document.getElementById('nextStepBtn').style.display = 'inline-flex';
-    document.getElementById('nextStepBtn').disabled = false;
-    document.getElementById('replayPhase1Btn').style.display = 'none';
-    document.getElementById('phase1Hint').textContent = '';
-    renderGraph();
-    renderTable();
-  });
-
-  /* ============ page 3: phase 2 (free interaction) ============ */
-  function handleNodeActivate(nodeId){
-    if(activeTab !== 'phase2' || !phase3Unlocked || phase2.done) return;
-    if(phase2.visited[nodeId]){
-      log('phase2', nodeName(nodeId) + ' has already been visited — pick a different location.', 'error');
-      return;
-    }
-    var expected = phase2.steps[phase2.stepIndex];
-    var wasCorrect = (nodeId === expected.visit);
-    var viaId = phase2.prev[nodeId];
-
-    if(wasCorrect){
-      phase2.visited[nodeId] = true;
-      phase2.dist[nodeId] = expected.visitDist;
-      log('phase2', 'Correct! ' + nodeName(nodeId) + ' is the closest unvisited location — locking in ' + expected.visitDist + ' min.', 'success');
-      expected.relax.forEach(function(r){
-        phase2.dist[r.to] = r.newDist;
-        phase2.prev[r.to] = r.from;
-        var msg = (r.oldDist === Infinity)
-          ? ('That opens up a route to ' + nodeName(r.to) + ': ' + r.newDist + ' min.')
-          : ('That opens a faster route to ' + nodeName(r.to) + ': ' + r.oldDist + ' min → ' + r.newDist + ' min.');
-        log('phase2', msg, 'info');
-      });
-      phase2.stats.correct++;
-      phase2.stepIndex++;
-      document.getElementById('statCorrect').textContent = phase2.stats.correct;
-    } else {
-      phase2.stats.wrong++;
-      document.getElementById('statWrong').textContent = phase2.stats.wrong;
-      log('phase2', 'Not quite — ' + nodeName(nodeId) + " isn't the closest unvisited location right now. Check the Time column for the smallest value without a checkmark.", 'error');
-    }
-
-    renderGraph();
-    renderTable();
-
-    if(wasCorrect){
-      flashNode(nodeId);
-      drawEdgeCorrect(viaId, nodeId);
-    } else {
-      flashWrongGuess(viaId, nodeId);
-    }
-
-    if(wasCorrect && phase2.stepIndex >= phase2.steps.length){
-      phase2.done = true;
-      var path = reconstructPath(phase2.prev, TARGET);
-      log('phase2', 'Every reachable location has been visited. Fastest route to Market: ' + path.map(nodeName).join(' → ') + ' — ' + phase2.dist[TARGET] + ' minutes total.', 'success');
-      showRouteFoundBox(path, phase2.dist[TARGET], phase2.stats);
-    }
-  }
-
-  function launchConfetti(){
-    var layer = document.getElementById('confettiLayer');
-    layer.innerHTML = '';
-    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    var colors = ['var(--blue)', 'var(--blue-dark)', 'var(--orange)', 'var(--orange-base)', 'var(--success-border)'];
-    var count = 30;
-    for(var i = 0; i < count; i++){
-      var piece = document.createElement('span');
-      piece.className = 'confetti-piece';
-      var angle = (Math.random() * 2 - 1) * 75;
-      var distance = 70 + Math.random() * 110;
-      var rad = angle * Math.PI / 180;
-      var tx = Math.sin(rad) * distance;
-      var ty = Math.abs(Math.cos(rad)) * distance + 40 + Math.random() * 40;
-      var rot = (Math.random() * 720 - 360);
-      var size = 5 + Math.random() * 6;
-      piece.style.setProperty('--tx', tx.toFixed(1) + 'px');
-      piece.style.setProperty('--ty', ty.toFixed(1) + 'px');
-      piece.style.setProperty('--rot', rot.toFixed(0) + 'deg');
-      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-      piece.style.width = size + 'px';
-      piece.style.height = (size * 0.45) + 'px';
-      piece.style.animationDelay = (Math.random() * 130) + 'ms';
-      layer.appendChild(piece);
-    }
-    setTimeout(function(){ layer.innerHTML = ''; }, 1500);
-  }
-
-  function showRouteFoundBox(path, total, stats){
-    document.getElementById('routeFoundText').textContent = 'Your fastest route to Market: ' + path.map(nodeName).join(' → ') + '.';
-    document.getElementById('routeFoundStats').innerHTML =
-      '<span><b>Total time:</b> ' + total + ' minutes</span>' +
-      '<span><b>Correct picks:</b> ' + stats.correct + '</span>' +
-      '<span><b>Wrong tries:</b> ' + stats.wrong + '</span>';
-    var box = document.getElementById('routeFoundBox');
-    box.style.display = 'block';
-    document.getElementById('phase2Controls').style.display = 'none';
-    launchConfetti();
-    box.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block:'nearest' });
-  }
-
-  document.getElementById('playAgainBtn').addEventListener('click', function(){
-    phase2 = freshState();
-    phase2.stats = { correct:0, wrong:0 };
-    renderInitialLog('phase2', phase2);
-    document.getElementById('statCorrect').textContent = '0';
-    document.getElementById('statWrong').textContent = '0';
-    document.getElementById('routeFoundBox').style.display = 'none';
-    document.getElementById('confettiLayer').innerHTML = '';
-    document.getElementById('phase2Controls').style.display = 'flex';
-    renderGraph();
-    renderTable();
-  });
-  document.getElementById('modalNextBtn').addEventListener('click', function(){
-    goNext();
+    if (typeof window.cityGameNewCity === 'function') window.cityGameNewCity();
   });
 
   /* ============ page 5: static path diagram ============ */
@@ -1360,8 +1135,693 @@
   buildPathDiagram();
 
   /* ============ init ============ */
-  resetPage3(true);
   renderNav();
+
+})();
+</script>
+
+<script>
+(function(){
+  "use strict";
+
+  // ---------- City name pools for flavor ----------
+  const NAME_PREFIXES = ["Maple","Oak","Cedar","Elm","Birch","River","Lake","Hill","Park","Garden",
+    "Market","Union","Liberty","Harbor","Bridge","Mill","Stone","Spring","Sunset","Highland",
+    "Forest","Meadow","Chapel","Castle","Pine","Willow","Bay","Crescent","Orchard","Royal"];
+  const NAME_SUFFIXES = ["Square","Street","Plaza","Junction","Corner","Walk","Court","Gardens",
+    "Terrace","Crossing","Avenue","Lane","Heights","Point","Place","Row","Yard","Way","Green","Circle"];
+
+  function shuffle(arr){
+    const a = arr.slice();
+    for(let i=a.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [a[i],a[j]]=[a[j],a[i]];
+    }
+    return a;
+  }
+
+  function randomName(used){
+    let name;
+    let tries=0;
+    do{
+      const p = NAME_PREFIXES[Math.floor(Math.random()*NAME_PREFIXES.length)];
+      const s = NAME_SUFFIXES[Math.floor(Math.random()*NAME_SUFFIXES.length)];
+      name = p+" "+s;
+      tries++;
+    } while(used.has(name) && tries<200);
+    used.add(name);
+    return name;
+  }
+
+  // ---------- Map generation ----------
+  const NUM_NODES = 18;
+  const WIDTH = 1200, HEIGHT = 640;
+  const WALK_SPEED_MPS = 1.4; // average walking speed
+  const PIXELS_PER_METER = 1.0; // we treat 1px ~ 1 meter for time calc purposes
+
+  let nodes = [];   // {id, name, x, y}
+  let adj = [];      // adjacency list: adj[i] = [{to, time, dist}]
+  let edgesList = []; // for drawing: {a,b,time}
+
+  function dist(p1,p2){
+    return Math.hypot(p1.x-p2.x, p1.y-p2.y);
+  }
+
+  function generateCity(){
+    nodes = [];
+    edgesList = [];
+    const usedNames = new Set();
+
+    // Lay out nodes on a jittered grid so the city looks planned but organic
+    const cols = 6, rows = 4; // 24 slots, we'll use 18
+    const marginX = 120, marginY = 100;
+    const cellW = (WIDTH - marginX*2) / (cols-1);
+    const cellH = (HEIGHT - marginY*2) / (rows-1);
+
+    let slots = [];
+    for(let r=0;r<rows;r++){
+      for(let c=0;c<cols;c++){
+        slots.push({r,c});
+      }
+    }
+    slots = shuffle(slots).slice(0, NUM_NODES);
+    // sort back so id order roughly follows reading order (nicer label numbering)
+    slots.sort((a,b)=> (a.r-b.r) || (a.c-b.c));
+
+    slots.forEach((slot, idx)=>{
+      const jitterX = (Math.random()-0.5) * cellW * 0.45;
+      const jitterY = (Math.random()-0.5) * cellH * 0.45;
+      const x = marginX + slot.c*cellW + jitterX;
+      const y = marginY + slot.r*cellH + jitterY;
+      nodes.push({
+        id: idx,
+        name: randomName(usedNames),
+        x: Math.round(x),
+        y: Math.round(y),
+        gridR: slot.r,
+        gridC: slot.c
+      });
+    });
+
+    // Build candidate edges via Delaunay-ish approach: connect each node to nearest few neighbors
+    const K = 3; // base nearest neighbors
+    const edgeSet = new Set();
+    adj = nodes.map(()=>[]);
+
+    function edgeKey(i,j){ return i<j ? i+"_"+j : j+"_"+i; }
+
+    function addEdge(i,j){
+      const key = edgeKey(i,j);
+      if(edgeSet.has(key)) return;
+      if(i===j) return;
+      edgeSet.add(key);
+      const d = dist(nodes[i], nodes[j]);
+      const meters = d * PIXELS_PER_METER * 0.6; // scale down so times feel like a real city (max ~ a few hundred meters per block)
+      const timeMin = Math.max(1, Math.round((meters / WALK_SPEED_MPS / 60) * 10) / 10);
+      adj[i].push({to:j, time: timeMin, dist: meters});
+      adj[j].push({to:i, time: timeMin, dist: meters});
+      edgesList.push({a:i, b:j, time: timeMin});
+    }
+
+    // connect nearest neighbors for each node
+    for(let i=0;i<nodes.length;i++){
+      const distances = [];
+      for(let j=0;j<nodes.length;j++){
+        if(i===j) continue;
+        distances.push({j, d: dist(nodes[i], nodes[j])});
+      }
+      distances.sort((a,b)=>a.d-b.d);
+      const k = K + (Math.random()<0.4 ? 1:0);
+      for(let n=0;n<Math.min(k, distances.length); n++){
+        addEdge(i, distances[n].j);
+      }
+    }
+
+    // Ensure full connectivity: run BFS/union-find, connect any isolated components
+    function findComponents(){
+      const visited = new Array(nodes.length).fill(false);
+      const comps = [];
+      for(let i=0;i<nodes.length;i++){
+        if(visited[i]) continue;
+        const comp = [];
+        const stack=[i];
+        visited[i]=true;
+        while(stack.length){
+          const cur = stack.pop();
+          comp.push(cur);
+          adj[cur].forEach(e=>{
+            if(!visited[e.to]){ visited[e.to]=true; stack.push(e.to); }
+          });
+        }
+        comps.push(comp);
+      }
+      return comps;
+    }
+
+    let comps = findComponents();
+    let guard = 0;
+    while(comps.length>1 && guard<100){
+      // connect closest pair between comps[0] and any other comp
+      const compA = comps[0];
+      let best=null;
+      for(let ci=1; ci<comps.length; ci++){
+        const compB = comps[ci];
+        for(const i of compA){
+          for(const j of compB){
+            const d = dist(nodes[i], nodes[j]);
+            if(!best || d<best.d) best = {i,j,d};
+          }
+        }
+      }
+      if(best) addEdge(best.i, best.j);
+      comps = findComponents();
+      guard++;
+    }
+
+    // A few random long "avenue" shortcuts for interesting alternate routes
+    for(let n=0;n<3;n++){
+      const i = Math.floor(Math.random()*nodes.length);
+      const j = Math.floor(Math.random()*nodes.length);
+      if(i!==j) addEdge(i,j);
+    }
+  }
+
+  // ---------- Dijkstra ----------
+  function dijkstra(startId, endId){
+    const dist_ = new Array(nodes.length).fill(Infinity);
+    const prev = new Array(nodes.length).fill(null);
+    const visited = new Array(nodes.length).fill(false);
+    dist_[startId] = 0;
+    const pq = [[0, startId]];
+    while(pq.length){
+      pq.sort((a,b)=>a[0]-b[0]);
+      const [d, u] = pq.shift();
+      if(visited[u]) continue;
+      visited[u]=true;
+      if(u===endId) break;
+      adj[u].forEach(e=>{
+        const nd = d + e.time;
+        if(nd < dist_[e.to]){
+          dist_[e.to] = nd;
+          prev[e.to] = u;
+          pq.push([nd, e.to]);
+        }
+      });
+    }
+    if(dist_[endId]===Infinity) return {time:Infinity, path:[]};
+    const path=[];
+    let cur = endId;
+    while(cur!==null){ path.unshift(cur); cur = prev[cur]; }
+    return {time: Math.round(dist_[endId]*10)/10, path};
+  }
+
+  // ---------- Game state ----------
+  let sourceId = null, destId = null;
+  let pendingSource = null, pendingDest = null;
+  let pickMode = 'start'; // 'start' | 'dest' — which pin the next map click sets
+  let gameActive = false;
+  let walkPath = [];     // array of node ids visited in order
+  let walkTime = 0;
+  let bestInfo = null;   // {time, path}
+  let revealedBest = false;
+  let finished = false;
+
+  // ---------- DOM refs ----------
+  const svg = document.getElementById('mapSvg');
+  const playCard = document.getElementById('playCard');
+  const yourTimeEl = document.getElementById('yourTime');
+  const optTimeEl = document.getElementById('optTime');
+  const optimalRow = document.getElementById('optimalRow');
+  const pathList = document.getElementById('pathList');
+  const nextStepsWrap = document.getElementById('nextStepsWrap');
+  const nextStepsButtons = document.getElementById('nextStepsButtons');
+  const undoBtn = document.getElementById('undoBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const statusEl = document.getElementById('status');
+  const giveUpBtn = document.getElementById('giveUpBtn');
+  const revealBestEl = document.getElementById('revealBest');
+  const newCityBtn = document.getElementById('newCityBtn');
+  const narratorCard = document.getElementById('narratorCard');
+  const modeStartBtn = document.getElementById('modeStartBtn');
+  const modeDestBtn = document.getElementById('modeDestBtn');
+  const clearOrChangeBtn = document.getElementById('clearOrChangeBtn');
+  const cgStep1 = document.getElementById('cgStep1');
+  const cgStep2 = document.getElementById('cgStep2');
+  const cgStep3 = document.getElementById('cgStep3');
+  const cgStep1Text = document.getElementById('cgStep1Text');
+  const cgStep2Text = document.getElementById('cgStep2Text');
+  const cgStep3Text = document.getElementById('cgStep3Text');
+  const cgBannerText = document.getElementById('cgBannerText');
+  const confettiLayer = document.getElementById('confettiLayer');
+
+  function updateBelowRowLayout(){
+    // When the "Your Walk" card is hidden (no walk started yet), let the
+    // status card fill the whole row instead of sitting in a half-empty grid.
+    narratorCard.style.gridColumn = (playCard.style.display === 'none') ? '1 / -1' : 'auto';
+  }
+
+  // Single source of truth for all the "what do I do now" UI: the step
+  // tracker, the instruction banner, and the map's corner controls.
+  function updateGameUI(){
+    cgStep1.classList.toggle('active', !gameActive && pickMode === 'start');
+    cgStep1.classList.toggle('done', pendingSource !== null);
+    cgStep1Text.textContent = (pendingSource !== null) ? nodes[pendingSource].name : 'Set your start';
+
+    cgStep2.classList.toggle('active', !gameActive && pickMode === 'dest');
+    cgStep2.classList.toggle('done', pendingDest !== null);
+    cgStep2Text.textContent = (pendingDest !== null) ? nodes[pendingDest].name : 'Set destination';
+
+    cgStep3.classList.toggle('active', gameActive && !finished);
+    cgStep3.classList.toggle('done', finished);
+    cgStep3Text.textContent = finished ? 'Arrived! 🎉' : (gameActive ? 'Walking…' : 'Walk there');
+
+    if(finished){
+      cgBannerText.innerHTML = `🏁 <strong>You made it!</strong> Check your time in the "Your Walk" card, or set new pins to try another route.`;
+    } else if(gameActive){
+      cgBannerText.innerHTML = `🚶 <strong>Click a glowing, highlighted location</strong> connected to where you are now, to take your next step.`;
+    } else if(pendingSource === null){
+      cgBannerText.innerHTML = `👉 <strong>Tap any location on the map below</strong> to set where you're starting from.`;
+    } else {
+      cgBannerText.innerHTML = `👉 <strong>Now tap a different location</strong> to set your destination — your walk will begin right away.`;
+    }
+
+    modeStartBtn.classList.toggle('active', !gameActive && pickMode === 'start');
+    modeDestBtn.classList.toggle('active', !gameActive && pickMode === 'dest');
+    modeStartBtn.disabled = gameActive;
+    modeDestBtn.disabled = gameActive;
+    clearOrChangeBtn.textContent = gameActive ? '↺ Change pins' : '✕ Clear pins';
+  }
+
+  function edgeBetween(a,b){
+    return adj[a].find(e=>e.to===b);
+  }
+
+  function nodeNeighborsSet(id){
+    return new Set(adj[id].map(e=>e.to));
+  }
+
+  // ---------- Rendering ----------
+  function render(){
+    svg.setAttribute('viewBox', `0 0 ${WIDTH} ${HEIGHT}`);
+    svg.setAttribute('width', WIDTH);
+    svg.setAttribute('height', HEIGHT);
+    svg.innerHTML = '';
+
+    const roadsGroup = document.createElementNS(svg.namespaceURI,'g');
+    const labelsGroup = document.createElementNS(svg.namespaceURI,'g');
+    const nodesGroup = document.createElementNS(svg.namespaceURI,'g');
+    svg.appendChild(roadsGroup);
+    svg.appendChild(labelsGroup);
+    svg.appendChild(nodesGroup);
+
+    // walked path edges as a set of pair-keys for quick lookup
+    const walkedKeys = new Set();
+    for(let i=0;i<walkPath.length-1;i++){
+      const a=walkPath[i], b=walkPath[i+1];
+      walkedKeys.add(a<b? a+"_"+b : b+"_"+a);
+    }
+    const bestKeys = new Set();
+    if(revealedBest && bestInfo && bestInfo.path.length){
+      for(let i=0;i<bestInfo.path.length-1;i++){
+        const a=bestInfo.path[i], b=bestInfo.path[i+1];
+        bestKeys.add(a<b? a+"_"+b : b+"_"+a);
+      }
+    }
+
+    const currentNode = walkPath.length ? walkPath[walkPath.length-1] : null;
+    const isWalkingNow = gameActive && !finished && currentNode !== null;
+
+    edgesList.forEach(e=>{
+      const n1 = nodes[e.a], n2 = nodes[e.b];
+      const key = e.a<e.b ? e.a+"_"+e.b : e.b+"_"+e.a;
+      const line = document.createElementNS(svg.namespaceURI,'line');
+      line.setAttribute('x1', n1.x); line.setAttribute('y1', n1.y);
+      line.setAttribute('x2', n2.x); line.setAttribute('y2', n2.y);
+      line.setAttribute('data-a', e.a);
+      line.setAttribute('data-b', e.b);
+      let cls = 'road';
+      if(walkedKeys.has(key)) cls = 'road-walked';
+      else if(bestKeys.has(key)) cls = 'road-best';
+      else if(isWalkingNow && (e.a===currentNode || e.b===currentNode)) cls = 'road-available';
+      line.setAttribute('class', cls);
+      roadsGroup.appendChild(line);
+
+      // time label at midpoint (only show for non-cluttered / hover-light info)
+      const mx = (n1.x+n2.x)/2, my=(n1.y+n2.y)/2;
+      const label = document.createElementNS(svg.namespaceURI,'text');
+      label.setAttribute('x', mx); label.setAttribute('y', my-3);
+      label.setAttribute('class','road-label');
+      label.setAttribute('text-anchor','middle');
+      label.textContent = e.time+'m';
+      labelsGroup.appendChild(label);
+    });
+
+    const reachable = isWalkingNow ? nodeNeighborsSet(currentNode) : new Set();
+    const visitedSet = new Set(walkPath);
+    // Before the walk begins, show the pins being placed; once walking, show the locked-in ones.
+    const showSourceId = gameActive ? sourceId : pendingSource;
+    const showDestId = gameActive ? destId : pendingDest;
+
+    nodes.forEach(n=>{
+      const g = document.createElementNS(svg.namespaceURI,'g');
+      g.setAttribute('class','node-group');
+      g.setAttribute('data-id', n.id);
+
+      let stateClass = '';
+      if(n.id === showSourceId) stateClass = 'is-source';
+      if(n.id === showDestId) stateClass = 'is-dest';
+      if(gameActive){
+        if(n.id === currentNode && n.id !== sourceId) stateClass = 'is-current';
+        else if(visitedSet.has(n.id) && n.id!==sourceId && n.id!==destId) stateClass = 'is-visited';
+        else if(reachable.has(n.id) && !visitedSet.has(n.id)) {
+          g.classList.add('is-reachable');
+        }
+        if(!finished && currentNode!==null && n.id!==currentNode && !reachable.has(n.id) && n.id!==destId){
+          g.classList.add('is-disabled');
+        }
+      }
+      if(stateClass) g.classList.add(stateClass);
+
+      const circle = document.createElementNS(svg.namespaceURI,'circle');
+      circle.setAttribute('cx', n.x);
+      circle.setAttribute('cy', n.y);
+      circle.setAttribute('r', (n.id===showSourceId||n.id===showDestId||n.id===currentNode) ? 11 : 8);
+      circle.setAttribute('class','node-circle');
+      g.appendChild(circle);
+
+      const idLabel = document.createElementNS(svg.namespaceURI,'text');
+      idLabel.setAttribute('x', n.x);
+      idLabel.setAttribute('y', n.y - 14);
+      idLabel.setAttribute('class','node-label');
+      idLabel.textContent = n.name;
+      g.appendChild(idLabel);
+
+      g.addEventListener('click', ()=> onNodeClick(n.id));
+      g.addEventListener('mouseenter', ()=> highlightEdges(n.id, true));
+      g.addEventListener('mouseleave', ()=> highlightEdges(n.id, false));
+      nodesGroup.appendChild(g);
+    });
+  }
+
+  function highlightEdges(id, on){
+    const lines = svg.querySelectorAll(`line[data-a="${id}"], line[data-b="${id}"]`);
+    lines.forEach(l => l.classList.toggle('road-hover', on));
+  }
+
+  // ---------- Game logic ----------
+  function onNodeClick(id){
+    if(gameActive){
+      handleWalkClick(id);
+    } else {
+      handlePickClick(id);
+    }
+  }
+
+  function handlePickClick(id){
+    if(pickMode === 'start'){
+      pendingSource = id;
+      if(pendingDest === id) pendingDest = null;
+      pickMode = 'dest';
+      updateGameUI();
+      render();
+    } else {
+      if(id === pendingSource){
+        cgBannerText.innerHTML = `⚠️ <strong>Pick a different spot</strong> — your destination can't be the same as your start.`;
+        return;
+      }
+      pendingDest = id;
+      updateGameUI();
+      render();
+      // Both pins are set — begin the walk right away instead of making
+      // the person hunt for a separate "Start" button.
+      startGame();
+    }
+  }
+
+  function handleWalkClick(id){
+    if(finished) return;
+    const currentNode = walkPath[walkPath.length-1];
+    if(id === currentNode) return;
+
+    const e = edgeBetween(currentNode, id);
+    if(!e){
+      flashStatus("There's no direct street between those two — pick a connected (highlighted) location.", false);
+      return;
+    }
+    walkPath.push(id);
+    walkTime = Math.round((walkTime + e.time)*10)/10;
+    updatePathList();
+    render();
+    updateTimeDisplay();
+
+    if(id === destId){
+      finished = true;
+      const ratio = bestInfo.time>0 ? walkTime / bestInfo.time : 1;
+      if(walkTime <= bestInfo.time + 0.05){
+        statusEl.textContent = `🏆 You arrived in ${walkTime} min — that's the optimal time! Perfect walk.`;
+        statusEl.className = 'win';
+      } else {
+        const diff = Math.round((walkTime - bestInfo.time)*10)/10;
+        statusEl.textContent = `🎉 You arrived in ${walkTime} min. The shortest possible route was ${bestInfo.time} min (you took ${diff} min longer).`;
+        statusEl.className = (ratio<1.15) ? 'win' : 'lose';
+      }
+      optimalRow.style.display = 'flex';
+      optTimeEl.textContent = bestInfo.time;
+      giveUpBtn.style.display = 'none';
+      revealedBest = true;
+      updateGameUI();
+      render();
+      launchConfetti();
+    } else {
+      statusEl.textContent = `At ${nodes[id].name}. Choose your next stop (highlighted streets) toward ${nodes[destId].name}.`;
+      statusEl.className = '';
+    }
+    updateNextSteps();
+  }
+
+  // Non-blocking celebration: confetti bursts across the top of the screen
+  // without any overlay, so the map and the route just walked stay fully
+  // visible the whole time.
+  function launchConfetti(){
+    confettiLayer.innerHTML = '';
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const colors = ['var(--blue)', 'var(--blue-dark)', 'var(--orange)', 'var(--orange-base)', 'var(--success-border)'];
+    const count = 46;
+    for(let i=0;i<count;i++){
+      const piece = document.createElement('span');
+      piece.className = 'confetti-piece';
+      const angle = (Math.random()*2-1) * 80;
+      const distance = 120 + Math.random()*220;
+      const rad = angle * Math.PI/180;
+      const tx = Math.sin(rad) * distance;
+      const ty = Math.abs(Math.cos(rad)) * distance + 60 + Math.random()*80;
+      const rot = (Math.random()*720 - 360);
+      const size = 5 + Math.random()*6;
+      piece.style.setProperty('--tx', tx.toFixed(1)+'px');
+      piece.style.setProperty('--ty', ty.toFixed(1)+'px');
+      piece.style.setProperty('--rot', rot.toFixed(0)+'deg');
+      piece.style.background = colors[Math.floor(Math.random()*colors.length)];
+      piece.style.width = size+'px';
+      piece.style.height = (size*0.45)+'px';
+      piece.style.animationDelay = (Math.random()*160)+'ms';
+      confettiLayer.appendChild(piece);
+    }
+    setTimeout(()=>{ confettiLayer.innerHTML = ''; }, 1600);
+  }
+
+  function updatePathList(){
+    pathList.innerHTML = '';
+    for(let i=0;i<walkPath.length;i++){
+      const li = document.createElement('li');
+      const n = nodes[walkPath[i]];
+      let timeStr = '';
+      if(i>0){
+        const e = edgeBetween(walkPath[i-1], walkPath[i]);
+        timeStr = '+'+e.time+' min';
+      } else {
+        timeStr = 'start';
+      }
+      li.innerHTML = `<span>${i+1}. ${n.name}</span><span class="step-time">${timeStr}</span>`;
+      pathList.appendChild(li);
+    }
+    pathList.scrollTop = pathList.scrollHeight;
+  }
+
+  // Explicit, clickable "where can I go" buttons — a direct, unmissable
+  // alternative to hunting for the highlighted nodes on the map itself.
+  function updateNextSteps(){
+    if(!gameActive || finished){
+      nextStepsWrap.style.display = 'none';
+      nextStepsButtons.innerHTML = '';
+      return;
+    }
+    const currentNode = walkPath[walkPath.length-1];
+    const neighbors = adj[currentNode].slice().sort((a,b)=>a.time-b.time);
+    nextStepsButtons.innerHTML = '';
+    neighbors.forEach(nb=>{
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'cg-next-btn' + (nb.to === destId ? ' is-dest' : '');
+      btn.innerHTML = `${nb.to === destId ? '🏁 ' : ''}${nodes[nb.to].name} <span class="cg-next-time">+${nb.time}m</span>`;
+      btn.addEventListener('click', ()=> handleWalkClick(nb.to));
+      nextStepsButtons.appendChild(btn);
+    });
+    nextStepsWrap.style.display = 'block';
+  }
+
+  function updateTimeDisplay(){
+    yourTimeEl.textContent = walkTime;
+    yourTimeEl.className = 'timeval';
+    if(bestInfo && walkTime > bestInfo.time){
+      yourTimeEl.classList.add('bad');
+    }
+  }
+
+  function flashStatus(msg, isErr){
+    statusEl.textContent = msg;
+    statusEl.className = '';
+  }
+
+  function startGame(){
+    if(pendingSource === null || pendingDest === null) return;
+    sourceId = pendingSource;
+    destId = pendingDest;
+    bestInfo = dijkstra(sourceId, destId);
+    walkPath = [sourceId];
+    walkTime = 0;
+    finished = false;
+    revealedBest = false;
+    gameActive = true;
+
+    playCard.style.display = 'block';
+    updateBelowRowLayout();
+    optimalRow.style.display = 'none';
+    giveUpBtn.style.display = 'inline-block';
+    revealBestEl.textContent = '';
+    updatePathList();
+    updateNextSteps();
+    updateTimeDisplay();
+    statusEl.textContent = `Walking from ${nodes[sourceId].name} to ${nodes[destId].name}. Every glowing location and blue-highlighted street is somewhere you can go next.`;
+    statusEl.className = '';
+    updateGameUI();
+    render();
+  }
+
+  function undoStep(){
+    if(!gameActive || walkPath.length<=1 || finished) return;
+    const last = walkPath.pop();
+    const prevNode = walkPath[walkPath.length-1];
+    const e = edgeBetween(prevNode, last);
+    walkTime = Math.round((walkTime - e.time)*10)/10;
+    updatePathList();
+    updateNextSteps();
+    updateTimeDisplay();
+    statusEl.textContent = `Backtracked to ${nodes[prevNode].name}.`;
+    render();
+  }
+
+  function resetWalk(){
+    if(!gameActive) return;
+    walkPath = [sourceId];
+    walkTime = 0;
+    finished = false;
+    revealedBest = false;
+    optimalRow.style.display = 'none';
+    giveUpBtn.style.display = 'inline-block';
+    revealBestEl.textContent = '';
+    updatePathList();
+    updateNextSteps();
+    updateTimeDisplay();
+    statusEl.textContent = `Walk reset. Start again from ${nodes[sourceId].name}.`;
+    statusEl.className = '';
+    updateGameUI();
+    render();
+  }
+
+  function revealShortest(){
+    if(!gameActive) return;
+    revealedBest = true;
+    optimalRow.style.display = 'flex';
+    optTimeEl.textContent = bestInfo.time;
+    const names = bestInfo.path.map(id=>nodes[id].name).join(' → ');
+    revealBestEl.textContent = `Optimal route: ${names} (${bestInfo.time} min). It is now traced in orange dashes on the map.`;
+    render();
+  }
+
+  // Drops the current walk and returns to pin-picking mode on the same city,
+  // so the person can choose a new start/destination without regenerating the map.
+  function newSelection(){
+    sourceId = null; destId = null;
+    pendingSource = null; pendingDest = null;
+    pickMode = 'start';
+    gameActive = false; finished = false; revealedBest = false;
+    walkPath = []; walkTime = 0; bestInfo = null;
+    playCard.style.display = 'none';
+    updateBelowRowLayout();
+    giveUpBtn.style.display = 'none';
+    revealBestEl.textContent = '';
+    optimalRow.style.display = 'none';
+    statusEl.textContent = 'Your move-by-move route will show up here once you begin walking.';
+    statusEl.className = '';
+    updateNextSteps();
+    updateGameUI();
+    render();
+  }
+
+  function newCity(){
+    generateCity();
+    sourceId = null; destId = null;
+    pendingSource = null; pendingDest = null;
+    pickMode = 'start';
+    gameActive = false; finished=false; revealedBest=false;
+    walkPath = []; walkTime = 0; bestInfo=null;
+    playCard.style.display='none';
+    updateBelowRowLayout();
+    giveUpBtn.style.display='none';
+    revealBestEl.textContent='';
+    optimalRow.style.display = 'none';
+    statusEl.textContent = 'Your move-by-move route will show up here once you begin walking.';
+    statusEl.className='';
+    updateNextSteps();
+    updateGameUI();
+    render();
+  }
+
+  // ---------- Events ----------
+  undoBtn.addEventListener('click', undoStep);
+  resetBtn.addEventListener('click', resetWalk);
+  giveUpBtn.addEventListener('click', revealShortest);
+  newCityBtn.addEventListener('click', newCity);
+  modeStartBtn.addEventListener('click', function(){
+    if(gameActive) return;
+    pickMode = 'start';
+    updateGameUI();
+  });
+  modeDestBtn.addEventListener('click', function(){
+    if(gameActive) return;
+    pickMode = 'dest';
+    updateGameUI();
+  });
+  clearOrChangeBtn.addEventListener('click', function(){
+    if(gameActive){
+      newSelection();
+    } else {
+      pendingSource = null; pendingDest = null; pickMode = 'start';
+      updateGameUI();
+      render();
+    }
+  });
+
+  // ---------- Init ----------
+  generateCity();
+  updateGameUI();
+  updateBelowRowLayout();
+  updateNextSteps();
+  render();
+
+  // Expose a reset hook so the template's "Restart the Whole Journey" button
+  // (on the Exercises page) can also regenerate this city map.
+  window.cityGameNewCity = newCity;
 
 })();
 </script>
