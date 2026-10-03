@@ -706,21 +706,21 @@
   <!-- PAGE 5 -->
   <section class="screen" id="page5" data-page="4">
     <div class="concept-wrap">
-      <h2>What you just did: Dijkstra's algorithm</h2>
+      <h2>Understanding Dijkstra's algorithm</h2>
 
       <div class="callout concept-callout">
         <span class="kicker">In plain terms</span>
-        <p>Dijkstra's algorithm finds the shortest route from one starting point to every other point in a network, by always taking the smallest guaranteed step next. It keeps a running "shortest known time" for every location, and at each turn it locks in whichever unvisited location currently has the smallest number in that table — because once every cheaper path has already been checked, that number can't get any smaller. Locking it in, then rechecking its neighbors for shortcuts, is what lets the whole map's shortest routes fall into place one location at a time, without ever having to try every possible path by hand.</p>
+        <p>Dijkstra's algorithm finds the shortest path from one starting node to every other node in a graph, by always taking the smallest guaranteed step next. It keeps a running "shortest known distance" for every node, and at each turn it locks in whichever unvisited node currently has the smallest number in that table — because once every cheaper path has already been checked, that number can't get any smaller. Locking it in, then rechecking its neighbors for shortcuts, is what lets every node's shortest distance fall into place one at a time, without ever having to try every possible path by hand.</p>
       </div>
 
       <div class="formula-card">
-        <div class="formula-text">time(v) = min( time(v), time(u) + road(u, v) )</div>
-        <p class="formula-note">Whenever a shorter route to a location <em>v</em> is found by passing through a just-visited location <em>u</em>, its time is updated. This single check, repeated over and over, is called "relaxing" the road.</p>
+        <div class="formula-text">dist(v) = min( dist(v), dist(u) + weight(u, v) )</div>
+        <p class="formula-note">Whenever a shorter path to a node <em>v</em> is found by passing through a just-visited node <em>u</em>, its distance is updated. This single check, repeated over and over, is called "relaxing" the edge.</p>
       </div>
 
       <div class="visual-card card">
-        <h3>The route your courier found</h3>
-        <svg class="path-diagram" viewBox="0 0 1020 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Depot to Market shortest route diagram">
+        <h3>Example: the shortest path found</h3>
+        <svg class="path-diagram" viewBox="0 0 1020 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Example shortest path diagram">
           <line x1="70" y1="75" x2="950" y2="75" stroke="var(--panel-border)" stroke-width="3"></line>
           <g id="pathStopsGroup"></g>
         </svg>
@@ -730,14 +730,14 @@
         <div class="compare-card naive">
           <span class="compare-icon">🧭</span>
           <span class="compare-stat">44</span>
-          <span class="compare-label">Routes to check by hand</span>
-          <span class="compare-caption">A brute-force search has to consider every possible way through the map — and that count explodes as more roads are added.</span>
+          <span class="compare-label">Paths to check by hand</span>
+          <span class="compare-caption">A brute-force search has to consider every possible path through the graph — and that count explodes as more edges are added.</span>
         </div>
         <div class="compare-card smart">
           <span class="compare-icon">📍</span>
           <span class="compare-stat">8</span>
-          <span class="compare-label">Locations visited — once each</span>
-          <span class="compare-caption">Dijkstra's algorithm settles each location's shortest time exactly once, then moves on. It never has to revisit or backtrack.</span>
+          <span class="compare-label">Nodes visited — once each</span>
+          <span class="compare-caption">Dijkstra's algorithm settles each node's shortest distance exactly once, then moves on. It never has to revisit or backtrack.</span>
         </div>
       </div>
 
@@ -834,14 +834,14 @@
 
   /* ============ graph data ============ */
   var NODES = [
-    { id:'S', short:'S', name:'Depot',    x:80,  y:175 },
-    { id:'A', short:'A', name:'Oak St',   x:270, y:70  },
-    { id:'B', short:'B', name:'Pine St',  x:270, y:280 },
-    { id:'C', short:'C', name:'Elm St',   x:500, y:70  },
-    { id:'D', short:'D', name:'Maple St', x:500, y:280 },
-    { id:'E', short:'E', name:'Cedar St', x:730, y:70  },
-    { id:'F', short:'F', name:'Birch St', x:730, y:280 },
-    { id:'T', short:'T', name:'Market',   x:920, y:175 }
+    { id:'S', short:'S', name:'Node S', x:80,  y:175 },
+    { id:'A', short:'A', name:'Node A', x:270, y:70  },
+    { id:'B', short:'B', name:'Node B', x:270, y:280 },
+    { id:'C', short:'C', name:'Node C', x:500, y:70  },
+    { id:'D', short:'D', name:'Node D', x:500, y:280 },
+    { id:'E', short:'E', name:'Node E', x:730, y:70  },
+    { id:'F', short:'F', name:'Node F', x:730, y:280 },
+    { id:'T', short:'T', name:'Node T', x:920, y:175 }
   ];
   var EDGES = [
     { id:'S-A', a:'S', b:'A', w:2 },
@@ -1110,14 +1110,6 @@
       lbl.textContent = n.short;
       group.appendChild(lbl);
 
-      var nameLbl = document.createElementNS('http://www.w3.org/2000/svg','text');
-      nameLbl.setAttribute('x', x); nameLbl.setAttribute('y', y + r + 20);
-      nameLbl.setAttribute('text-anchor','middle');
-      nameLbl.setAttribute('font-family',"'Inter',sans-serif"); nameLbl.setAttribute('font-size','11.5'); nameLbl.setAttribute('font-weight','600');
-      nameLbl.setAttribute('fill','var(--text-dim)');
-      nameLbl.textContent = n.name;
-      group.appendChild(nameLbl);
-
       var cumLbl = document.createElementNS('http://www.w3.org/2000/svg','text');
       cumLbl.setAttribute('x', x); cumLbl.setAttribute('y', y - r - 12);
       cumLbl.setAttribute('text-anchor','middle');
@@ -1129,7 +1121,7 @@
 
     var svgEl = document.querySelector('.path-diagram');
     if(svgEl){
-      svgEl.setAttribute('aria-label', 'Depot to Market, via ' + finalPath.slice(1, -1).map(nodeName).join(', ') + ', totalling ' + cumulative + ' minutes');
+      svgEl.setAttribute('aria-label', 'Shortest path from ' + nodeName(START) + ' to ' + nodeName(TARGET) + ', via ' + finalPath.slice(1, -1).map(nodeName).join(', ') + ', totalling ' + cumulative + ' minutes');
     }
   }
   buildPathDiagram();
