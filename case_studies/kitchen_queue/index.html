@@ -4,12 +4,12 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-9M9C5T1Y9R"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);} gtag('js',new Date()); gtag('config','G-9M9C5T1Y9R');</script>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kitchen Rush: Cloud Kitchen</title>
+<title>Kitchen Rush · A Queue Case Study</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{--bg-1:#FDF1E9;--bg-2:#EDF3FA;--bg-3:#E4EEFA;--primary:#4A9BD1;--primary-dark:#2B6FA3;--primary-deep:#1B4A66;--amber:#EA8C36;--amber-dark:#C96F1F;--danger:#D9714F;--success:#4B7A4A;--ink:#1F2E37;--muted:#54666D;--faint:#93A5AB;--card-bg:#fff;--glass-border:#D9E5F2;--shadow-card:rgba(23,50,77,0.12);--shadow-btn:rgba(43,111,163,0.28);--radius-lg:18px}
 *,*::before,*::after{box-sizing:border-box}html,body{height:100%}body{margin:0;min-height:100vh;font-family:'Inter',sans-serif;color:var(--ink);background:linear-gradient(180deg,var(--bg-1) 0%,var(--bg-2) 40%,var(--bg-2) 100%);background-attachment:fixed;-webkit-font-smoothing:antialiased}
-h1,h2{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;margin:0}p{line-height:1.65;color:var(--muted);margin:0}button{font-family:'Poppins',sans-serif;cursor:pointer}
+h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;margin:0}p{line-height:1.65;color:var(--muted);margin:0}button{font-family:'Poppins',sans-serif;cursor:pointer}
 .wrap{max-width:960px;margin:0 auto;padding:96px 20px 70px}
 .stepper{max-width:700px;margin:0 auto 30px;display:flex;align-items:center;justify-content:center;padding:0 12px}
 .step-item{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;position:relative}
@@ -54,7 +54,8 @@ h1,h2{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;mar
 .stats{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:8px}
 .stat{font-size:12.5px;font-weight:700;color:var(--muted)} .stat strong{color:var(--ink)}
 .qgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:8px}
-.qcard{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:18px;padding:22px 20px 20px;box-shadow:0 14px 30px -18px rgba(23,50,77,.3);min-height:140px;display:flex;flex-direction:column;gap:10px}
+.qcard{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:18px;padding:22px 20px 20px;box-shadow:0 14px 30px -18px rgba(23,50,77,.3);min-height:140px;display:flex;flex-direction:column;gap:10px;transition:transform .15s}
+.qcard:hover{transform:translateY(-3px);box-shadow:0 18px 34px -16px rgba(23,50,77,.38)}
 .qcard .q-num{font-weight:800;font-size:13px;color:var(--primary)}
 .qcard .q-text{font-size:14.5px;color:var(--ink);line-height:1.6;font-weight:600}
 @media(max-width:900px){.qgrid{grid-template-columns:repeat(2,1fr)}}@media(max-width:640px){.qgrid{grid-template-columns:1fr}}
@@ -64,15 +65,16 @@ h1,h2{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;mar
 .kl-item{display:flex;gap:12px;align-items:flex-start;text-align:left}
 .kl-item + .kl-item{padding-top:14px;border-top:1px dotted var(--glass-border)}
 .kl-icon{font-size:20px;flex-shrink:0}
-.kl-item b{display:block;font-size:13.5px;color:var(--primary-deep);margin-bottom:3px}
+.kl-item b{display:inline-block;font-size:13px;font-weight:700;color:var(--primary-deep);background:rgba(74,155,209,.08);padding:2px 8px;border-radius:6px;margin-bottom:6px}
 .kl-item p{font-size:12.5px;color:var(--muted);line-height:1.5}
-.concept-blank{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:18px;padding:22px;box-shadow:0 14px 30px -18px rgba(23,50,77,.3);margin-bottom:18px}
+.concept-blank{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:18px;padding:22px;box-shadow:0 14px 30px -18px rgba(23,50,77,.3)}
 .concept-blank h4{font-size:13px;color:var(--primary);margin:14px 0 6px;text-transform:uppercase;letter-spacing:.04em}
 .concept-blank h4:first-child{margin-top:0}
-.compare-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
-.compare-card{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:14px;padding:18px;text-align:center}
+.compare-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.compare-card{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:18px;padding:22px;text-align:center;box-shadow:0 14px 30px -18px rgba(23,50,77,.3)}
 .compare-title{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
-.compare-sub{font-size:12.5px;color:var(--faint);margin-top:4px}
+.compare-sub{font-size:12.5px;color:var(--muted);margin-top:4px}
+@media(max-width:640px){.compare-cards{grid-template-columns:1fr}}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#22496B;color:#fff;font-weight:600;padding:12px 20px;border-radius:999px;opacity:0;pointer-events:none;transition:.3s;z-index:90} .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .pulse{animation:ctaPulse 1.8s ease-in-out infinite}
 @keyframes ctaPulse{0%,100%{transform:translateY(0);box-shadow:0 0 0 0 rgba(74,155,209,.45)}50%{transform:translateY(-2px);box-shadow:0 0 0 10px rgba(74,155,209,0)}}
@@ -168,13 +170,13 @@ code{font-family:inherit;font-weight:700;color:var(--primary-deep);background:rg
 <h2 class="section-title">What did you notice?</h2>
 <p class="section-sub">No single right answer, just what you saw happen.</p>
 <div class="card"><div class="qgrid">
-<div class="qcard"><span class="q-num">01 · Cold Biryani</span><span class="q-text">Biryani came at 8:00, Burger at 8:05. If Burger is served first, how long does Biryani keep waiting?</span></div>
-<div class="qcard"><span class="q-num">02 · Serve twice</span><span class="q-text">Orders: Biryani, Momos, Pizza, Burger. You serve two. Who is still waiting, and in what order?</span></div>
-<div class="qcard"><span class="q-num">03 · Fair or not</span><span class="q-text">Serving the newest order before the oldest, how does that feel for the first customer? Which way feels fair?</span></div>
-<div class="qcard"><span class="q-num">04 · Same everywhere</span><span class="q-text">Where else should the first to arrive be served first, a counter line, a bus stand? Why do people dislike queue-jumping?</span></div>
-<div class="qcard"><span class="q-num">05 · Watch, don't touch</span><span class="q-text">You glance at the front order but don't serve it. Why does looking at it not count as serving it?</span></div>
-<div class="qcard"><span class="q-num">06 · The printer queue</span><span class="q-text">You send a print job, then a friend sends theirs. Should the printer finish yours first (newest) or theirs first (oldest)? Which feels fair?</span></div>
-<div class="qcard"><span class="q-num">07 · Milk shelf</span><span class="q-text">Old milk must leave the shelf before new milk so it doesn't spoil. Is that the same rule as your kitchen line, or the opposite?</span></div>
+<div class="qcard"><span class="q-num">01 · Reading the rail</span><span class="q-text">Add four orders and serve nothing. Which ticket carries the FRONT badge, which carries REAR, and which one sits in the middle with no badge at all?</span></div>
+<div class="qcard"><span class="q-num">02 · Serving an empty kitchen</span><span class="q-text">Press Serve Front before any order exists. What happens on screen, and what do you call that situation?</span></div>
+<div class="qcard"><span class="q-num">03 · The times on the tickets</span><span class="q-text">Every ticket shows a time. After four adds and two serves, read the remaining times in the order they will be served. What did you notice about who waits longest?</span></div>
+<div class="qcard"><span class="q-num">04 · Using the cheat</span><span class="q-text">Press Cheat: Skip the Line once. Which order left the rail, what happened to your stars, and how did that compare with serving from the front?</span></div>
+<div class="qcard"><span class="q-num">05 · Holding five stars</span><span class="q-text">The Challenge wanted a set number of orders in and a set number of serves from the front. What sequence did you run, and which mistake would have cost you stars?</span></div>
+<div class="qcard"><span class="q-num">06 · Auto Rush versus your own hands</span><span class="q-text">Let Auto Rush run once, then repeat the same run by hand. What did watching it show you that serving it yourself did not?</span></div>
+<div class="qcard"><span class="q-num">07 · What you would change</span><span class="q-text">If you could change one rule about how this kitchen works, what would you change? What would it break for somebody else?</span></div>
 </div>
 <div class="section-nav"><button class="btn ghost" id="btn-notes-back">⬅ Back</button><button class="btn" id="btn-notes-continue">Continue to The Method ➜</button></div></div>
 </section>
@@ -186,11 +188,11 @@ code{font-family:inherit;font-weight:700;color:var(--primary-deep);background:rg
 <div class="hero" style="margin-bottom:6px"><div style="font-size:48px">🚶‍♂️🚶‍♀️</div><h2>The Queue (FIFO)</h2></div>
 <div class="learning-flow">
 <div class="concept-blank">
-<h4>Definition</h4><p><strong>FIFO: First In, First Out.</strong> Like a line, first to arrive is first to be served. No cutting.</p>
+<h4>Definition</h4><p><code>FIFO</code>, First In, First Out: like a line, the first to arrive is the first to be served. No cutting.</p>
 <h4>Mechanism</h4><p><code>enqueue(x)</code>: new order at rear, <code>dequeue()</code>: serve from front, <code>peek()</code>: see front. All <code>O(1)</code>. Rear in, front out: the middle is never touched.</p>
 <h4>Vocabulary</h4><p><code>front</code>: next to serve, <code>rear</code>: last arrived, <code>FIFO</code>, <code>underflow</code>: serve when empty.</p>
 </div>
-<div class="compare-cards" style="margin-top:18px">
+<div class="compare-cards">
 <div class="compare-card"><span class="compare-title">If it were a Stack (LIFO)</span><span class="compare-sub">Last order first: Biryani waits longest, gets cold</span></div>
 <div class="compare-card"><span class="compare-title">Because it’s a Queue (FIFO)</span><span class="compare-sub">First order first: everyone waits fairly, hot food</span></div>
 </div>
@@ -208,14 +210,14 @@ code{font-family:inherit;font-weight:700;color:var(--primary-deep);background:rg
 <h2 class="section-title">Try on your own</h2>
 <p class="section-sub">Work it out in your head.</p>
 <div class="card"><div class="qgrid">
-<div class="qcard"><span class="q-num">01 · Predict the queue</span><span class="q-text">Predict: enqueue Biryani, enqueue Momos, dequeue, enqueue Pizza, dequeue, enqueue Burger. Who remains in the queue, and who is at the front?</span></div>
-<div class="qcard"><span class="q-num">02 · Stack at the printer</span><span class="q-text">A printer queue serves jobs oldest-first. Would a Stack (LIFO) work? Trace push Job A, push Job B, pop, push Job C, pop: which job prints out of order and which starves?</span></div>
-<div class="qcard"><span class="q-num">03 · Empty dequeue</span><span class="q-text">The queue is empty and a dequeue (Serve) is called. What must your code do instead of serving, and what is that case called?</span></div>
-<div class="qcard"><span class="q-num">04 · Two riders</span><span class="q-text">Two riders share one queue. R1 drops Biryani then Pizza, R2 drops Momos then Burger, interleaved as they arrive. Predict the exact serve order, and confirm each rider's pair leaves oldest-first.</span></div>
-<div class="qcard"><span class="q-num">05 · Burger exactly third</span><span class="q-text">Orders arrive: Biryani, Momos, Pizza, Burger. Design the enqueue/dequeue sequence so Burger is served exactly third. You may serve between enqueues: how many dequeues run before Burger leaves?</span></div>
-<div class="qcard"><span class="q-num">06 · Newest-first router</span><span class="q-text">Packets P1, P2, P3 arrive in order. If a router processed the newest first, trace the serve order and explain what breaks for P1.</span></div>
-<div class="qcard"><span class="q-num">07 · Coal heap</span><span class="q-text">A truck dumps coal onto a heap, then a second truck dumps on top. Is the shovel grabbing from the front or the top, and which structure does the heap match?</span></div>
-<div class="qcard"><span class="q-num">08 · Milk shelf vs coal heap</span><span class="q-text">Prices rise, so newest-sold-first lowers tax while oldest-sold-first raises it. Which selling rule fits the milk shelf (FIFO) and which fits the coal heap (LIFO)? Why must milk clear the oldest first?</span></div>
+<div class="qcard"><span class="q-num">01 · Read the line</span><span class="q-text">In the game, add Biryani, Momos, then serve one, then add Pizza, then serve again, then add Burger. Who is still waiting, and who is served next?</span></div>
+<div class="qcard"><span class="q-num">02 · Who waits longest</span><span class="q-text">Orders arrive at 8:00, 8:05 and 8:07, and each order takes two minutes to make. Which order is handed over last, and how long has the first customer waited by then?</span></div>
+<div class="qcard"><span class="q-num">03 · One printer, three jobs</span><span class="q-text">You send a print job at 9:00, a classmate at 9:01, a teacher at 9:02. The printer takes one job at a time. Whose job should print first, and why is that fairer than the other way round?</span></div>
+<div class="qcard"><span class="q-num">04 · The milk shelf</span><span class="q-text">A shop stacks new milk at the back and sells whatever is at the front. Why can't they sell the newest bottle first, even though it would be easier to reach?</span></div>
+<div class="qcard"><span class="q-num">05 · Two lines at the clinic</span><span class="q-text">A clinic keeps a normal line and an emergency line, and anyone in the emergency line is seen straight away. Why does that feel fair there but unfair in a food line? What goes wrong if the emergency line never empties?</span></div>
+<div class="qcard"><span class="q-num">06 · Changing your mind</span><span class="q-text">A customer orders, then decides two minutes later that they do not want it. Nothing has been served yet. Could your kitchen line let them take that order back, and which end would you remove it from?</span></div>
+<div class="qcard"><span class="q-num">07 · When arrival order is wrong</span><span class="q-text">Name a situation where serving strictly in arrival order would be the wrong choice. What rule would you use instead?</span></div>
+<div class="qcard"><span class="q-num">08 · Design the kitchen line</span><span class="q-text">You are writing the software behind the line. What do you keep track of, and how much work is it to add an order compared with serving one?</span></div>
 </div>
 <div class="section-nav"><button class="btn ghost" id="btn-cases-back">⬅ Back</button><button class="btn" id="btn-cases-home">🏠 Back to CSE Lab</button><button class="btn" id="btn-cases-finish">Restart ↻</button></div></div>
 </section>

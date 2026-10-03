@@ -4,7 +4,7 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-9M9C5T1Y9R"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);} gtag('js',new Date()); gtag('config','G-9M9C5T1Y9R');</script>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Back Again: How Does Back Work?</title>
+<title>Browser Tabs · A Stack Case Study</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{--bg-1:#FDF1E9;--bg-2:#EDF3FA;--bg-3:#E4EEFA;--primary:#4A9BD1;--primary-dark:#2B6FA3;--primary-deep:#1B4A66;--amber:#EA8C36;--amber-dark:#C96F1F;--danger:#D9714F;--success:#4B7A4A;--ink:#1F2E37;--muted:#54666D;--faint:#93A5AB;--card-bg:#fff;--glass-border:#D9E5F2;--shadow-card:rgba(23,50,77,0.12);--shadow-btn:rgba(43,111,163,0.28);--radius-lg:18px}
@@ -56,7 +56,7 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;
 .rules-list li::before{content:"✕";color:var(--danger);font-weight:700;flex-shrink:0}
 .rules-list li.ok::before{content:"✓";color:var(--success)}
 .qgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:8px}
-.qcard{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:18px;padding:22px 20px 20px;box-shadow:0 14px 30px -18px rgba(23,50,77,.3);min-height:140px;display:flex;flex-direction:column;gap:10px}
+.qcard{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:18px;padding:22px 20px 20px;box-shadow:0 14px 30px -18px rgba(23,50,77,.3);min-height:140px;display:flex;flex-direction:column;gap:10px;transition:transform .15s}
 .qcard:hover{transform:translateY(-3px);box-shadow:0 18px 34px -16px rgba(23,50,77,.38)}
 .qcard .q-num{font-weight:800;font-size:13px;color:var(--primary)}
 .qcard .q-text{font-size:14.5px;color:var(--ink);line-height:1.6;font-weight:600}
@@ -67,15 +67,16 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;
 .kl-item{display:flex;gap:12px;align-items:flex-start;text-align:left}
 .kl-item + .kl-item{padding-top:14px;border-top:1px dotted var(--glass-border)}
 .kl-icon{font-size:20px;flex-shrink:0}
-.kl-item b{display:block;font-size:13.5px;color:var(--primary-deep);margin-bottom:3px}
+.kl-item b{display:inline-block;font-size:13px;font-weight:700;color:var(--primary-deep);background:rgba(74,155,209,.08);padding:2px 8px;border-radius:6px;margin-bottom:6px}
 .kl-item p{font-size:12.5px;color:var(--muted);line-height:1.5}
-.concept-blank{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:18px;padding:22px;box-shadow:0 14px 30px -18px rgba(23,50,77,.3);margin-bottom:18px}
+.concept-blank{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:18px;padding:22px;box-shadow:0 14px 30px -18px rgba(23,50,77,.3)}
 .concept-blank h4{font-size:13px;color:var(--primary);margin:14px 0 6px;text-transform:uppercase;letter-spacing:.04em}
 .concept-blank h4:first-child{margin-top:0}
-.compare-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
-.compare-card{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:14px;padding:18px;text-align:center}
+.compare-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.compare-card{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:18px;padding:22px;text-align:center;box-shadow:0 14px 30px -18px rgba(23,50,77,.3)}
 .compare-title{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
-.compare-sub{font-size:12.5px;color:var(--faint);margin-top:4px}
+.compare-sub{font-size:12.5px;color:var(--muted);margin-top:4px}
+@media(max-width:640px){.compare-cards{grid-template-columns:1fr}}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#22496B;color:#fff;font-weight:600;padding:12px 20px;border-radius:999px;opacity:0;pointer-events:none;transition:.3s;z-index:90} .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .pulse{animation:ctaPulse 1.8s ease-in-out infinite}
 @keyframes ctaPulse{0%,100%{transform:translateY(0);box-shadow:0 0 0 0 rgba(74,155,209,.45)}50%{transform:translateY(-2px);box-shadow:0 0 0 10px rgba(74,155,209,0)}}
@@ -178,13 +179,13 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;
 <h2 class="section-title">What did you notice?</h2>
 <p class="section-sub">No single right answer: just what you felt while surfing.</p>
 <div class="card"><div class="qgrid">
-<div class="qcard"><span class="q-num">01 · The newest page</span><span class="q-text">You went Google → Wiki → YouTube, then pressed Back. You got YouTube, not Google. Why?</span></div>
-<div class="qcard"><span class="q-num">02 · Two steps back</span><span class="q-text">You went A → B → C → D, then pressed Back twice. Which page are you on?</span></div>
-<div class="qcard"><span class="q-num">03 · One step forward</span><span class="q-text">After pressing Back once, a Forward arrow appears. Which page do you think it brings back?</span></div>
-<div class="qcard"><span class="q-num">04 · Same feeling</span><span class="q-text">Where else does “the newest thing comes undone first” feel right: fixing a typo, a pile of plates?</span></div>
-<div class="qcard"><span class="q-num">05 · Going deeper</span><span class="q-text">Why does going back one step feel instant, but a page 10 visits ago takes 10 presses?</span></div>
-<div class="qcard"><span class="q-num">06 · Pile of coal</span><span class="q-text">Coal is heaped up, with newer loads on top. A shovel takes from the top. Is the coal used first the newest or the oldest, and does that feel like Back?</span></div>
-<div class="qcard"><span class="q-num">07 · The printer queue</span><span class="q-text">Three people send documents to one printer: you, then someone else. Should your later job print before theirs? Why not?</span></div>
+<div class="qcard"><span class="q-num">01 · Reading your pile</span><span class="q-text">Visit four pages without pressing Back, then look at the rail. Which page is marked TOP, and where in that column is the very first page you visited?</span></div>
+<div class="qcard"><span class="q-num">02 · Back with nothing there</span><span class="q-text">Press Back before you visit anything. What does the button do, and what message appears? Have you seen this happen in a real browser?</span></div>
+<div class="qcard"><span class="q-num">03 · The vanishing arrow</span><span class="q-text">Press Back twice, press Forward once, then visit a new page. What happens to the Forward arrow? Why do you think a real browser behaves that way?</span></div>
+<div class="qcard"><span class="q-num">04 · Watching the counters</span><span class="q-text">Keep an eye on Pages and Back ops while you work. Which number moves when you press Back, and does the pile shrink from the top or the bottom?</span></div>
+<div class="qcard"><span class="q-num">05 · Beating the Challenge</span><span class="q-text">The Challenge asked for a set number of visits and then exactly so many Backs. What sequence did you run, and what did the page tell you if you ever pressed Back too many times?</span></div>
+<div class="qcard"><span class="q-num">06 · Auto Surf versus your own hands</span><span class="q-text">Let Auto Surf run once, then repeat the same run by hand. What did watching it show you that doing it yourself did not?</span></div>
+<div class="qcard"><span class="q-num">07 · Reset is not Back</span><span class="q-text">Press Reset in the middle of a run. What all did it clear at once, and why does that feel different from pressing Back a few times?</span></div>
 </div>
 <div class="section-nav"><button class="btn ghost" id="btn-notes-back">⬅ Back</button><button class="btn" id="btn-notes-continue">Continue to The Method ➜</button></div></div>
 </section>
@@ -196,7 +197,7 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;
 <div class="hero" style="margin-bottom:6px"><div style="font-size:48px">🥞</div><h2>The Stack (LIFO)</h2></div>
 <div class="learning-flow">
 <div class="concept-blank">
-<h4>Definition</h4><p><strong>LIFO: Last In, First Out.</strong> Like plates, you can only touch the top. Last thing you put in is first you get back.</p>
+<h4>Definition</h4><p><code>LIFO</code>, Last In, First Out: like plates, you can only touch the top. The last thing you put in is the first thing you get back.</p>
 <h4>Mechanism</h4><p><code>push(x)</code>: visit on top, <code>pop()</code>: Back removes top, <code>peek()</code>: glance at top. All <code>O(1)</code>. No middle jump: you must pop everything above.</p>
 <h4>Vocabulary</h4><p><code>top</code>: current page, <code>underflow</code>: Back on empty, <code>overflow</code>: push when full, <code>LIFO</code>.</p>
 </div>
@@ -218,14 +219,14 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;
 <h2 class="section-title">Try on your own</h2>
 <p class="section-sub">Trace the steps in your head.</p>
 <div class="card"><div class="qgrid">
-<div class="qcard"><span class="q-num">01 · Mixed visit</span><span class="q-text">You push Google, Wiki, YouTube, pop once, push Docs, pop once. Which pages remain on the Stack, and which one is on top?</span></div>
-<div class="qcard"><span class="q-num">02 · Typo</span><span class="q-text">You type H-E-L-L-O, with each letter pushed onto the Stack, then pop three times. Which letters remain, and which one would pop next?</span></div>
-<div class="qcard"><span class="q-num">03 · Wrong undo</span><span class="q-text">A text app pops the oldest letter first. You typed HELLO and undid once. What remains, and which structure is it really using: a Stack or a Queue?</span></div>
-<div class="qcard"><span class="q-num">04 · Fresh start</span><span class="q-text">You open a fresh browser and press Back before any visit. No push has happened yet. Which case protects you, underflow or overflow, and what should the app show?</span></div>
-<div class="qcard"><span class="q-num">05 · Build it</span><span class="q-text">Start with an empty Stack. Design the push/pop sequence so Docs sits on top with Google just below it. State every operation in order.</span></div>
-<div class="qcard"><span class="q-num">06 · Stack or Queue</span><span class="q-text">A backup app undoes newest-first. The tax office must process oldest-first. Which one gets a Stack and which gets a Queue, and why?</span></div>
-<div class="qcard"><span class="q-num">07 · Pop order</span><span class="q-text">Push A, B, C. Pop once, push D, pop twice. List the pop order, then the final Stack from bottom to top.</span></div>
-<div class="qcard"><span class="q-num">08 · Newest milk</span><span class="q-text">A shop uses a Queue so the oldest milk sells first and nothing spoils. If it switched to a Stack, which bottles would always sit at the bottom?</span></div>
+<div class="qcard"><span class="q-num">01 · Read the pile</span><span class="q-text">Use the game itself: visit Google, Wiki and YouTube, press Back once, visit Docs, press Back once. What is left in your pile, and which page is on top?</span></div>
+<div class="qcard"><span class="q-num">02 · Back three times</span><span class="q-text">You visited six pages and you want the third one back. How many Backs does that take? If you had visited thirty pages instead, how many would you need for the one page you actually wanted?</span></div>
+<div class="qcard"><span class="q-num">03 · The Forward button</span><span class="q-text">In the browser you use every day, press Back a few times, then Forward, then click a new link. What happens to Forward at that point, and why do you think browsers are built to do that?</span></div>
+<div class="qcard"><span class="q-num">04 · Undo and Redo</span><span class="q-text">You type a sentence, undo it four times, then start typing a new sentence. Does Redo still work afterwards? What is each of those two buttons holding on to?</span></div>
+<div class="qcard"><span class="q-num">05 · Plates and lines</span><span class="q-text">A canteen stacks clean plates and you take from the top. A food line forms and people are served from the front. Which of those is your browser Back, and which is it not?</span></div>
+<div class="qcard"><span class="q-num">06 · Design the Back button</span><span class="q-text">You have to build Back for 10,000 visited pages. What do you keep track of, what does each button do to it, and is Back fast or slow?</span></div>
+<div class="qcard"><span class="q-num">07 · When keeping everything breaks</span><span class="q-text">Holding on to every page you ever visit uses a lot of memory. What could a real browser do instead, and what would your Back button lose?</span></div>
+<div class="qcard"><span class="q-num">08 · Something you use daily</span><span class="q-text">Name something you use every day that works the same way as your page pile. In that thing, which item is the newest, and how do you get back to something you used earlier?</span></div>
 </div>
 <div class="section-nav"><button class="btn ghost" id="btn-cases-back">⬅ Back</button><button class="btn" id="btn-cases-home">🏠 Back to CSE Concept Laboratory</button><button class="btn" id="btn-cases-finish">Restart ↻</button></div></div>
 </section>
