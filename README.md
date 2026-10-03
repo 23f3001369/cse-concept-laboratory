@@ -57,7 +57,7 @@ Explore the live case studies here: [vicharanashala.github.io/cse-concept-labora
 | 07 | The Milk Problem | ✅ Available |
 | 08 | Junction Street | ✅ Available  |
 | 09 | The Blindfolded Archer | ✅ Available |
-| 10 | Nuts-and-Bolts | 🚧 Coming soon |
+| 10 | Nuts-and-Bolts | ✅ Available |
 | 11 | Operation Padlock | 🚧 Coming soon |
 
 ## Repository Structure
