@@ -1384,7 +1384,10 @@
                 <div class="qcard"><span class="q-num">06 · Manual freedom</span><span class="q-text">A library with no
                         collector (like plain C) hands the full task to you. What kinds of mistakes does that free you
                         to make, and does "reachable" still apply?</span></div>
-            </div>
+            
+            <div class="qcard"><span class="q-num">07 · The cache that cleans itself</span><span class="q-text">Zara keeps a small cache of recent poster files and drops the oldest when memory runs low. Those files are still reachable from the app, so is this garbage collection or something else? What is actually deciding which entries survive?</span></div>
+            <div class="qcard"><span class="q-num">08 · Swept right on release</span><span class="q-text">A board is reachable only while the user drags it. The moment the mouse is released the collector sweeps and frees it. Is that the correct moment, and whose fault is it if the app tries to touch the board one frame later?</span></div>
+            <div class="qcard"><span class="q-num">09 · The chain of ten arrows</span><span class="q-text">A pin keeps a board alive through a chain of ten arrows. Does the collector need every one of those arrows to stay correct, and what does following a long chain cost? What would change if a board could be pinned always-alive with no arrows at all?</span></div></div>
             <div class="section-nav"><button class="btn ghost" id="btn-cases-back">⬅ Back</button><button class="btn"
                     id="btn-cases-finish">Restart ↻</button></div>
         </section>

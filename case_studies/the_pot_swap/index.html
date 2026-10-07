@@ -902,7 +902,7 @@
                         </div>
                         <div class="kl-item"><span class="kl-icon">🔄</span>
                             <div><b>Minimal Swaps</b>
-                                <p>Each item is placed exactly once, straight into its final spot, at most n−1 swaps,
+                                <p>Each item is placed exactly once, straight into its final spot, at most n-1 swaps,
                                     never misplacing a locked pot.</p>
                             </div>
                         </div>
@@ -946,7 +946,10 @@
                 <div class="qcard"><span class="q-num">06 · Why O(n²)</span><span class="q-text">Locking spot 1 scans all
                         6 pots, spot 2 scans the 5 that remain, and so on. If the tray doubled to 12 pots, why does the
                         work grow by about four times instead of two?</span></div>
-            </div>
+            
+            <div class="qcard"><span class="q-num">07 · The pot that moved before</span><span class="q-text">On your first pass the minimum jumps into its locked spot and the pot pushed out of that spot lands somewhere else. Could that pushed pot get swapped again in a later pass, or is it safe because it already moved once? What actually guarantees that a pot is finished?</span></div>
+            <div class="qcard"><span class="q-num">08 · Two pots, one height</span><span class="q-text">The tray holds two pots of equal height. Selection sort hands the title of minimum to whichever one it meets first. Does it matter which one wins, and after the sort can you still tell the equal pots apart? What does that say about equal values?</span></div>
+            <div class="qcard"><span class="q-num">09 · The scan you cannot skip</span><span class="q-text">A friend swears pot 3 is tiny, so why scan the whole tray each pass? If selection sort stopped scanning early and trusted that hunch, which guarantee would it lose, and what could the final tray look like on a bad day?</span></div></div>
             <div class="section-nav"><button class="btn ghost" id="btn-cases-back">⬅ Back</button><button class="btn"
                     id="btn-cases-home">🏠 Back to CSE Lab</button><button class="btn" id="btn-cases-finish">Restart
                     ↻</button></div>
