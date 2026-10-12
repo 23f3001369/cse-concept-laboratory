@@ -473,21 +473,47 @@
             display: flex;
             flex-direction: column;
             gap: 6px;
-            text-align: center;
+            text-align: left;
             background: var(--card-bg);
-            border: 1.5px dashed var(--primary);
-            border-radius: 12px;
-            padding: 12px 16px;
-            font-size: 12.5px;
-            color: var(--muted)
+            border: 1.5px solid var(--primary);
+            border-radius: 14px;
+            padding: 14px 18px;
+            font-size: 13.5px;
+            color: var(--muted);
+            max-width: 720px;
+            margin: 0 auto 16px;
+            box-shadow: var(--shadow-card)
         }
 
         .how-to b {
             font-family: 'Poppins', sans-serif;
-            font-size: 11px;
+            font-size: 11.5px;
             letter-spacing: .08em;
             text-transform: uppercase;
-            color: var(--primary-deep)
+            color: var(--primary-deep);
+            text-align: center
+        }
+
+        .how-to p {
+            margin: 0
+        }
+
+        .how-steps {
+            margin: 6px 0 0;
+            padding: 0 0 0 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 7px
+        }
+
+        .how-steps li {
+            line-height: 1.5
+        }
+
+        .how-steps li b {
+            text-transform: none;
+            letter-spacing: 0;
+            font-family: 'Inter', sans-serif
         }
 
         .phase-bar {
@@ -1147,6 +1173,86 @@
             font-size: 14px
         }
 
+        .mech-steps {
+            list-style: none;
+            counter-reset: mech;
+            margin: 8px 0 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px
+        }
+
+        .mech-steps li {
+            counter-increment: mech;
+            position: relative;
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 12px 14px 12px 46px;
+            font-size: 13.5px;
+            line-height: 1.55;
+            color: var(--ink);
+            text-align: left
+        }
+
+        .mech-steps li::before {
+            content: counter(mech);
+            position: absolute;
+            left: 14px;
+            top: 12px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            font-weight: 700;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 12px;
+            margin-top: 8px
+        }
+
+        .vocab-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 13px 15px 12px;
+            text-align: left;
+            box-shadow: 0 10px 22px -16px rgba(23, 50, 77, .3)
+        }
+
+        .vocab-term {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--primary-deep);
+            margin-bottom: 7px
+        }
+
+        .vocab-term code,
+        .mech-steps li code {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            color: var(--primary-deep);
+            background: rgba(74, 155, 209, .08);
+            padding: 1px 6px;
+            border-radius: 6px
+        }
+
+        .vocab-def {
+            font-size: 12.5px;
+            color: var(--muted);
+            line-height: 1.5
+        }
+
         .key-learnings h3 {
             font-size: 16px;
             margin-bottom: 12px;
@@ -1438,7 +1544,8 @@
                     <li><b>Pass 1, Spread.</b> Click a card so it lifts off the table, then click the drawer whose
                         label covers that year. The card flies in and shows the drawer it landed in.</li>
                     <li><b>Pass 2, Order.</b> Inside a drawer, click the card that is in the wrong spot, then click
-                        the card it belongs in front of. Or click the end strip to place it last.</li>
+                        the card it belongs in front of. Or click the end strip to place it last. That is insertion
+                        sort: each card is slid into place among the cards already in its drawer.</li>
                     <li><b>Stuck?</b> Press Hint and the right drawer or neighbour will light up.</li>
                 </ul>
                 <p style="font-size:13px;color:var(--muted);margin:-6px 0 14px">If two cards show the same year,
@@ -1471,6 +1578,19 @@
             <h2 class="section-title">Spread first, then order</h2>
             <p class="section-sub" id="scene-story">The cards are on the table. Each drawer is labelled with a range
                 of years.</p>
+            <div class="how-to">
+                <b>How the vault works</b>
+                <p>The ribbon is the whole range of years. Each labelled band is one drawer, and every dot is one card
+                    sitting at its year on the range.</p>
+                <ol class="how-steps">
+                    <li><b>Pass 1, Spread:</b> click a card to lift it, then click the drawer whose band covers its year.
+                    </li>
+                    <li><b>Pass 2, Order:</b> inside a drawer, click the card that is in the wrong spot, then click the
+                        card it belongs in front of. Or click the end strip to place it last.</li>
+                    <li><b>Stuck?</b> press Hint and the right drawer or neighbour lights up. Press Reset to start the
+                        round over.</li>
+                </ol>
+            </div>
             <div class="game-shell">
                 <div class="stats">
                     <span class="stat">Shift: <strong id="s-scene">1</strong>/3</span>
@@ -1483,13 +1603,6 @@
 
                 <div class="phase-bar">
                     <span class="phase-chip" id="phase-chip">Pass 1 of 2 · Spread into drawers</span>
-                </div>
-
-                <div class="how-to">
-                    <b>How the vault works</b>
-                    <span>The ribbon below is the whole range of years. Each labelled band is one drawer. Every dot is
-                        one card sitting at its position on the range. Click a dot to lift that card, then click the drawer
-                        whose band covers its year.</span>
                 </div>
 
                 <div class="ribbon">
@@ -1598,20 +1711,37 @@
             </div>
             <div class="learning-flow" style="margin-top:10px">
                 <h4>Definition</h4>
-                <p><strong>Bucket sort spreads the values into buckets by range first, then sorts inside each
-                        bucket.</strong> Like the cabinet, a value finds its own drawer by reading its own
-                    range, so no value is ever compared against a value in another bucket.</p>
+                <p><strong>Bucket sort spreads the values into buckets by range first, then orders each bucket,
+                        usually with insertion sort.</strong> Like the cabinet, a value finds its own drawer by reading
+                    its own range, so no value is ever compared against a value in another bucket.</p>
                 <h4>Mechanism</h4>
-                <p><code>bucket(v) = floor((v - min) / width)</code> picks the drawer in one step.
-                    <code>sort each bucket</code> is small, usually insertion sort. Concatenating the
-                    ordered buckets gives one ordered list. The total work is
-                    <b>one step per value to spread, plus the sorting inside each bucket</b>.</p>
+                <ol class="mech-steps">
+                    <li><code>spread</code> each value into its bucket by reading its own range. The formula
+                        <code>bucket(v) = floor((v - min) / width)</code> picks the drawer in one step, no comparisons.</li>
+                    <li><code>order each bucket</code> with <b>insertion sort</b>: slide each card into place among the
+                        ones already in that drawer.</li>
+                    <li><code>concatenate</code> the ordered buckets in range order: drawer one, then the next, and so
+                        on, into one sorted list.</li>
+                    <li><code>count the cost</code>: one step per value to spread, plus the sorting that now happens
+                        only inside each bucket.</li>
+                </ol>
                 <h4>Vocabulary</h4>
-                <p><code>bucket</code>: one labelled range of values.
-                    <code>bucket width</code>: how wide that range is.
-                    <code>distribution</code>: how values spread across buckets, even or clumped.
-                    <code>O(n + k)</code>: the cost when values spread evenly and k buckets keep each
-                    list short.</p>
+                <div class="vocab-grid">
+                    <div class="vocab-card"><div class="vocab-term"><code>bucket</code></div><div
+                            class="vocab-def">One labelled range of values, the drawer a card reads its way into.</div>
+                    </div>
+                    <div class="vocab-card"><div class="vocab-term"><code>bucket width</code></div><div
+                            class="vocab-def">How wide each labelled range is; equal widths keep every drawer short.
+                    </div></div>
+                    <div class="vocab-card"><div class="vocab-term"><code>bucket distribution</code></div><div
+                            class="vocab-def">How the values spread across buckets: even, or clumped into one.</div>
+                    </div>
+                    <div class="vocab-card"><div class="vocab-term"><code>insertion sort</code></div><div
+                            class="vocab-def">The simple internal sort used to order each bucket.</div></div>
+                    <div class="vocab-card"><div class="vocab-term"><code>O(n + k)</code></div><div
+                            class="vocab-def">The cost when values spread evenly and k buckets keep each list short.
+                    </div></div>
+                </div>
             </div>
             <div class="comp">
                 <div class="compare-cards">
@@ -1666,25 +1796,9 @@
         <section class="section" id="sec-cases">
             <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 6
                 · New Cases</span>
-            <h2 class="section-title">Where this turns up for real</h2>
-            <p class="section-sub">Places where real numbers get sorted by range first, because the values already
-                know which bucket they belong to.</p>
-            <ul class="case-list">
-                <li><b>Census and survey data.</b> Statistics offices sort millions of records by age, year of
-                    birth, or income band before publishing. One drawer per decade, then order inside it.</li>
-                <li><b>Spam filters.</b> A message score from 0 to 10 goes into one of ten buckets. Only the
-                    bucket near the threshold needs close attention, and everything far from it is dismissed
-                    cheaply.</li>
-                <li><b>Photo and video libraries.</b> Tools group clips into year folders, then do a small sort
-                    inside each folder. Sorting 100,000 files by exact timestamp would be slow; by year first is
-                    quick.</li>
-                <li><b>Exam grading and reporting.</b> Marks go into grade bands (0-9, 10-19, ...) and each band
-                    is ranked. The bands come first, so the expensive comparison only happens inside a band.</li>
-                <li><b>Histogram bins in data analysis.</b> Before you can find a median you have to bin the
-                    values; numpy, pandas and R all bucket by range before anything else.</li>
-                <li><b>Where it backfires.</b> When values clump, one drawer swallows the rest and you are back to
-                    sorting a single long list. Uniform spread is the whole trick.</li>
-            </ul>
+            <h2 class="section-title">Put the method to work</h2>
+            <p class="section-sub">Real situations where sorting by range first helps, or quietly fails. For each one,
+                decide whether a bucket belongs, and why.</p>
             <h4
                 style="font-family:'Poppins',sans-serif;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--primary-dark);text-align:center;margin:26px 0 12px">Try these on paper</h4>
             <div class="qgrid">
@@ -1700,9 +1814,10 @@
                 <div class="qcard"><span class="q-num">04 · Counting instead</span><span class="q-text">A friend
                         says "if the values are whole numbers from 0 to 100, just count them". Which sort is that,
                         and how is it different from what Rhea did?</span></div>
-                <div class="qcard"><span class="q-num">05 · One huge drawer</span><span class="q-text">Every year
-                        turns out to be 1960 or 1961. How many useful buckets do you really have, and what does
-                        the cabinet look like when you draw it?</span></div>
+                <div class="qcard"><span class="q-num">05 · A drawer for every mark</span><span class="q-text">A teacher
+                        draws one bucket for every mark, 0 right up to 99, but the class only ever scores between
+                        78 and 82. How many of those drawers will ever hold a card, and what does drawing 95 empty
+                        drawers really cost the sort?</span></div>
                 <div class="qcard"><span class="q-num">06 · Names not numbers</span><span class="q-text">Bucket sort
                         places a value by reading its own number. Which step breaks the moment you try it on last
                         names, and what would you reach for instead?</span></div>
