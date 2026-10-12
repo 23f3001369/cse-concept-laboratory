@@ -61,7 +61,7 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;
 .qcard .q-num{font-weight:800;font-size:13px;color:var(--primary)}
 .qcard .q-text{font-size:14.5px;color:var(--ink);line-height:1.6;font-weight:600}
 @media(max-width:900px){.qgrid{grid-template-columns:repeat(2,1fr)}}@media(max-width:640px){.qgrid{grid-template-columns:1fr}}
-.learning-flow{max-width:640px;margin:0 auto;text-align:left}.learning-flow > * + *{margin-top:22px;padding-top:22px;border-top:1px dashed var(--glass-border)}
+.learning-flow{max-width:640px;margin:0 auto;text-align:left}.learning-flow > * + *{margin-top:22px;padding-top:22px;border-top:1px dashed var(--glass-border)}.mech-steps{list-style:none;counter-reset:mech;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}.mech-steps li{counter-increment:mech;position:relative;background:var(--card-bg);border:1px solid var(--glass-border);border-radius:12px;padding:12px 14px 12px 46px;font-size:13.5px;line-height:1.55;color:var(--ink);text-align:left}.mech-steps li::before{content:counter(mech);position:absolute;left:14px;top:12px;width:22px;height:22px;border-radius:50%;background:var(--primary);color:#fff;font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center}.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;margin-top:8px}.vocab-card{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:12px;padding:13px 15px 12px;text-align:left;box-shadow:0 10px 22px -16px rgba(23,50,77,.3)}.vocab-term{font-family:'Poppins',sans-serif;font-weight:700;font-size:13px;color:var(--primary-deep);margin-bottom:7px}.vocab-term code,.mech-steps li code{font-family:'Poppins',sans-serif;font-weight:700;color:var(--primary-deep);background:rgba(74,155,209,.08);padding:1px 6px;border-radius:6px}.vocab-def{font-size:12.5px;color:var(--muted);line-height:1.5}
 .key-learnings h3{font-size:16px;margin-bottom:12px;color:var(--primary-deep);text-align:center}
 .kl-grid{display:flex;flex-direction:column;gap:14px}
 .kl-item{display:flex;gap:12px;align-items:flex-start;text-align:left}
@@ -198,8 +198,20 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;
 <div class="learning-flow">
 <div class="concept-blank">
 <h4>Definition</h4><p><code>LIFO</code>, Last In, First Out: like plates, you can only touch the top. The last thing you put in is the first thing you get back.</p>
-<h4>Mechanism</h4><p><code>push(x)</code>: visit on top, <code>pop()</code>: Back removes top, <code>peek()</code>: glance at top. All <code>O(1)</code>. No middle jump: you must pop everything above.</p>
-<h4>Vocabulary</h4><p><code>top</code>: current page, <code>underflow</code>: Back on empty, <code>overflow</code>: push when full, <code>LIFO</code>.</p>
+<h4>Mechanism</h4>
+<ol class="mech-steps">
+<li><code>push(x)</code>: visit a page and place it on top of the pile.</li>
+<li><code>peek()</code>: glance at the top page without removing it.</li>
+<li><code>pop()</code>: press Back, which removes the top page.</li>
+<li>All three touch only the top, so each is <code>O(1)</code>. No middle jump: you must pop everything above the page you want.</li>
+</ol>
+<h4>Vocabulary</h4>
+<div class="vocab-grid">
+<div class="vocab-card"><div class="vocab-term"><code>top</code></div><div class="vocab-def">The current page: the one you can see and the only one you can touch.</div></div>
+<div class="vocab-card"><div class="vocab-term"><code>underflow</code></div><div class="vocab-def">Pressing Back when the pile is empty: nothing is left to return to.</div></div>
+<div class="vocab-card"><div class="vocab-term"><code>overflow</code></div><div class="vocab-def">Pushing onto a pile that is already full.</div></div>
+<div class="vocab-card"><div class="vocab-term"><code>LIFO</code></div><div class="vocab-def">Last In, First Out: the newest item leaves first, as in browser Back or Undo.</div></div>
+</div>
 </div>
 <div class="compare-cards">
 <div class="compare-card"><span class="compare-title">If it were a Queue (FIFO)</span><span class="compare-sub">Back would give Google first, not last. Undo would erase H from HELLO → ELLO!</span></div>
