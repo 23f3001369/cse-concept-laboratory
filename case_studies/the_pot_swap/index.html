@@ -595,6 +595,86 @@
             border-top: 1px dashed var(--glass-border)
         }
 
+        .mech-steps {
+            list-style: none;
+            counter-reset: mech;
+            margin: 8px 0 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px
+        }
+
+        .mech-steps li {
+            counter-increment: mech;
+            position: relative;
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 12px 14px 12px 46px;
+            font-size: 13.5px;
+            line-height: 1.55;
+            color: var(--ink);
+            text-align: left
+        }
+
+        .mech-steps li::before {
+            content: counter(mech);
+            position: absolute;
+            left: 14px;
+            top: 12px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            font-weight: 700;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 12px;
+            margin-top: 8px
+        }
+
+        .vocab-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 13px 15px 12px;
+            text-align: left;
+            box-shadow: 0 10px 22px -16px rgba(23, 50, 77, .3)
+        }
+
+        .vocab-term {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--primary-deep);
+            margin-bottom: 7px
+        }
+
+        .vocab-term code,
+        .mech-steps li code {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            color: var(--primary-deep);
+            background: rgba(74, 155, 209, .08);
+            padding: 1px 6px;
+            border-radius: 6px
+        }
+
+        .vocab-def {
+            font-size: 12.5px;
+            color: var(--muted);
+            line-height: 1.5
+        }
+
         .key-learnings h3 {
             font-size: 16px;
             margin-bottom: 12px;
@@ -874,13 +954,26 @@
                 <p><strong>Selection Sort: find the smallest remaining, swap it into its final spot, lock it,
                         repeat.</strong> Like the game, one scan, one swap, one locked pot each round.</p>
                 <h4>Mechanism</h4>
-                <p><code>find-minimum</code>: scan the unsorted part and remember the smallest; <code>swap</code> it
-                    to the front so it locks. The sorted prefix grows by one each round, and every item moves
-                    <b>at most once</b>.</p>
+                <ol class="mech-steps">
+                    <li><code>scan</code>: walk the unsorted part and remember the smallest item.</li>
+                    <li><code>swap</code>: trade it with the front item so it lands in its final spot.</li>
+                    <li><code>lock</code>: the sorted prefix grows by one locked pot each round.</li>
+                    <li><code>repeat</code>: scan and swap until the whole tray is locked. Every item moves at most
+                        once.</li>
+                </ol>
                 <h4>Vocabulary</h4>
-                <p><code>pass</code>: one scan of the rest, <code>minimum</code>: the smallest remaining item,
-                    <code>swap</code>: trade two spots, <code>sorted prefix</code>: the locked part,
-                    <code>O(n²)</code>: n passes, each scanning up to n items.</p>
+                <div class="vocab-grid">
+                    <div class="vocab-card"><div class="vocab-term"><code>pass</code></div><div
+                            class="vocab-def">One scan of the remaining items to find the smallest.</div></div>
+                    <div class="vocab-card"><div class="vocab-term"><code>minimum</code></div><div
+                            class="vocab-def">The smallest remaining item, chosen during a pass.</div></div>
+                    <div class="vocab-card"><div class="vocab-term"><code>swap</code></div><div
+                            class="vocab-def">Trading two items' spots; both are finally placed.</div></div>
+                    <div class="vocab-card"><div class="vocab-term"><code>sorted prefix</code></div><div
+                            class="vocab-def">The locked front part, grown by one each pass.</div></div>
+                    <div class="vocab-card"><div class="vocab-term"><code>O(n²)</code></div><div
+                            class="vocab-def">n passes, each scanning up to n remaining items.</div></div>
+                </div>
             </div>
             <div class="comp" style="max-width:640px;margin:40px auto 28px;text-align:left">
                 <div class="compare-cards">

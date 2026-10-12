@@ -782,6 +782,86 @@
             font-size: 14px
         }
 
+        .mech-steps {
+            list-style: none;
+            counter-reset: mech;
+            margin: 8px 0 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px
+        }
+
+        .mech-steps li {
+            counter-increment: mech;
+            position: relative;
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 12px 14px 12px 46px;
+            font-size: 13.5px;
+            line-height: 1.55;
+            color: var(--ink);
+            text-align: left
+        }
+
+        .mech-steps li::before {
+            content: counter(mech);
+            position: absolute;
+            left: 14px;
+            top: 12px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            font-weight: 700;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 12px;
+            margin-top: 8px
+        }
+
+        .vocab-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 13px 15px 12px;
+            text-align: left;
+            box-shadow: 0 10px 22px -16px rgba(23, 50, 77, .3)
+        }
+
+        .vocab-term {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--primary-deep);
+            margin-bottom: 7px
+        }
+
+        .vocab-term code,
+        .mech-steps li code {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            color: var(--primary-deep);
+            background: rgba(74, 155, 209, .08);
+            padding: 1px 6px;
+            border-radius: 6px
+        }
+
+        .vocab-def {
+            font-size: 12.5px;
+            color: var(--muted);
+            line-height: 1.5
+        }
+
         .key-learnings h3 {
             font-size: 16px;
             margin-bottom: 12px;
@@ -1085,16 +1165,32 @@
                 <p><strong>A linked list is a chain of stops where each stop holds its own data plus a link to the
                         next stop, and you reach any stop only by following links from the start.</strong></p>
                 <h4>Mechanism</h4>
-                <p><code>traverse</code>: from the Head, follow <code>next</code> until you reach the stop you want.
-                    <code>insert</code> after stop <i>P</i>: point the new stop at <i>P</i>'s old next, then point
-                    <i>P</i> at the new stop, <b>2 rewrites</b>. <code>delete</code> the stop after <i>P</i>: point
-                    <i>P</i> directly at that stop's next, <b>1 rewrite</b>.</p>
+                <ol class="mech-steps">
+                    <li><code>traverse</code>: start at the Head and follow <code>next</code> until you reach the
+                        stop you want.</li>
+                    <li><code>insert</code> after stop <i>P</i>: point the new stop at <i>P</i>'s old next, then
+                        point <i>P</i> at the new stop, <b>2 rewrites</b>.</li>
+                    <li><code>delete</code> the stop after <i>P</i>: point <i>P</i> directly at that stop's next,
+                        <b>1 rewrite</b>.</li>
+                    <li><code>count the cost</code>: reaching the k-th stop takes up to k steps, so walking costs
+                        <code>O(n)</code>, while adding or removing is always local.</li>
+                </ol>
                 <h4>Vocabulary</h4>
-                <p><code>node</code>: one stop (data + link), <code>head</code>: the first stop, entry point,
-                    <code>tail</code>: the last stop, its link is null, <code>next</code>: the link to the following
-                    stop, <code>traversal</code>: walking the chain stop by stop, <code>insertion /
-                        deletion</code>: local rewiring of links, <code>O(n)</code>: reaching the k-th stop takes up
-                    to k steps.</p>
+                <div class="vocab-grid">
+                    <div class="vocab-card"><div class="vocab-term"><code>node</code></div><div
+                            class="vocab-def">One stop: its own data plus a link to the next stop.</div></div>
+                    <div class="vocab-card"><div class="vocab-term"><code>head</code></div><div
+                            class="vocab-def">The first stop, the only entry point to the chain.</div></div>
+                    <div class="vocab-card"><div class="vocab-term"><code>next</code></div><div
+                            class="vocab-def">The link from one stop to the following one.</div></div>
+                    <div class="vocab-card"><div class="vocab-term"><code>tail</code></div><div
+                            class="vocab-def">The last stop, whose link points to nothing.</div></div>
+                    <div class="vocab-card"><div class="vocab-term"><code>traversal</code></div><div
+                            class="vocab-def">Walking the chain stop by stop from the head.</div></div>
+                    <div class="vocab-card"><div class="vocab-term"><code>insertion / deletion</code></div><div
+                            class="vocab-def">Local rewiring of links: add or cancel without moving anything after it.
+                    </div></div>
+                </div>
             </div>
             <div class="comp" style="max-width:640px;margin:40px auto 28px;text-align:left">
                 <div class="compare-cards">

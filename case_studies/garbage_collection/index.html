@@ -782,6 +782,86 @@
             font-size: 14px
         }
 
+        .mech-steps {
+            list-style: none;
+            counter-reset: mech;
+            margin: 8px 0 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px
+        }
+
+        .mech-steps li {
+            counter-increment: mech;
+            position: relative;
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 12px 14px 12px 46px;
+            font-size: 13.5px;
+            line-height: 1.55;
+            color: var(--ink);
+            text-align: left
+        }
+
+        .mech-steps li::before {
+            content: counter(mech);
+            position: absolute;
+            left: 14px;
+            top: 12px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            font-weight: 700;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 12px;
+            margin-top: 8px
+        }
+
+        .vocab-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 13px 15px 12px;
+            text-align: left;
+            box-shadow: 0 10px 22px -16px rgba(23, 50, 77, .3)
+        }
+
+        .vocab-term {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--primary-deep);
+            margin-bottom: 7px
+        }
+
+        .vocab-term code,
+        .mech-steps li code {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            color: var(--primary-deep);
+            background: rgba(74, 155, 209, .08);
+            padding: 1px 6px;
+            border-radius: 6px
+        }
+
+        .vocab-def {
+            font-size: 12.5px;
+            color: var(--muted);
+            line-height: 1.5
+        }
+
         .key-learnings h3 {
             font-size: 16px;
             margin-bottom: 12px;
@@ -1307,13 +1387,29 @@
                         reach from its roots and freeing it.</strong> Like the studio, what the pins can still reach
                     stays, everything else gets swept.</p>
                 <h4>Mechanism</h4>
-                <p><code>mark</code>: start from every root and walk all references, flagging what you touch;
-                    <code>sweep</code>: walk the workspace and free every unmarked object. Reachable stays, unreachable
-                    goes.</p>
+                <ol class="mech-steps">
+                    <li><code>roots</code>: begin from the pins, the live references the program still holds.</li>
+                    <li><code>mark</code>: walk every reference reachable from those roots, flagging each object you
+                        touch.</li>
+                    <li><code>sweep</code>: walk the whole workspace and free every unmarked object.</li>
+                    <li><code>result</code>: reachable stays, unreachable goes, even objects only reachable inside a
+                        cycle.</li>
+                </ol>
                 <h4>Vocabulary</h4>
-                <p><code>root</code>: the pins, live references the program holds, <code>reference</code>: an arrow to
-                    another object, <code>reachability</code>: a path from a root, <code>garbage</code>: unreachable
-                    memory, <code>mark</code>: tracing reachable objects, <code>sweep</code>: freeing the rest.</p>
+                <div class="vocab-grid">
+                    <div class="vocab-card"><div class="vocab-term"><code>root</code></div><div
+                            class="vocab-def">A pin, a live reference the program holds.</div></div>
+                    <div class="vocab-card"><div class="vocab-term"><code>reference</code></div><div
+                            class="vocab-def">An arrow from one object to another.</div></div>
+                    <div class="vocab-card"><div class="vocab-term"><code>reachability</code></div><div
+                            class="vocab-def">Having a path from a root; that is what keeps an object alive.</div></div>
+                    <div class="vocab-card"><div class="vocab-term"><code>mark</code></div><div
+                            class="vocab-def">Tracing and flagging every reachable object.</div></div>
+                    <div class="vocab-card"><div class="vocab-term"><code>sweep</code></div><div
+                            class="vocab-def">Freeing every unmarked object afterwards.</div></div>
+                    <div class="vocab-card"><div class="vocab-term"><code>garbage</code></div><div
+                            class="vocab-def">Memory no root can reach, ready to be reclaimed.</div></div>
+                </div>
             </div>
             <div class="comp" style="max-width:640px;margin:40px auto 28px;text-align:left">
                 <div class="compare-cards">
