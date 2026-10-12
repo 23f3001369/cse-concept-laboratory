@@ -71,7 +71,7 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;
 .qcard .q-num{font-weight:800;font-size:13px;color:var(--primary)}
 .qcard .q-text{font-size:14.5px;color:var(--ink);line-height:1.6;font-weight:600}
 @media(max-width:900px){.qgrid{grid-template-columns:repeat(2,1fr)}}@media(max-width:640px){.qgrid{grid-template-columns:1fr}}
-.learning-flow{max-width:640px;margin:0 auto;text-align:left}.learning-flow > * + *{margin-top:22px;padding-top:22px;border-top:1px dashed var(--glass-border)}
+.learning-flow{max-width:640px;margin:0 auto;text-align:left}.learning-flow > * + *{margin-top:22px;padding-top:22px;border-top:1px dashed var(--glass-border)}.mech-steps{list-style:none;counter-reset:mech;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}.mech-steps li{counter-increment:mech;position:relative;background:var(--card-bg);border:1px solid var(--glass-border);border-radius:12px;padding:12px 14px 12px 46px;font-size:13.5px;line-height:1.55;color:var(--ink);text-align:left}.mech-steps li::before{content:counter(mech);position:absolute;left:14px;top:12px;width:22px;height:22px;border-radius:50%;background:var(--primary);color:#fff;font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center}.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;margin-top:8px}.vocab-card{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:12px;padding:13px 15px 12px;text-align:left;box-shadow:0 10px 22px -16px rgba(23,50,77,.3)}.vocab-term{font-family:'Poppins',sans-serif;font-weight:700;font-size:13px;color:var(--primary-deep);margin-bottom:7px}.vocab-term code,.mech-steps li code{font-family:'Poppins',sans-serif;font-weight:700;color:var(--primary-deep);background:rgba(74,155,209,.08);padding:1px 6px;border-radius:6px}.vocab-def{font-size:12.5px;color:var(--muted);line-height:1.5}
 .key-learnings h3{font-size:16px;margin-bottom:12px;color:var(--primary-deep);text-align:center}
 .kl-grid{display:flex;flex-direction:column;gap:14px}
 .kl-item{display:flex;gap:12px;align-items:flex-start;text-align:left}
@@ -199,8 +199,20 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;
 <div class="learning-flow">
 <div class="concept-blank">
 <h4>Definition</h4><p><strong>Insertion Sort: build one neat stretch.</strong> Keep everything before you in order. For each new item, slide it left, shifting larger items over one at a time, until it belongs.</p>
-<h4>Mechanism</h4><p><code>insert(x)</code>: take the next item and place it among the already-arranged items, shifting bigger ones right by one space. Repeat for every item until none are left.</p>
-<h4>Vocabulary</h4><p><code>pass</code>: one item handled, <code>shift</code>: a neighbour sliding over one space, <code>sorted prefix</code>: the neat part you've already built.</p>
+<h4>Mechanism</h4>
+<ol class="mech-steps">
+<li><code>take(x)</code>: lift the next item that is not yet placed.</li>
+<li><code>shift</code>: slide the bigger neighbours over one space right to open a gap.</li>
+<li><code>insert(x)</code>: drop the item into the gap, where it belongs.</li>
+<li>Repeat for every item until none are left; the neat stretch has grown across the whole shelf.</li>
+</ol>
+<h4>Vocabulary</h4>
+<div class="vocab-grid">
+<div class="vocab-card"><div class="vocab-term"><code>pass</code></div><div class="vocab-def">One item handled: taken, shifted over, and placed.</div></div>
+<div class="vocab-card"><div class="vocab-term"><code>shift</code></div><div class="vocab-def">A neighbour sliding over one space to make room.</div></div>
+<div class="vocab-card"><div class="vocab-term"><code>sorted prefix</code></div><div class="vocab-def">The neat part already built, which only ever grows.</div></div>
+<div class="vocab-card"><div class="vocab-term"><code>stable</code></div><div class="vocab-def">Equal items keep the order they arrived in.</div></div>
+</div>
 </div>
 <div class="compare-cards" style="margin-top:18px">
 <div class="compare-card"><span class="compare-title">If you swept the line again and again</span><span class="compare-sub">You'd keep walking the whole shelf, nudging neighbours each time, even after early jars were settled.</span></div>
