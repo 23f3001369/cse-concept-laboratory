@@ -58,7 +58,9 @@ Explore the live case studies here: [vicharanashala.github.io/cse-concept-labora
 | 08 | Junction Street | ✅ Available  |
 | 09 | The Blindfolded Archer | ✅ Available |
 | 10 | Nuts-and-Bolts | ✅ Available |
-| 11 | Operation Padlock | 🚧 Coming soon |
+| 11 | The Last Mile | ✅ Available |
+| 12 | 1 Bag, 3 Slots, 14 Classes | ✅ Available |
+| 13 | The Tower of Brahma | ✅ Available |
 
 ## Repository Structure
 
