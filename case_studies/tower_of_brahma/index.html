@@ -249,6 +249,8 @@ button:focus-visible{outline:3px solid var(--primary);outline-offset:2px;}
 
 /* ---- top action row (Exercise section) ---- */
 .top-actions{display:flex;justify-content:flex-start;margin:0 0 14px;}
+.cs-Laboratory-link{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:999px;border:1.5px solid var(--primary);background:transparent;color:var(--primary-dark);font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;text-decoration:none;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease;}
+.cs-Laboratory-link:hover{transform:translateY(-1px);box-shadow:0 10px 22px -10px var(--shadow-btn);}
 
 /* ---- Brahma clock ---- */
 .brahma-clock{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:20px;box-shadow:0 14px 30px -18px rgba(23,50,77,.3);text-align:center;}
@@ -331,30 +333,6 @@ pre.code .c{color:#93A5AB;}
   .platform-row{gap:14px;}
   .platform{width:100px;}
   .platform-base{width:104px;}
-}
-
-
-.cs-Laboratory-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 20px;
-  background-color: #2B6FA3; /* Modern professional blue */
-  color: #ffffff;            /* White text */
-  text-decoration: none;     /* Removes standard underline */
-  font-family: system-ui, -apple-system, sans-serif;
-  font-weight: 600;
-  font-size: 14px;
-  border-radius: 50px;       /* ⬅️ Changed from 6px to 50px for pill shape */
-  transition: all 0.2s ease-in-out;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-/* Hover effect */
-.cs-Laboratory-link:hover {
-  background-color: #235882; /* ⬅️ Slightly darker blue so hover effect is visible */
-  transform: translateY(-1px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.12);
 }
 </style>
 </head>
@@ -588,10 +566,11 @@ def move(n, start, end, spare):
 
   <!-- ================= CHAPTER 6: EXERCISE WORKBOOK ================= -->
   <section class="section" id="sec-cases">
-    <a href="../../index.html" class="cs-Laboratory-link">
-    ← Back to CSE Concept Laboratory
-  </a>
-  
+    <div class="top-actions">
+      <a href="../../index.html" class="cs-Laboratory-link">
+        ← Back to CSE Concept Laboratory
+      </a>
+    </div>
     <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 6 &middot; Exercise Workbook</span>
     <h2 class="section-title">Try it on new problems</h2>
     <p class="section-sub">Seven questions to think through at your own pace. There is no single right answer, so take your time.</p>
@@ -608,7 +587,7 @@ def move(n, start, end, spare):
       </div>
       <div class="section-nav">
         <button class="btn ghost" id="btn-cases-back">⬅ Back to the Reveal</button>
-        <button class="btn" id="btn-cases-finish">🏁 Restart from Beginning ➜</button>
+        <button class="btn" id="btn-cases-finish">Restart from Beginning</button>
       </div>
     </div>
   </section>
@@ -1064,7 +1043,6 @@ document.getElementById('btn-method-continue').addEventListener('click', () => s
 
 document.getElementById('btn-cases-back').addEventListener('click', () => showSection('sec-method'));
 document.getElementById('btn-cases-finish').addEventListener('click', () => showSection('sec-puzzle'));
-document.getElementById('btn-cases-home').addEventListener('click', () => showSection('sec-puzzle'));
 
 /* ---------------- Chapter 5: small visuals (mini rods + call-stack snapshots) ---------------- */
 function miniRodHTML(stack, label){
