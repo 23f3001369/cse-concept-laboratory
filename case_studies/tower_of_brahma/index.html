@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9M9C5T1Y9R"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-9M9C5T1Y9R');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Tower of Brahma | ब्रह्मा की आयु</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ==========================================================
+   THEME: soft blue & orange, white cards, pill buttons.
+   (kept identical to the approved reference template)
+   ========================================================== */
+:root{
+  --bg-1:#FDF1E9; --bg-2:#EDF3FA; --bg-3:#E4EEFA; --bg-4:#D9E5F2;
+  --primary:#4A9BD1; --primary-dark:#2B6FA3; --primary-deep:#1B4A66;
+  --amber:#EA8C36; --amber-dark:#C96F1F;
+  --danger:#D9714F; --success:#4B7A4A; --violet:#EA8C36;
+  --ink:#1F2E37; --muted:#54666D; --faint:#93A5AB;
+  --card-bg:#FFFFFF;
+  --footer-bg:#22496B;
+  --glass-border:#D9E5F2;
+  --shadow-card:rgba(23,50,77,0.12); --shadow-btn:rgba(43,111,163,0.28);
+  --success-bg:#DCEAD8; --success-text:#274B26; --success-border:#4B7A4A;
+  --error-bg:#FBE1DC; --error-text:#8A3420; --error-border:#D9714F;
+  --radius-lg:18px; --radius-md:12px; --radius-sm:8px;
+}
+*,*::before,*::after{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;min-height:100vh;font-family:'Inter', sans-serif;font-weight:400;color:var(--ink);
+  background:linear-gradient(180deg,var(--bg-1) 0%, var(--bg-2) 40%, var(--bg-2) 100%);
+  background-attachment:fixed;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:'Poppins', sans-serif;font-weight:700;letter-spacing:-0.01em;margin:0;}
+p{line-height:1.65;color:var(--muted);margin:0;}
+button{font-family:'Poppins', sans-serif;cursor:pointer;}
+button:focus-visible{outline:3px solid var(--primary);outline-offset:2px;}
+.wrap{max-width:960px;margin:0 auto;padding:44px 20px 70px;}
+
+/* ---- stepper ---- */
+.stepper{max-width:700px;margin:0 auto 30px;display:flex;align-items:center;justify-content:center;padding:0 12px;}
+.step-item{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;position:relative;}
+.step-circle{
+  width:32px;height:32px;border-radius:50%;background:var(--bg-3);color:var(--primary-deep);font-weight:700;font-size:13px;
+  display:flex;align-items:center;justify-content:center;border:2px solid var(--glass-border);transition:.25s;z-index:2;
+  font-family:'Poppins', sans-serif;
+}
+.step-label{font-size:10px;font-weight:700;color:var(--muted);text-align:center;letter-spacing:.03em;font-family:'Poppins', sans-serif;}
+.step-line{position:absolute;top:16px;left:-50%;width:100%;height:2px;background:var(--glass-border);z-index:1;}
+.step-item:first-child .step-line{display:none;}
+.step-item.done .step-circle{background:var(--primary-dark);border-color:var(--primary-dark);color:#fff;}
+.step-item.done .step-line{background:var(--primary-dark);}
+.step-item.active .step-circle{background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-color:var(--primary-dark);color:#fff;box-shadow:0 0 0 4px rgba(74,155,209,.25);}
+.step-item.active .step-label{color:var(--primary-dark);}
+
+/* ---- section framing ---- */
+.section{display:none;}
+.section.active-view{display:block;animation:sectionFade .35s ease;}
+@keyframes sectionFade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--amber-dark);
+  background:#FBE9DA;padding:6px 14px;border-radius:999px;margin-bottom:12px;font-family:'Poppins', sans-serif;
+}
+.section-title{font-size:clamp(24px,4vw,36px);color:var(--ink);margin:0 0 8px;text-align:center;}
+.section-sub{max-width:640px;margin:0 auto 18px;text-align:center;font-size:14.5px;color:var(--muted);}
+.hero{text-align:center;}
+.hero h1{font-size:clamp(26px,4.4vw,40px);color:var(--ink);margin:0 0 12px;}
+
+.card{background:transparent;border:none;border-radius:0;box-shadow:none;padding:6px 0 0;}
+.btn{
+  border:none;border-radius:999px;padding:13px 24px;font-weight:600;font-size:15px;color:#fff;
+  background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+  box-shadow:0 12px 24px -10px var(--shadow-btn);transition:transform .15s,box-shadow .15s;
+}
+.btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 14px 28px -8px var(--shadow-btn);}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn.secondary{background:#fff;color:var(--primary-dark);border:1.5px solid var(--primary);box-shadow:none;text-align:left;}
+.btn.secondary.selected{border-color:var(--amber);background:#FBE9DA;color:var(--amber-dark);}
+.btn.secondary.correct{border-color:var(--success);background:var(--success-bg);color:var(--success-text);}
+.btn.secondary.incorrect{border-color:var(--danger);background:var(--error-bg);color:var(--error-text);}
+.btn.secondary:disabled{opacity:.75;cursor:default;}
+.btn.ghost{background:transparent;color:var(--primary-dark);box-shadow:none;border:1.5px solid var(--primary);padding:10px 16px;}
+.btn.small{padding:9px 18px;font-size:13px;}
+.section-nav{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:26px;}
+
+/* ---- Chapter 1: the case ---- */
+.problem-card{text-align:left;max-width:680px;margin:20px auto 0;}
+.problem-card p{margin:0 0 14px;font-size:15.5px;}
+.problem-card p:last-child{margin-bottom:0;}
+.problem-card b{color:var(--primary-deep);}
+.story-lines{
+  text-align:left;max-width:680px;margin:26px auto 0;background:transparent;
+  border:none;border-radius:0;padding:0;
+  display:flex;flex-direction:column;gap:10px;
+}
+.story-lines p{font-size:15px;}
+.story-lines .highlight{color:var(--amber-dark);font-weight:700;}
+.rules-list{list-style:none;margin:20px auto 0;padding:0;max-width:560px;display:flex;flex-direction:column;gap:8px;}
+.rules-list li{font-size:14px;color:var(--muted);display:flex;gap:10px;align-items:flex-start;line-height:1.5;}
+.rules-list li::before{content:"\2715";color:var(--danger);font-weight:700;flex-shrink:0;}
+.rules-list li.ok::before{content:"\2022";color:var(--primary);}
+
+/* ---- game shell ---- */
+.game-shell{width:100%;max-width:820px;margin:0 auto;display:flex;flex-direction:column;gap:14px;}
+.topbar{
+  display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;
+  background:transparent;border:none;padding:4px 0;
+}
+.status-cluster{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center;}
+.game-note{
+  max-width:640px;margin:0 auto 14px;text-align:center;font-size:13.5px;color:var(--primary-deep);
+  background:rgba(74,155,209,0.08);border:1px dashed var(--glass-border);border-radius:var(--radius-md);
+  padding:10px 16px;
+}
+.status-pill{font-size:13px;display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:#fff;border:1px solid var(--glass-border);}
+.status-pill.score{color:var(--amber-dark);font-weight:700;}
+
+.dialogue-box{
+  display:flex;gap:12px;align-items:flex-start;background:var(--card-bg);
+  border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:12px 14px;
+}
+.dialogue-avatar{width:38px;height:38px;flex-shrink:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--violet),#C96F1F);display:flex;align-items:center;justify-content:center;font-size:18px;}
+.dialogue-text{font-size:14px;color:var(--ink);line-height:1.5;}
+.dialogue-text .speaker{font-size:11px;color:var(--violet);display:block;margin-bottom:2px;letter-spacing:.05em;font-weight:700;}
+
+/* ---- platforms & disks ---- */
+.platform-row{display:flex;justify-content:center;align-items:flex-end;gap:34px;flex-wrap:wrap;margin:22px 0 6px;}
+.platform{display:flex;flex-direction:column;align-items:center;width:150px;cursor:pointer;user-select:none;}
+.platform-tower{position:relative;width:100%;height:180px;display:flex;flex-direction:column-reverse;align-items:center;justify-content:flex-start;}
+.platform-pole{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:8px;height:158px;background:linear-gradient(180deg,var(--glass-border),var(--faint));border-radius:4px;z-index:0;}
+.platform-disks{position:relative;z-index:1;display:flex;flex-direction:column-reverse;align-items:center;gap:5px;width:100%;}
+.platform-base{width:158px;height:14px;background:var(--primary-deep);border-radius:7px;margin-top:6px;box-shadow:0 6px 14px -6px rgba(23,50,77,.4);transition:background .2s;}
+.platform-label{margin-top:10px;font-size:12.5px;font-weight:700;color:var(--muted);letter-spacing:.03em;transition:color .2s;}
+.platform.selected-source .platform-base{background:var(--amber-dark);}
+.platform.selected-source .platform-label{color:var(--amber-dark);}
+.disk{height:22px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;box-shadow:0 4px 10px rgba(0,0,0,.18);transition:transform .18s ease;}
+.disk.top-selected{transform:translateY(-10px);box-shadow:0 10px 18px rgba(0,0,0,.28);outline:2px solid #fff;outline-offset:-3px;}
+
+/* ---- controls: slider + play/pause + speed ---- */
+.controls-row{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:4px;}
+.slider-wrap{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);background:#fff;border:1px solid var(--glass-border);border-radius:999px;padding:8px 16px;}
+.slider-wrap input[type=range]{accent-color:var(--primary-dark);width:130px;}
+.speed-group{display:flex;gap:4px;background:#fff;border:1px solid var(--glass-border);border-radius:999px;padding:4px;}
+.speed-btn{border:none;background:transparent;padding:7px 13px;border-radius:999px;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;}
+.speed-btn.active{background:var(--primary-dark);color:#fff;}
+
+/* ---- call-stack panel (recursion visualization) ---- */
+.callstack-panel{max-width:520px;margin:16px auto 0;background:var(--card-bg);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:14px 16px;}
+.callstack-title{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--primary);margin-bottom:10px;text-align:center;}
+.callstack-list{display:flex;flex-direction:column-reverse;gap:6px;min-height:44px;}
+.callstack-item{background:var(--bg-3);border:1px solid var(--glass-border);border-radius:8px;padding:7px 12px;font-size:12.5px;color:var(--primary-deep);font-weight:600;animation:stackPop .25s ease;text-align:center;}
+.callstack-item.flash{background:#FBE9DA;border-color:var(--amber);color:var(--amber-dark);}
+@keyframes stackPop{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.callstack-empty{font-size:12.5px;color:var(--faint);text-align:center;padding:10px 0;}
+
+/* ---- sequential insight / discovery cards ---- */
+.insight-card{max-width:600px;margin:10px auto 0;background:var(--card-bg);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:26px 26px;text-align:center;box-shadow:0 14px 30px -18px rgba(23,50,77,.3);}
+.insight-icon{font-size:30px;margin-bottom:10px;}
+.insight-text{font-size:15.5px;color:var(--ink);line-height:1.65;font-weight:600;}
+.insight-progress{display:flex;justify-content:center;gap:6px;margin:16px 0 2px;}
+.insight-dot{width:7px;height:7px;border-radius:50%;background:var(--glass-border);transition:background .2s;}
+.insight-dot.done{background:var(--primary);}
+.insight-dot.current{background:var(--amber);}
+
+/* ---- result card ---- */
+.result-card{max-width:560px;width:100%;margin:0 auto;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px;}
+.result-icon{font-size:56px;}
+.stat-row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;width:100%;}
+.stat-chip{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:12px 18px;min-width:110px;}
+.stat-chip .num{font-size:20px;color:var(--amber-dark);font-weight:800;}
+.stat-chip .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;}
+.result-copy{max-width:480px;font-size:14.5px;}
+
+/* ---- open question cards: reflection + exercise ---- */
+.qgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:8px;}
+.qcard{
+  background:var(--card-bg);border:1px solid var(--glass-border);border-radius:18px;
+  padding:22px 20px 20px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  box-shadow:0 14px 30px -18px rgba(23,50,77,.3);min-height:190px;display:flex;flex-direction:column;gap:10px;
+  transition:transform .18s,box-shadow .18s;
+}
+.qcard:hover{transform:translateY(-3px);box-shadow:0 18px 34px -16px rgba(23,50,77,.38);}
+.qcard .q-num{font-weight:800;font-size:13px;color:var(--primary);letter-spacing:.03em;}
+.qcard .q-text{font-size:14.5px;color:var(--ink);line-height:1.6;font-weight:600;}
+@media(max-width:900px){.qgrid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:640px){.qgrid{grid-template-columns:1fr;}.qcard{min-height:auto;padding:18px 18px 16px;}}
+.qcard.qcard-wide{grid-column:1 / -1;min-height:auto;}
+
+/* ---- Chapter: the reveal (concept), one continuous flow ---- */
+.learning-flow{max-width:640px;margin:0 auto;text-align:left;}
+.learning-flow > * + *{margin-top:22px;padding-top:22px;border-top:1px dashed var(--glass-border);}
+
+.recursion-ladder{display:flex;flex-direction:column;align-items:center;gap:0;margin:8px 0;}
+.ladder-step{display:flex;align-items:center;gap:8px;padding:9px 18px;border-radius:10px;font-size:13px;font-weight:700;color:var(--primary-deep);background:var(--bg-3);border:1px solid var(--glass-border);white-space:nowrap;}
+.ladder-step.base{background:#FBE9DA;color:var(--amber-dark);border-color:var(--amber);}
+.ladder-arrow{font-size:14px;color:var(--faint);margin:2px 0;}
+.ladder-caption{text-align:center;font-size:12.5px;color:var(--muted);max-width:420px;margin:12px auto 0;}
+
+.reveal-summary{text-align:left;}
+.reveal-lead{font-size:14.5px;color:var(--ink);line-height:1.6;margin-bottom:8px;}
+.reveal-summary ul{margin:0 0 10px;padding-left:20px;display:flex;flex-direction:column;gap:6px;}
+.reveal-summary li{font-size:13.5px;color:var(--muted);line-height:1.55;}
+.reveal-summary strong{color:var(--amber-dark);}
+
+.fun-fact-card{
+  max-width:600px;margin:0 auto;background:#FBE9DA;border:1px solid var(--amber);border-radius:var(--radius-md);
+  padding:16px 18px;text-align:left;
+}
+.fun-fact-card b{color:var(--amber-dark);}
+.fun-fact-card p{color:var(--ink);font-size:13.5px;}
+
+.key-learnings h3{font-size:16px;margin-bottom:12px;color:var(--primary-deep);text-align:center;}
+.kl-grid{display:flex;flex-direction:column;gap:14px;}
+.kl-item{display:flex;gap:12px;align-items:flex-start;text-align:left;}
+.kl-item + .kl-item{padding-top:14px;border-top:1px dotted var(--glass-border);}
+.kl-icon{font-size:20px;flex-shrink:0;line-height:1.3;}
+.kl-item b{display:block;font-size:13.5px;color:var(--primary-deep);margin-bottom:3px;}
+.kl-item p{font-size:12.5px;color:var(--muted);line-height:1.5;}
+
+.achv-toast{
+  position:fixed;top:-90px;left:50%;transform:translateX(-50%);background:#fff;border:1px solid var(--amber);
+  border-radius:999px;padding:12px 22px;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:700;
+  box-shadow:0 20px 50px -20px rgba(23,50,77,.4);z-index:80;transition:top .4s cubic-bezier(.2,.9,.3,1.3);
+}
+.achv-toast.show{top:20px;}
+
+
+/* ---- Think It Through: whole chain on one page ---- */
+.thought-chain{max-width:640px;margin:8px auto 0;display:flex;flex-direction:column;gap:10px;}
+.tc-item{display:flex;gap:12px;align-items:flex-start;padding:12px 16px;border-radius:var(--radius-md);background:var(--card-bg);border:1px solid var(--glass-border);border-left:4px solid var(--primary);}
+.tc-item.insight{background:#FBE9DA;border-color:var(--amber);border-left-color:var(--amber-dark);}
+.tc-icon{font-size:20px;line-height:1.4;flex-shrink:0;}
+.tc-item p{font-size:14.5px;color:var(--ink);font-weight:500;line-height:1.55;}
+
+/* ---- top action row (Exercise section) ---- */
+.top-actions{display:flex;justify-content:flex-start;margin:0 0 14px;}
+.cs-Laboratory-link{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:999px;border:1.5px solid var(--primary);background:transparent;color:var(--primary-dark);font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;text-decoration:none;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease;}
+.cs-Laboratory-link:hover{transform:translateY(-1px);box-shadow:0 10px 22px -10px var(--shadow-btn);}
+
+/* ---- Brahma clock ---- */
+.brahma-clock{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:20px;box-shadow:0 14px 30px -18px rgba(23,50,77,.3);text-align:center;}
+.brahma-clock h3{font-size:17px;color:var(--primary-deep);margin-bottom:6px;}
+.brahma-clock .bc-lead{font-size:13.5px;max-width:480px;margin:0 auto;}
+.formula{font-family:'Poppins',sans-serif;font-weight:700;font-size:24px;color:var(--amber-dark);margin:10px 0 4px;}
+.bc-slider{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:12px 0;font-size:13px;color:var(--muted);}
+.bc-slider input[type=range]{accent-color:var(--primary-dark);width:min(240px,60vw);}
+.bc-slider b{color:var(--primary-deep);min-width:22px;display:inline-block;}
+.bc-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;}
+.bc-stat{background:var(--bg-2);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:12px;}
+.bc-stat .num{font-size:17px;font-weight:800;color:var(--primary-deep);word-break:break-word;font-family:'Poppins',sans-serif;}
+.bc-stat .sub{font-size:12px;color:var(--amber-dark);font-weight:600;min-height:16px;}
+.bc-stat .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:2px;}
+.life-bar{height:14px;border-radius:7px;background:var(--bg-4);overflow:hidden;margin:10px 0 4px;}
+.life-fill{height:100%;width:0;min-width:3px;background:linear-gradient(90deg,var(--amber),var(--amber-dark));transition:width .25s;}
+.life-cap{font-size:12.5px;color:var(--muted);}
+.life-cap b{color:var(--amber-dark);}
+.bc-note{font-size:13px;color:var(--ink);margin-top:10px;min-height:20px;}
+.cosmic-facts{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:8px;text-align:left;}
+.cosmic-facts li{font-size:13.5px;color:var(--muted);line-height:1.55;padding-left:18px;position:relative;}
+.cosmic-facts li::before{content:"\2022";color:var(--amber-dark);position:absolute;left:4px;font-weight:700;}
+.cosmic-facts b{color:var(--primary-deep);}
+@media(max-width:640px){.bc-stats{grid-template-columns:1fr;}}
+
+
+/* ---- Lesson (Chapter 5) ---- */
+.lesson-step h3{font-size:17px;color:var(--primary-deep);display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.lesson-num{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;font-size:13px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Poppins',sans-serif;}
+.lesson-step p{font-size:14.5px;margin:0 0 10px;color:var(--muted);}
+.lesson-step p b{color:var(--primary-deep);}
+.term{color:var(--amber-dark);font-weight:700;}
+.frames{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:14px 0;}
+.frame{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:12px 8px 12px;text-align:center;}
+.frame-tag{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--amber-dark);background:#FBE9DA;padding:2px 9px;border-radius:999px;margin-bottom:8px;font-family:'Poppins',sans-serif;}
+.mini-set{display:flex;justify-content:center;gap:8px;}
+.mini-rod{width:62px;display:flex;flex-direction:column;align-items:center;}
+.mini-tower{position:relative;width:100%;height:58px;display:flex;flex-direction:column-reverse;align-items:center;}
+.mini-pole{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:4px;height:54px;background:var(--faint);border-radius:2px;opacity:.6;}
+.mini-disks{position:relative;z-index:1;display:flex;flex-direction:column-reverse;align-items:center;gap:2px;width:100%;}
+.mini-disk{height:10px;border-radius:5px;}
+.mini-base{width:100%;height:5px;background:var(--primary-deep);border-radius:3px;}
+.mini-lbl{font-size:10px;color:var(--faint);font-weight:700;margin-top:3px;}
+.frame-cap{font-size:12.5px;line-height:1.45;margin:8px 0 0!important;color:var(--ink)!important;}
+.recipe{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:14px 0 6px;}
+.recipe-part{border-radius:var(--radius-sm);padding:10px 8px;text-align:center;font-size:12.5px;font-weight:600;line-height:1.4;}
+.recipe-part.small{background:var(--bg-3);color:var(--primary-deep);border:1px solid var(--glass-border);}
+.recipe-part.big{background:#FBE9DA;color:var(--amber-dark);border:1px solid var(--amber);}
+.recipe-sum{text-align:center;font-size:12.5px;color:var(--muted);margin-bottom:12px;}
+@media(max-width:640px){.recipe{grid-template-columns:1fr;}}
+.snap .callstack-list{min-height:104px;}
+.tag{display:inline-block;font-size:10px;font-weight:800;border-radius:999px;padding:1px 8px;margin-left:6px;font-family:'Poppins',sans-serif;}
+.tag.wait{background:#fff;border:1px solid var(--faint);color:var(--muted);}
+.tag.go{background:var(--amber);color:#fff;}
+.t-wrap{overflow-x:auto;}
+.t-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px;}
+.t-table th,.t-table td{padding:8px 10px;text-align:center;border-bottom:1px solid var(--glass-border);color:var(--ink);}
+.t-table th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);}
+.t-table td.hl{font-weight:800;color:var(--amber-dark);}
+.derive{background:var(--bg-2);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:14px 16px;font-size:14px;color:var(--ink);line-height:1.8;margin:10px 0;}
+.derive .eq{font-family:'Poppins',sans-serif;font-weight:700;color:var(--primary-deep);}
+details.code-peek{border:1px dashed var(--glass-border);border-radius:var(--radius-md);padding:10px 14px;background:#fff;margin-top:12px;}
+details.code-peek summary{cursor:pointer;font-weight:600;font-size:13.5px;color:var(--primary-dark);}
+pre.code{margin:10px 0 4px;background:#1F2E37;color:#E8F0F5;border-radius:var(--radius-sm);padding:12px 14px;font-size:12.5px;line-height:1.65;overflow-x:auto;}
+pre.code .c{color:#93A5AB;}
+
+/* ---- Watch It Scale: one move at a time ---- */
+.move-card{min-height:72px;display:flex;align-items:center;justify-content:center;text-align:center;}
+.move-inner{animation:stackPop .25s ease;}
+.move-count{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--amber-dark);margin-bottom:4px;font-family:'Poppins',sans-serif;}
+.move-line{font-family:'Poppins',sans-serif;font-size:20px;font-weight:700;color:var(--primary-deep);}
+.move-hint{font-size:13.5px;color:var(--muted);}
+.disk.just-moved{animation:landPulse .45s ease;box-shadow:0 0 0 3px var(--amber),0 4px 10px rgba(0,0,0,.18);}
+@keyframes landPulse{0%{transform:translateY(-14px);}100%{transform:translateY(0);}}
+
+.hidden{display:none!important;}
+
+@media(max-width:640px){
+  .wrap{padding:28px 14px 50px;}
+  .platform-row{gap:14px;}
+  .platform{width:100px;}
+  .platform-base{width:104px;}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="stepper" id="stepper">
+    <div class="step-item active" id="step-1"><span class="step-line"></span><span class="step-circle">1</span><span class="step-label">The Legend</span></div>
+    <div class="step-item" id="step-2"><span class="step-line"></span><span class="step-circle">2</span><span class="step-label">The Rules</span></div>
+    <div class="step-item" id="step-3"><span class="step-line"></span><span class="step-circle">3</span><span class="step-label">The Challenge</span></div>
+    <div class="step-item" id="step-4"><span class="step-line"></span><span class="step-circle">4</span><span class="step-label">Reflect</span></div>
+    <div class="step-item" id="step-5"><span class="step-line"></span><span class="step-circle">5</span><span class="step-label">The Reveal</span></div>
+    <div class="step-item" id="step-6"><span class="step-line"></span><span class="step-circle">6</span><span class="step-label">Workbook</span></div>
+  </div>
+
+  <!-- ================= CHAPTER 1: THE LEGEND ================= -->
+  <section class="section active-view" id="sec-puzzle">
+    <div class="hero">
+      <span class="eyebrow">Chapter 1 &middot; The Legend</span>
+      <h1>🛕 The Tower of Brahma<br><span style="font-size:.7em;color:var(--amber-dark);">ब्रह्मा की आयु</span></h1>
+    </div>
+    <div class="problem-card">
+      <p>In the great temple of <b>Kashi Vishwanath</b>, so the legend goes, priests tend a brass plate fitted with <b>three rods</b>.</p>
+      <p>On the first rod rest <b>64 discs of pure diamond</b>, each one smaller than the one beneath it, the largest at the bottom.</p>
+      <p>Day and night the priests move the discs, <b>one at a time</b>, from the first rod to the third. The legend says that when the very last disc is placed, <b>the universe will come to an end</b>.</p>
+      <p>So how long do the priests actually need? To find out, we'll start with a much smaller tower 👇</p>
+    </div>
+    <div class="section-nav">
+      <button class="btn" id="btn-puzzle-continue">See the Rules ➜</button>
+    </div>
+  </section>
+
+  <!-- ================= CHAPTER 2: THE RULES ================= -->
+  <section class="section" id="sec-briefing">
+    <div class="hero">
+      <span class="eyebrow">Chapter 2 &middot; The Rules</span>
+      <h1>The Priests' Rules</h1>
+    </div>
+
+    <div class="story-lines">
+      <p>The brass plate has three rods: <span class="highlight">Rod 1</span>, <span class="highlight">Rod 2</span>, and <span class="highlight">Rod 3</span>.</p>
+      <p><span class="highlight">Rod 1</span> holds the tower of discs, largest at the bottom, smallest at the top.</p>
+      <p>The mission: move the <span class="highlight">entire tower</span> from Rod 1 to Rod 3.</p>
+      <p>The priests may use <span class="highlight">Rod 2</span> along the way, but only as a temporary resting place.</p>
+    </div>
+
+    <ul class="rules-list">
+      <li class="ok">Move only one disc at a time, always the top disc of a rod</li>
+      <li class="ok">Rod 2 may temporarily hold discs</li>
+      <li>Never place a larger disc on top of a smaller one</li>
+      <li>Never lift a disc that has another disc on top of it</li>
+    </ul>
+    <p class="section-sub">Before the priests face 64 discs, let's try it with just 3.</p>
+
+    <div class="section-nav">
+      <button class="btn ghost" id="btn-briefing-back">⬅ Back to the Legend</button>
+      <button class="btn" id="btn-briefing-start">Begin the Challenge ▶</button>
+    </div>
+  </section>
+
+  <!-- ================= CHAPTER 3: THE CHALLENGE ================= -->
+  <section class="section" id="sec-game">
+    <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;" id="chal-eyebrow">Chapter 3 &middot; The Challenge</span>
+    <h2 class="section-title" id="chal-title">Try It: Move 3 Discs</h2>
+    <p class="section-sub" id="chal-sub">Click a rod to pick up its top disc, then click another rod to place it there.</p>
+
+    <div class="game-shell">
+      <div class="topbar" id="chal-topbar">
+        <div class="status-cluster" id="chal-status-cluster">
+          <div class="status-pill score" id="chal-moves-pill">🔢 Moves: <span id="chal-moves-value">0</span></div>
+        </div>
+      </div>
+
+      <div class="dialogue-box" id="chal-dialogue-box">
+        <div class="dialogue-avatar">🛕</div>
+        <div class="dialogue-text">
+          <span class="speaker">THE PRIEST SAYS</span>
+          <span id="chal-dialogue-text">Click Rod 1 to pick up its top disc. Then click another rod to place it there.</span>
+        </div>
+      </div>
+
+      <div id="chal-stage"><!-- filled by JS: manual puzzle / think-it-through / auto demo --></div>
+    </div>
+  </section>
+
+  <!-- ================= CHAPTER 4: REFLECT ================= -->
+  <section class="section" id="sec-notes">
+    <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 4 &middot; Reflect</span>
+    <h2 class="section-title">Think back on your game</h2>
+    <p class="section-sub">Take a minute to look back at what you just did. There are no right answers here, just think each one over in your own words.</p>
+
+    <div class="card">
+      <div class="qgrid">
+        <div class="qcard"><span class="q-num">1 &middot; Finding the Best Solution</span><span class="q-text">If multiple valid move sequences can solve the puzzle, how would you decide which one is optimal?</span></div>
+        <div class="qcard"><span class="q-num">2 &middot; Why Does Disc Order Matter?</span><span class="q-text">Why must smaller discs stay above larger discs, and what could go wrong if this rule were reversed?</span></div>
+        <div class="qcard"><span class="q-num">3 &middot; Making the Biggest Move</span><span class="q-text">Why must the smaller discs be moved out of the way before the largest disc can reach its destination?</span></div>
+        <div class="qcard"><span class="q-num">4 &middot; Planning Ahead</span><span class="q-text">How did solving the puzzle change when you started thinking about smaller tasks instead of moving individual discs?</span></div>
+        <div class="qcard"><span class="q-num">5 &middot; Recognising a Pattern</span><span class="q-text">What pattern did you observe in the minimum number of moves as each new disc was added?</span></div>
+      </div>
+      <div class="section-nav">
+        <button class="btn ghost" id="btn-notes-back">⬅ Back to the Challenge</button>
+        <button class="btn" id="btn-notes-continue">Continue to the Reveal ➜</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CHAPTER 5: THE REVEAL (learning) ================= -->
+  <section class="section" id="sec-method">
+    <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 5 &middot; The Reveal</span>
+    <h2 class="section-title">What your hands were really doing</h2>
+    <p class="section-sub">Let's walk back through the moves you made, one idea at a time, starting with the smallest tower possible.</p>
+
+    <div class="learning-flow">
+
+      <div class="lesson-step">
+        <h3><span class="lesson-num">1</span> One disc is easy</h3>
+        <p>Start with the simplest tower there is: a single disc. Nothing sits on top of it and nothing is in the way, so you just pick it up and put it on Rod 3. One move, no planning.</p>
+        <div class="frames" id="frames-base"></div>
+        <p>When a problem gets so small that you can just do it, that's the <span class="term">base case</span>. It's the point where all the thinking stops.</p>
+      </div>
+
+      <div class="lesson-step">
+        <h3><span class="lesson-num">2</span> Two discs: the small one steps aside</h3>
+        <p>Now put a bigger disc underneath. You can't touch the big one while the small one is sitting on it, so the small disc has to get out of the way first. That makes 3 moves: small disc aside, big disc across, small disc back on top.</p>
+        <div class="frames" id="frames-two"></div>
+      </div>
+
+      <div class="lesson-step">
+        <h3><span class="lesson-num">3</span> Three discs: same trick, one size up</h3>
+        <p>You probably felt this one in your hands. To free the biggest disc, you had to move the top two discs onto Rod 2. And that's exactly the 2-disc puzzle you just saw, only with the rods playing different roles. After the big disc crosses, you solve that same 2-disc puzzle again to bring them over.</p>
+        <div class="frames" id="frames-three"></div>
+        <div class="recipe">
+          <div class="recipe-part small">Move the top n&minus;1 discs onto Rod 2</div>
+          <div class="recipe-part big">Move disc n to Rod 3 (just 1 move)</div>
+          <div class="recipe-part small">Move those n&minus;1 discs onto Rod 3</div>
+        </div>
+        <p class="recipe-sum">n&minus;1 discs, then 1 big move, then n&minus;1 discs again</p>
+        <p>That plan works for any tower. Notice that the two &ldquo;move n&minus;1 discs&rdquo; jobs are the very same problem you started with, just smaller. Handing that smaller tower to the same set of steps is called a <span class="term">recursive call</span>, and the whole &ldquo;n&minus;1 twice, plus one big move&rdquo; plan is the <span class="term">recursive case</span>.</p>
+      </div>
+
+      <div class="lesson-step">
+        <h3><span class="lesson-num">4</span> Who is waiting for whom?</h3>
+        <p>While you were parking the top discs on Rod 2, the job &ldquo;move the biggest disc&rdquo; hadn't happened yet. It was on hold, waiting for the smaller job to finish. A program keeps track of those paused jobs in a <span class="term">call stack</span>. Here's the 3-disc case:</p>
+        <div class="frames" id="snaps-stack"></div>
+        <p>Once the smallest job is finished, it drops off the stack, and the job underneath it wakes up and carries on from exactly where it paused. That step back is called <span class="term">returning</span>.</p>
+        <details class="code-peek">
+          <summary>Curious how this looks in code? (optional)</summary>
+<pre class="code"><span class="c"># move n discs from one rod to another</span>
+def move(n, start, end, spare):
+    if n == 1:
+        print("move disc 1:", start, "-&gt;", end)   <span class="c"># base case</span>
+        return
+    move(n - 1, start, spare, end)    <span class="c"># clear the way</span>
+    print("move disc", n, ":", start, "-&gt;", end)   <span class="c"># the one big move</span>
+    move(n - 1, spare, end, start)    <span class="c"># bring them back on top</span></pre>
+        </details>
+      </div>
+
+      <div class="lesson-step">
+        <h3><span class="lesson-num">5</span> Counting the moves</h3>
+        <p>Let T(n) be the fewest moves needed for n discs. From the plan above, we make two trips with n&minus;1 discs, plus one move for the biggest disc:</p>
+        <div class="derive"><span class="eq">T(n) = 2 &middot; T(n&minus;1) + 1</span> &nbsp;and&nbsp; <span class="eq">T(1) = 1</span></div>
+        <p>Let's use it on small towers first:</p>
+        <div class="t-wrap">
+          <table class="t-table">
+            <tr><th>Discs (n)</th><th>Working</th><th>T(n)</th><th>2<sup>n</sup></th></tr>
+            <tr><td>1</td><td>base case</td><td class="hl">1</td><td>2</td></tr>
+            <tr><td>2</td><td>2 &times; 1 + 1</td><td class="hl">3</td><td>4</td></tr>
+            <tr><td>3</td><td>2 &times; 3 + 1</td><td class="hl">7</td><td>8</td></tr>
+            <tr><td>4</td><td>2 &times; 7 + 1</td><td class="hl">15</td><td>16</td></tr>
+            <tr><td>5</td><td>2 &times; 15 + 1</td><td class="hl">31</td><td>32</td></tr>
+          </table>
+        </div>
+        <p>Spot it? Every answer is exactly one less than a power of 2. Here's why that always works:</p>
+        <div class="derive">
+          Add 1 to both sides of the rule: <span class="eq">T(n) + 1 = 2 &middot; (T(n&minus;1) + 1)</span><br>
+          So T(n) + 1 doubles every time we add a disc, starting from T(1) + 1 = 2.<br>
+          That means T(n) + 1 = 2<sup>n</sup>, so <span class="eq">T(n) = 2<sup>n</sup> &minus; 1</span>.
+        </div>
+      </div>
+
+      <div class="lesson-step">
+        <h3><span class="lesson-num">6</span> Now try 64 discs</h3>
+        <p>With the formula in hand, let's go back to the priests of Kashi Vishwanath. Slide the number of discs up and watch how fast the numbers run away.</p>
+        <div class="brahma-clock">
+          <h3 style="justify-content:center;">⏳ The Brahma Clock</h3>
+          <div class="formula">moves = 2<sup>n</sup> &minus; 1</div>
+
+          <div class="bc-slider">
+            <span>Discs:</span>
+            <input type="range" id="bc-slider" min="1" max="64" step="1" value="5" aria-label="Number of discs">
+            <b id="bc-n">5</b>
+            <button class="btn ghost small" id="bc-jump">🛕 Jump to 64 discs</button>
+          </div>
+
+          <div class="bc-stats">
+            <div class="bc-stat"><div class="num" id="bc-moves">31</div><div class="sub" id="bc-sci"></div><div class="lbl">Moves needed</div></div>
+            <div class="bc-stat"><div class="num" id="bc-time">31 seconds</div><div class="sub">at 1 move per second</div><div class="lbl">Time needed</div></div>
+          </div>
+
+          <div class="life-bar"><div class="life-fill" id="bc-fill"></div></div>
+          <p class="life-cap">That is <b id="bc-pct">0%</b> of Brahma's entire lifespan (311 trillion years).</p>
+          <p class="bc-note" id="bc-note"></p>
+        </div>
+      </div>
+
+      <div class="reveal-summary">
+        <p class="reveal-lead">🕉️ <strong>How long does Brahma live?</strong></p>
+        <ul class="cosmic-facts">
+          <li><b>Bhagavad Gita, Chapter 8, Verse 17:</b> a single day of Brahma lasts 1,000 Mahayugas, and his night lasts just as long.</li>
+          <li>That's about <b>4.32 billion solar years</b> for the day, and the same again for the night.</li>
+          <li>Brahma's life is <b>100 Brahma years</b>, about <b>3.11 &times; 10<sup>14</sup> solar years</b> (311 trillion years). This is the lifecycle of the universe itself.</li>
+        </ul>
+      </div>
+
+      <div class="fun-fact-card">
+        <p><b>🛕 So, what does the legend say?</b> With 64 discs the priests need 2<sup>64</sup> &minus; 1 moves, about 1.84 &times; 10<sup>19</sup> (roughly 18.4 quintillion). Even at one move every second, that's over <b>580 billion years</b>. It sounds endless, but Brahma's life is about 311 trillion years, so the priests' whole task is just a tiny slice of it. By the Hindu cosmic timeline, the present Brahma's life is far from over, which means the end of the universe is still very, very far away.</p>
+      </div>
+
+      <div class="fun-fact-card" style="background:#fff;border-color:var(--glass-border);">
+        <p><b>🏛️ A small note on the story.</b> In the West this puzzle is called the <b>Tower of Hanoi</b>. It's the way of solving a big problem by handing a smaller copy of it to the same steps.</p>
+      </div>
+    </div>
+
+    <div class="section-nav">
+      <button class="btn ghost" id="btn-method-back">⬅ Back to Reflection</button>
+      <button class="btn" id="btn-method-continue">Continue to the Workbook ➜</button>
+    </div>
+  </section>
+
+  <!-- ================= CHAPTER 6: EXERCISE WORKBOOK ================= -->
+  <section class="section" id="sec-cases">
+    <div class="top-actions">
+      <a href="../../index.html" class="cs-Laboratory-link">
+        ← Back to CSE Concept Laboratory
+      </a>
+    </div>
+    <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 6 &middot; Exercise Workbook</span>
+    <h2 class="section-title">Try it on new problems</h2>
+    <p class="section-sub">Seven questions to think through at your own pace. There is no single right answer, so take your time.</p>
+
+    <div class="card">
+      <div class="qgrid">
+        <div class="qcard"><span class="q-num">1 &middot; One Puzzle, Different Names</span><span class="q-text">How are the Tower of Hanoi and Lucas's Tower related? Does giving the same puzzle a different name change its rules or solution?</span></div>
+        <div class="qcard"><span class="q-num">2 &middot; The Tower of Venice</span><span class="q-text">If your Venice-inspired version introduces a new movement restriction, how would that change the original Tower of Hanoi solution?</span></div>
+        <div class="qcard"><span class="q-num">3 &middot; Beyond Three Rods</span><span class="q-text">If an extra rod makes the puzzle easier, does adding more resources always make a computational problem easier? And how much easier does it become?</span></div>
+        <div class="qcard"><span class="q-num">4 &middot; Recursion vs. Iteration</span><span class="q-text">How could you solve the Tower of Hanoi using a loop instead of recursion? What would the iterative approach need to keep track of?</span></div>
+        <div class="qcard"><span class="q-num">5 &middot; Choosing Recursion</span><span class="q-text">Why might recursion make the Tower of Hanoi solution easier to understand, even though an iterative solution is also possible?</span></div>
+        <div class="qcard"><span class="q-num">6 &middot; Beyond the Towers</span><span class="q-text">How could recursion help find every file inside a folder that contains nested subfolders?</span></div>
+        <div class="qcard qcard-wide"><span class="q-num">7 &middot; When Recursion Is Useful</span><span class="q-text">Consider a family tree in which each person may have children and grandchildren. How could recursion help display all descendants?</span></div>
+      </div>
+      <div class="section-nav">
+        <button class="btn ghost" id="btn-cases-back">⬅ Back to the Reveal</button>
+        <button class="btn" id="btn-cases-finish">Restart from Beginning</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div class="achv-toast" id="achv-toast">
+  <span class="achv-icon">🏆</span>
+  <span id="achv-text">Achievement unlocked</span>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ============================================================
+   NAVIGATION: 6-chapter stepper
+   ============================================================ */
+const STEP_FOR_SECTION = {
+  'sec-puzzle':1, 'sec-briefing':2, 'sec-game':3, 'sec-notes':4, 'sec-method':5, 'sec-cases':6
+};
+function setStep(n){
+  for (let i = 1; i <= 6; i++){
+    const el = document.getElementById('step-' + i);
+    el.classList.remove('active','done');
+    if (i < n) el.classList.add('done');
+    if (i === n) el.classList.add('active');
+  }
+}
+function showSection(id){
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active-view'));
+  document.getElementById(id).classList.add('active-view');
+  setStep(STEP_FOR_SECTION[id] || 1);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* =========================================================================
+   SHARED HELPERS: disk visuals, platform names
+   ========================================================================= */
+const DISK_COLORS = {1:'#F6C453', 2:'#EA8C36', 3:'#C96F1F', 4:'#7FB8DE', 5:'#4A9BD1', 6:'#2B6FA3'};
+function diskColor(size){ return DISK_COLORS[size] || '#4A9BD1'; }
+function diskWidth(size){ return 40 + size * 18; }
+function platformName(key){ return {S:'Rod 1', M:'Rod 2', F:'Rod 3'}[key]; }
+
+function unlockAchievement(key, label){
+  if (unlockAchievement._seen && unlockAchievement._seen.has(key)) return;
+  unlockAchievement._seen = unlockAchievement._seen || new Set();
+  unlockAchievement._seen.add(key);
+  const toast = document.getElementById('achv-toast');
+  document.getElementById('achv-text').textContent = label;
+  toast.classList.add('show');
+  clearTimeout(toast._hideTimer);
+  toast._hideTimer = setTimeout(() => toast.classList.remove('show'), 2400);
+}
+
+/* =========================================================================
+   CHAPTER 3, PHASE A: MANUAL PLAY (3 discs, click to move)
+   ========================================================================= */
+const manualState = {
+  numDisks: 3,
+  platforms: { S:[3,2,1], M:[], F:[] },
+  selected: null,
+  moves: 0,
+  solved: false,
+};
+
+function resetManual(){
+  manualState.platforms = { S:[3,2,1], M:[], F:[] };
+  manualState.selected = null;
+  manualState.moves = 0;
+  manualState.solved = false;
+}
+
+function renderManualPhase(){
+  document.getElementById('chal-title').textContent = 'Try It: Move 3 Discs';
+  document.getElementById('chal-sub').textContent = 'Click a rod to pick up its top disc, then click another rod to place it there.';
+  document.getElementById('chal-dialogue-box').classList.remove('hidden');
+  setChalDialogue('Click Rod 1 to pick up its top disc. Then click another rod to place it there.');
+  document.getElementById('chal-status-cluster').innerHTML =
+    `<div class="status-pill score" id="chal-moves-pill">🔢 Moves: <span id="chal-moves-value">${manualState.moves}</span></div>`;
+
+  const stage = document.getElementById('chal-stage');
+  stage.innerHTML = `
+    <div class="platform-row" id="manual-platform-row">
+      ${['S','M','F'].map(key => `
+        <div class="platform" data-key="${key}" id="manual-platform-${key}">
+          <div class="platform-tower">
+            <div class="platform-pole"></div>
+            <div class="platform-disks" id="manual-disks-${key}"></div>
+          </div>
+          <div class="platform-base"></div>
+          <div class="platform-label">${platformName(key)}</div>
+        </div>`).join('')}
+    </div>
+    <p class="game-note">Rules: one disc at a time &middot; never a bigger disc on a smaller one &middot; Rod 2 is just a stopover.</p>
+    <div class="section-nav">
+      <button class="btn ghost small" id="btn-manual-reset">↺ Reset</button>
+    </div>`;
+
+  ['S','M','F'].forEach(key => {
+    document.getElementById('manual-platform-' + key).addEventListener('click', () => onManualPlatformClick(key));
+  });
+  document.getElementById('btn-manual-reset').addEventListener('click', () => {
+    resetManual();
+    renderManualPhase();
+  });
+
+  renderManualPlatforms();
+}
+
+function renderManualPlatforms(){
+  ['S','M','F'].forEach(key => {
+    const container = document.getElementById('manual-disks-' + key);
+    const stack = manualState.platforms[key];
+    container.innerHTML = stack.map((size, idx) => {
+      const isTop = idx === stack.length - 1;
+      const selectedCls = (manualState.selected === key && isTop) ? 'top-selected' : '';
+      return `<div class="disk ${selectedCls}" style="width:${diskWidth(size)}px;background:${diskColor(size)}">${size}</div>`;
+    }).join('');
+    document.getElementById('manual-platform-' + key).classList.toggle('selected-source', manualState.selected === key);
+  });
+  document.getElementById('chal-moves-value').textContent = manualState.moves;
+}
+
+function setChalDialogue(text){
+  const el = document.getElementById('chal-dialogue-text');
+  if (el) el.textContent = text;
+}
+
+function onManualPlatformClick(key){
+  if (manualState.solved) return;
+
+  if (manualState.selected === null){
+    if (manualState.platforms[key].length === 0){
+      setChalDialogue(`${platformName(key)} is empty, there's nothing there to pick up.`);
+      return;
+    }
+    manualState.selected = key;
+    setChalDialogue(`Picked up the top disc from ${platformName(key)}. Now click where you'd like to place it.`);
+  } else if (manualState.selected === key){
+    manualState.selected = null;
+    setChalDialogue('Put it back down. Click a rod to pick up its top disc.');
+  } else {
+    const from = manualState.selected, to = key;
+    const fromStack = manualState.platforms[from], toStack = manualState.platforms[to];
+    const movingDisk = fromStack[fromStack.length - 1];
+    const destTop = toStack.length ? toStack[toStack.length - 1] : null;
+
+    if (destTop !== null && movingDisk > destTop){
+      setChalDialogue("A bigger disc can't go on top of a smaller one. Try somewhere else.");
+      manualState.selected = null;
+    } else {
+      fromStack.pop();
+      toStack.push(movingDisk);
+      manualState.moves++;
+      manualState.selected = null;
+      if (manualState.moves === 1) unlockAchievement('first-move', 'First move made!');
+
+      if (manualState.platforms.F.length === manualState.numDisks){
+        manualState.solved = true;
+        setChalDialogue("The whole tower is on Rod 3. Nicely done!");
+        renderManualPlatforms();
+        setTimeout(onManualSolved, 500);
+        return;
+      }
+      setChalDialogue('Nice, keep going.');
+    }
+  }
+  renderManualPlatforms();
+}
+
+function onManualSolved(){
+  const optimal = Math.pow(2, manualState.numDisks) - 1;
+  if (manualState.moves === optimal) unlockAchievement('perfect-solve', `Solved in the fewest possible moves (${optimal})!`);
+
+  document.getElementById('chal-title').textContent = 'Solved!';
+  document.getElementById('chal-sub').textContent = '';
+  document.getElementById('chal-dialogue-box').classList.add('hidden');
+
+  const stage = document.getElementById('chal-stage');
+  stage.innerHTML = `<div class="result-card">
+    <div class="result-icon">🎉</div>
+    <h2>You moved the whole tower!</h2>
+    <div class="stat-row">
+      <div class="stat-chip"><div class="num">${manualState.moves}</div><div class="lbl">Your Moves</div></div>
+      <div class="stat-chip"><div class="num">${optimal}</div><div class="lbl">Fewest Possible</div></div>
+    </div>
+    <p class="result-copy">Three discs needed at least ${optimal} moves. The priests of Kashi Vishwanath have 64 discs. What do you think happens to the number of moves as discs are added?</p>
+    <div class="section-nav">
+      <button class="btn" id="btn-go-discover">What about 64 discs? ➜</button>
+    </div>
+  </div>`;
+  document.getElementById('btn-go-discover').addEventListener('click', () => renderDiscoverPhase());
+}
+
+/* =========================================================================
+   CHAPTER 3, PHASE B: THINK IT THROUGH (whole chain of thought on one page)
+   ========================================================================= */
+const DISCOVER_STEPS = [
+  { icon:'🤔', kind:'question', text:"You just solved 3 discs. The priests have 64. Would your exact same strategy still work, or would it become impossible to plan move by move?" },
+  { icon:'🤔', kind:'question', text:"Zoom in on the biggest disc, sitting at the very bottom. What has to happen before you're allowed to move it to Rod 3?" },
+  { icon:'💡', kind:'insight',  text:"The biggest disc can only move once every disc on top of it is out of the way, parked on Rod 2." },
+  { icon:'🤔', kind:'question', text:"But that pile on Rod 2 still has many discs in it, largest at the bottom, smallest on top. How do you move all of those?" },
+  { icon:'💡', kind:'insight',  text:"Look closely, that's the exact same challenge again: move a stack from one rod to another, using a spare rod, just with one fewer disc this time." },
+  { icon:'🤔', kind:'question', text:"If solving 'move N discs' means first solving 'move N\u22121 discs', what happens if we keep applying that same idea, again and again?" },
+  { icon:'💡', kind:'insight',  text:"Eventually the stack shrinks all the way down to just ONE disc. Moving one disc is trivial, no puzzle needed, you just move it." },
+  { icon:'💡', kind:'insight',  text:"Once that single tiniest step is done, everything that was waiting can happen, one layer at a time, until the entire tower has moved." },
+];
+
+function renderDiscoverPhase(){
+  document.getElementById('chal-title').textContent = 'Think It Through';
+  document.getElementById('chal-sub').textContent = "Read the whole chain of thought below, top to bottom, then watch it play out.";
+  document.getElementById('chal-dialogue-box').classList.add('hidden');
+  document.getElementById('chal-status-cluster').innerHTML = '';
+
+  document.getElementById('chal-stage').innerHTML = `
+    <div class="thought-chain">
+      ${DISCOVER_STEPS.map(s => `
+        <div class="tc-item ${s.kind === 'insight' ? 'insight' : ''}">
+          <span class="tc-icon">${s.icon}</span>
+          <p>${s.text}</p>
+        </div>`).join('')}
+    </div>
+    <div class="section-nav">
+      <button class="btn" id="btn-discover-next">Watch the Pattern Build ▶</button>
+    </div>`;
+  document.getElementById('btn-discover-next').addEventListener('click', () => renderAutoPhase());
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* =========================================================================
+   CHAPTER 3, PHASE C: AUTO-SOLVE VISUALIZER (scales up, shows recursion)
+   ========================================================================= */
+const autoState = {
+  numDisks: 4,
+  platforms: null,
+  trace: [],
+  stepIndex: 0,
+  totalMoves: 0,
+  movesDone: 0,
+  playing: false,
+  timer: null,
+  speedMs: 1200,
+};
+
+function initialStack(n){
+  const arr = [];
+  for (let s = n; s >= 1; s--) arr.push(s);
+  return arr;
+}
+
+function buildTrace(n, from, to, aux, depth, trace){
+  if (n === 0) return;
+  const f = platformName(from), t = platformName(to);
+  trace.push({ type:'call', depth, label:`Move ${n} disc${n === 1 ? '' : 's'}: ${f} \u2192 ${t}` });
+  buildTrace(n - 1, from, aux, to, depth + 1, trace);
+  trace.push({ type:'move', depth, disk:n, from, to, label:`Move disc ${n} directly: ${f} \u2192 ${t}` });
+  buildTrace(n - 1, aux, to, from, depth + 1, trace);
+  trace.push({ type:'return', depth, label:`Done: ${n} disc${n === 1 ? '' : 's'} moved` });
+}
+
+function resetAuto(){
+  pauseAuto();
+  autoState.platforms = { S: initialStack(autoState.numDisks), M: [], F: [] };
+  autoState.trace = [];
+  buildTrace(autoState.numDisks, 'S', 'F', 'M', 0, autoState.trace);
+  /* keep only the real disc movements: one entry per move */
+  autoState.trace = autoState.trace.filter(e => e.type === 'move');
+  autoState.stepIndex = 0;
+  autoState.totalMoves = autoState.trace.length;
+  autoState.movesDone = 0;
+}
+
+function renderAutoPhase(){
+  document.getElementById('chal-title').textContent = 'Watch It Scale';
+  document.getElementById('chal-sub').textContent = "Now watch this exact idea solve a taller tower on its own, one move at a time.";
+  document.getElementById('chal-dialogue-box').classList.remove('hidden');
+  setChalDialogue("Slide the disc count up and down, then hit Play or Step. You'll see one move at a time, with the disc that just moved highlighted.");
+
+  document.getElementById('chal-status-cluster').innerHTML = `
+    <div class="status-pill score" id="auto-moves-pill">🔢 Move <span id="auto-moves-value">0</span> / <span id="auto-total-value">0</span></div>`;
+
+  resetAuto();
+
+  const stage = document.getElementById('chal-stage');
+  stage.innerHTML = `
+    <div class="platform-row" id="auto-platform-row">
+      ${['S','M','F'].map(key => `
+        <div class="platform" data-key="${key}" id="auto-platform-${key}">
+          <div class="platform-tower">
+            <div class="platform-pole"></div>
+            <div class="platform-disks" id="auto-disks-${key}"></div>
+          </div>
+          <div class="platform-base"></div>
+          <div class="platform-label">${platformName(key)}</div>
+        </div>`).join('')}
+    </div>
+
+    <div class="controls-row">
+      <div class="slider-wrap">
+        <span>Discs:</span>
+        <input type="range" id="auto-slider" min="1" max="6" step="1" value="${autoState.numDisks}">
+        <b id="auto-slider-value">${autoState.numDisks}</b>
+      </div>
+      <div class="speed-group" id="auto-speed-group">
+        <button class="speed-btn" data-ms="1800">Slow</button>
+        <button class="speed-btn active" data-ms="1200">Normal</button>
+        <button class="speed-btn" data-ms="600">Fast</button>
+      </div>
+    </div>
+    <div class="controls-row">
+      <button class="btn small" id="btn-auto-play">▶ Play</button>
+      <button class="btn ghost small" id="btn-auto-step">⏭ Step</button>
+      <button class="btn ghost small" id="btn-auto-reset">↺ Reset</button>
+    </div>
+
+    <div class="callstack-panel">
+      <div class="callstack-title">🎯 Current Move</div>
+      <div class="move-card" id="auto-move-card"></div>
+    </div>
+
+    <div class="section-nav">
+      <button class="btn" id="btn-go-notes">Continue to Reflection ➜</button>
+    </div>`;
+
+  document.getElementById('auto-slider').addEventListener('input', (e) => {
+    autoState.numDisks = parseInt(e.target.value, 10);
+    document.getElementById('auto-slider-value').textContent = autoState.numDisks;
+    resetAuto();
+    renderAutoPlatforms();
+    renderAutoMove(null);
+    updateAutoHUD();
+  });
+  document.getElementById('auto-speed-group').querySelectorAll('.speed-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#auto-speed-group .speed-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      autoState.speedMs = parseInt(btn.dataset.ms, 10);
+      if (autoState.playing){ pauseAuto(); playAuto(); }
+    });
+  });
+  document.getElementById('btn-auto-play').addEventListener('click', () => {
+    autoState.playing ? pauseAuto() : playAuto();
+  });
+  document.getElementById('btn-auto-step').addEventListener('click', () => {
+    pauseAuto();
+    autoStep();
+  });
+  document.getElementById('btn-auto-reset').addEventListener('click', () => {
+    resetAuto();
+    renderAutoPlatforms();
+    renderAutoMove(null);
+    updateAutoHUD();
+    setChalDialogue("Back to the start. Hit Play or Step whenever you're ready.");
+  });
+  document.getElementById('btn-go-notes').addEventListener('click', () => {
+    pauseAuto();
+    showSection('sec-notes');
+  });
+
+  renderAutoPlatforms();
+  renderAutoMove(null);
+  updateAutoHUD();
+}
+
+function renderAutoPlatforms(justMovedKey){
+  ['S','M','F'].forEach(key => {
+    const container = document.getElementById('auto-disks-' + key);
+    if (!container) return;
+    container.innerHTML = autoState.platforms[key].map(size =>
+      `<div class="disk" style="width:${diskWidth(size)}px;background:${diskColor(size)}">${size}</div>`
+    ).join('');
+    if (key === justMovedKey && container.lastElementChild) container.lastElementChild.classList.add('just-moved');
+  });
+}
+
+/* shows only the move that just happened */
+function renderAutoMove(ev){
+  const card = document.getElementById('auto-move-card');
+  if (!card) return;
+  if (!ev){
+    card.innerHTML = '<div class="move-hint">Press <b>Play</b> or <b>Step</b> to see the first move.</div>';
+    return;
+  }
+  card.innerHTML = `
+    <div class="move-inner">
+      <div class="move-count">Move ${autoState.movesDone} of ${autoState.totalMoves}</div>
+      <div class="move-line">Disc ${ev.disk} &middot; ${platformName(ev.from)} \u2192 ${platformName(ev.to)}</div>
+    </div>`;
+}
+
+function updateAutoHUD(){
+  const mv = document.getElementById('auto-moves-value');
+  const tot = document.getElementById('auto-total-value');
+  if (mv) mv.textContent = autoState.movesDone;
+  if (tot) tot.textContent = autoState.totalMoves;
+}
+
+function autoStep(){
+  if (autoState.stepIndex >= autoState.trace.length){
+    pauseAuto();
+    onAutoComplete();
+    return;
+  }
+  const ev = autoState.trace[autoState.stepIndex];
+  const disk = autoState.platforms[ev.from].pop();
+  autoState.platforms[ev.to].push(disk);
+  autoState.movesDone++;
+  autoState.stepIndex++;
+  renderAutoPlatforms(ev.to);
+  renderAutoMove(ev);
+  updateAutoHUD();
+  if (autoState.stepIndex >= autoState.trace.length){
+    pauseAuto();
+    onAutoComplete();
+  }
+}
+
+function playAuto(){
+  if (autoState.stepIndex >= autoState.trace.length) return;
+  autoState.playing = true;
+  document.getElementById('btn-auto-play').textContent = '⏸ Pause';
+  autoState.timer = setInterval(autoStep, autoState.speedMs);
+}
+function pauseAuto(){
+  autoState.playing = false;
+  const btn = document.getElementById('btn-auto-play');
+  if (btn) btn.textContent = '▶ Play';
+  if (autoState.timer) clearInterval(autoState.timer);
+  autoState.timer = null;
+}
+function onAutoComplete(){
+  setChalDialogue(`All ${autoState.numDisks} discs moved, using exactly ${autoState.totalMoves} moves, one recursive layer at a time.`);
+  unlockAchievement('watched-recursion', 'Watched the full recursive build!');
+}
+
+/* ============================================================
+   EVENT WIRING
+   ============================================================ */
+document.getElementById('btn-puzzle-continue').addEventListener('click', () => showSection('sec-briefing'));
+document.getElementById('btn-briefing-back').addEventListener('click', () => showSection('sec-puzzle'));
+document.getElementById('btn-briefing-start').addEventListener('click', () => {
+  showSection('sec-game');
+  resetManual();
+  renderManualPhase();
+});
+
+document.getElementById('btn-notes-back').addEventListener('click', () => showSection('sec-game'));
+document.getElementById('btn-notes-continue').addEventListener('click', () => showSection('sec-method'));
+
+document.getElementById('btn-method-back').addEventListener('click', () => showSection('sec-notes'));
+document.getElementById('btn-method-continue').addEventListener('click', () => showSection('sec-cases'));
+
+document.getElementById('btn-cases-back').addEventListener('click', () => showSection('sec-method'));
+document.getElementById('btn-cases-finish').addEventListener('click', () => showSection('sec-puzzle'));
+
+/* ---------------- Chapter 5: small visuals (mini rods + call-stack snapshots) ---------------- */
+function miniRodHTML(stack, label){
+  const discs = stack.map(s => `<div class="mini-disk" style="width:${14 + s * 11}px;background:${diskColor(s)}"></div>`).join('');
+  return `<div class="mini-rod"><div class="mini-tower"><div class="mini-pole"></div><div class="mini-disks">${discs}</div></div><div class="mini-base"></div><div class="mini-lbl">${label}</div></div>`;
+}
+function framesHTML(frames){
+  return frames.map(f => `
+    <div class="frame">
+      <span class="frame-tag">${f.tag}</span>
+      <div class="mini-set">${['S','M','F'].map((k, i) => miniRodHTML(f[k] || [], i + 1)).join('')}</div>
+      <p class="frame-cap">${f.cap}</p>
+    </div>`).join('');
+}
+function stackSnapsHTML(snaps){
+  return snaps.map(s => `
+    <div class="frame snap">
+      <span class="frame-tag">${s.tag}</span>
+      <div class="callstack-list">
+        ${s.items.map(it => `<div class="callstack-item ${it.go ? 'flash' : ''}">${it.label}<span class="tag ${it.go ? 'go' : 'wait'}">${it.go ? 'working' : 'waiting'}</span></div>`).join('')}
+      </div>
+      <p class="frame-cap">${s.cap}</p>
+    </div>`).join('');
+}
+function renderLessonVisuals(){
+  document.getElementById('frames-base').innerHTML = framesHTML([
+    { tag:'Start',  S:[1], cap:'One disc on Rod 1.' },
+    { tag:'1 move', F:[1], cap:'Lift it, put it on Rod 3. Done.' },
+  ]);
+  document.getElementById('frames-two').innerHTML = framesHTML([
+    { tag:'Start',  S:[2,1],        cap:'Both discs on Rod 1.' },
+    { tag:'Move 1', S:[2], M:[1],   cap:'The small disc steps aside onto Rod 2.' },
+    { tag:'Move 2', M:[1], F:[2],   cap:'Now the big disc is free to cross to Rod 3.' },
+    { tag:'Move 3', F:[2,1],        cap:'The small disc comes back and sits on top. 3 moves in total.' },
+  ]);
+  document.getElementById('frames-three').innerHTML = framesHTML([
+    { tag:'Start',        S:[3,2,1],        cap:'Three discs on Rod 1.' },
+    { tag:'Moves 1 to 3', S:[3], M:[2,1],   cap:'Clear the top two discs onto Rod 2. That is the 2-disc puzzle again (3 moves).' },
+    { tag:'Move 4',       M:[2,1], F:[3],   cap:'The biggest disc crosses to Rod 3 (1 move).' },
+    { tag:'Moves 5 to 7', F:[3,2,1],        cap:'Bring the two discs over on top of it. The 2-disc puzzle once more (3 moves).' },
+  ]);
+  /* items are listed bottom to top, because the call-stack list grows upward */
+  document.getElementById('snaps-stack').innerHTML = stackSnapsHTML([
+    { tag:'Step 1', items:[ {label:'move(3 discs)'} ],
+      cap:'move(3) starts. The biggest disc is stuck under two others, so it asks move(2) to clear the way.' },
+    { tag:'Step 2', items:[ {label:'move(3 discs)'}, {label:'move(2 discs)'} ],
+      cap:'move(2) has the same problem on a smaller scale, so it asks move(1) for help.' },
+    { tag:'Step 3', items:[ {label:'move(3 discs)'}, {label:'move(2 discs)'}, {label:'move(1 disc)', go:true} ],
+      cap:'move(1) has nothing in its way. It moves the disc and finishes.' },
+    { tag:'Step 4', items:[ {label:'move(3 discs)'}, {label:'move(2 discs)', go:true} ],
+      cap:'move(1) is gone from the stack. move(2) wakes up, moves its disc, and carries on.' },
+  ]);
+}
+
+/* ---------------- Chapter 5: the Brahma clock ---------------- */
+const SEC_PER_YEAR = 31557600;          // 365.25 days
+const BRAHMA_LIFE_YEARS = 3.11e14;      // 100 Brahma years
+function fmtNum(x){ return x >= 100 ? Math.round(x).toLocaleString('en-US') : String(Math.round(x * 10) / 10); }
+function humanTime(sec){
+  if (sec < 60)       return `${sec} second${sec === 1 ? '' : 's'}`;
+  if (sec < 3600)     return `${fmtNum(sec / 60)} minutes`;
+  if (sec < 86400)    return `${fmtNum(sec / 3600)} hours`;
+  if (sec < SEC_PER_YEAR) return `${fmtNum(sec / 86400)} days`;
+  const yrs = sec / SEC_PER_YEAR;
+  if (yrs >= 1e9) return `${fmtNum(yrs / 1e9)} billion years`;
+  if (yrs >= 1e6) return `${fmtNum(yrs / 1e6)} million years`;
+  return `${fmtNum(yrs)} years`;
+}
+function updateBrahmaClock(){
+  const n = parseInt(document.getElementById('bc-slider').value, 10);
+  const moves = (BigInt(1) << BigInt(n)) - BigInt(1);
+  const sec = Number(moves);
+  const years = sec / SEC_PER_YEAR;
+  const pct = years / BRAHMA_LIFE_YEARS * 100;
+
+  document.getElementById('bc-n').textContent = n;
+  document.getElementById('bc-moves').textContent = moves.toLocaleString('en-US');
+  let sci = '';
+  if (n >= 20){
+    const parts = sec.toExponential(2).split('e');
+    sci = `\u2248 ${parts[0]} \u00D7 10<sup>${parseInt(parts[1], 10)}</sup>`;
+  }
+  document.getElementById('bc-sci').innerHTML = sci;
+  document.getElementById('bc-time').textContent = humanTime(sec);
+  document.getElementById('bc-fill').style.width = Math.max(pct, 0) + '%';
+  document.getElementById('bc-pct').textContent = pct < 0.0001 ? 'less than 0.0001%' : pct.toPrecision(2) + '%';
+
+  let note = '';
+  if (n === 3)       note = 'The 3-disc tower you solved: 7 moves, over in seconds.';
+  else if (n === 10) note = 'Only 10 discs, and already over 1,000 moves.';
+  else if (n === 20) note = 'Twenty discs: about 12 days of non-stop moving.';
+  else if (n === 64) note = "The legend's tower: over 580 billion years of moving, yet still a tiny sliver of Brahma's life. The universe is safe for a very long time.";
+  document.getElementById('bc-note').textContent = note;
+  if (n === 64) unlockAchievement('brahma-64', 'You reached the Tower of Brahma: 64 discs!');
+}
+document.getElementById('bc-slider').addEventListener('input', updateBrahmaClock);
+document.getElementById('bc-jump').addEventListener('click', () => {
+  document.getElementById('bc-slider').value = 64;
+  updateBrahmaClock();
+});
+
+/* ---------------- initial paint ---------------- */
+renderLessonVisuals();
+updateBrahmaClock();
+
+})();
+</script>
+</body>
+</html>
