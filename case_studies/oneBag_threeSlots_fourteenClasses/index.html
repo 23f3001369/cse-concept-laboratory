@@ -193,7 +193,15 @@
   }
   .banner strong { font-family: 'Poppins', sans-serif; }
 
-  .tab-row { display: flex; gap: 8px; margin-bottom: 18px; }
+  .tab-row { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; align-items: center; }
+  .speed-wrap { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-dim); }
+  .speed-wrap label { font-weight: 600; }
+  .speed-wrap select {
+    font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600;
+    color: var(--blue-dark); background: var(--panel);
+    border: 1.5px solid var(--blue); border-radius: 999px; padding: 7px 14px; cursor: pointer;
+  }
+  .speed-wrap select:focus-visible { outline: 3px solid var(--blue-dark); outline-offset: 2px; }
   .tab-btn {
     background: transparent; border: 1.5px solid var(--panel-border);
     color: var(--text-dim); border-radius: 999px;
@@ -229,6 +237,13 @@
   }
   .rules-recap summary:focus-visible { outline: 2px solid var(--blue-dark); outline-offset: 3px; }
   .rules-recap li { line-height: 1.5; }
+
+  /* Pause freezes every running animation exactly where it is */
+  #page3.paused .frame-slot,
+  #page3.paused .frame-note,
+  #page3.paused .ref-chip,
+  #page3.paused .point-arrow,
+  #page3.paused .arrow-down { animation-play-state: paused; }
 
   .legend { display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 16px; }
   .legend-item { display: flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--text-dim); }
@@ -316,8 +331,8 @@
   .frame-slot.confirmable { cursor: pointer; border-color: var(--blue); }
   .frame-slot.confirmable:hover { background: #EAF3FB; transform: translateY(-2px); }
   .frame-slot.confirmable:focus-visible { outline: 3px solid var(--blue-dark); outline-offset: 2px; }
-  .frame-slot.flash-hit { border-color: var(--success-border); background: var(--success-bg); animation: flashPulse 4.5s ease; }
-  .frame-slot.flash-fault { border-color: var(--error-border); background: var(--error-bg); animation: shakeSmall 4.5s ease; }
+  .frame-slot.flash-hit { border-color: var(--success-border); background: var(--success-bg); animation: flashPulse var(--flash-dur, 4.5s) ease; }
+  .frame-slot.flash-fault { border-color: var(--error-border); background: var(--error-bg); animation: shakeSmall var(--flash-dur, 4.5s) ease; }
   .frame-slot.pop-in { animation: popIn 0.35s ease; }
   .frame-tag {
     font-size: 10.5px; text-align: center; font-weight: 600;
@@ -353,7 +368,7 @@
     100% { transform: scale(1); opacity: 1; }
   }
 
-  .demo-controls { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+  .demo-controls { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; align-items: center; }
 
   .side-panel {
     background: var(--panel);
@@ -591,7 +606,7 @@
         <div class="demo-grid">
           <div class="demo-main">
             <div class="banner" id="demoBanner">
-              <strong>Watch:</strong> this day follows one simple rule. Swap out whichever book has been in your bag the longest. Click "Step" below to move to the next class.
+              <strong>Watch:</strong> this day follows one simple rule. Swap out whichever book has been in your bag the longest. Press "Auto-play" to watch the whole day. Use the Speed menu to slow it down or speed it up.
             </div>
 
             <div class="legend">
@@ -607,7 +622,18 @@
             <div class="frames-row" id="framesRow" aria-label="Backpack slots"></div>
 
             <div class="demo-controls" id="demoControlsGuided">
-              <button class="btn btn-primary" id="stepBtn">Step →</button>
+              <button class="btn btn-primary" id="autoBtn">Auto-play</button>
+              <div class="speed-wrap">
+                <label for="speedSelect">Speed</label>
+                <select id="speedSelect">
+                  <option value="9000">0.5x</option>
+                  <option value="6000">0.75x</option>
+                  <option value="4500" selected>1x</option>
+                  <option value="3600">1.25x</option>
+                  <option value="3000">1.5x</option>
+                  <option value="2250">2x</option>
+                </select>
+              </div>
               <button class="btn btn-secondary" id="restartGuidedBtn">Restart day</button>
             </div>
             <div class="demo-controls" id="demoControlsFree" style="display:none;">
@@ -786,6 +812,7 @@
   }
 
   function goTo(n) {
+    if (n !== 3) stopAuto();
     current = n;
     if (n > maxReached) maxReached = n;
     document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
@@ -866,14 +893,119 @@
   function reducedMotion() {
     return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
+  // Speed control: how long each highlight/pop-up stays on screen (ms)
+  var speedMs = 4500;
+  function applySpeed(ms) {
+    speedMs = ms;
+    syncFlashDur();
+  }
+  function effectiveSpeed() {
+    return (demo && demo.mode === 'guided') ? speedMs : 4500;
+  }
+  function syncFlashDur() {
+    document.documentElement.style.setProperty('--flash-dur', (effectiveSpeed() / 1000) + 's');
+  }
   function animDelay() {
-    return reducedMotion() ? 0 : 420;
+    return reducedMotion() ? 0 : Math.max(150, Math.round(420 * effectiveSpeed() / 4500));
   }
   function hitDelay() {
-    return 4500;
+    return effectiveSpeed();
   }
   function evictDelay() {
-    return 4500;
+    return effectiveSpeed();
+  }
+
+  // Pausable timer for the step that is currently on screen (highlight + pop-up).
+  // Pausing freezes it, so the highlight and note stay exactly where they are.
+  var stepTimer = null;
+  function schedStep(fn, ms) {
+    var rec = { fn: fn, remaining: ms, started: Date.now(), id: null };
+    rec.id = setTimeout(function() { stepTimer = null; fn(); }, ms);
+    stepTimer = rec;
+  }
+  function pauseStep() {
+    if (stepTimer && stepTimer.id) {
+      clearTimeout(stepTimer.id);
+      stepTimer.remaining = Math.max(0, stepTimer.remaining - (Date.now() - stepTimer.started));
+      stepTimer.id = null;
+    }
+  }
+  function resumeStep() {
+    if (stepTimer && !stepTimer.id) {
+      var rec = stepTimer;
+      rec.started = Date.now();
+      rec.id = setTimeout(function() { stepTimer = null; rec.fn(); }, rec.remaining);
+    }
+  }
+  function clearStep() {
+    if (stepTimer && stepTimer.id) clearTimeout(stepTimer.id);
+    stepTimer = null;
+  }
+  function setFrozen(on) {
+    var pg = document.getElementById('page3');
+    if (pg) pg.classList.toggle('paused', on);
+  }
+
+  // Auto-play for the guided day: runs every class without clicking
+  var autoOn = false;
+  var autoPaused = false;
+  var autoTimer = null;
+  var autoGapDone = true;
+  function setAutoLabel() {
+    var b = document.getElementById('autoBtn');
+    if (!b) return;
+    b.textContent = autoOn ? 'Pause'
+      : autoPaused ? 'Resume'
+      : (demo && demo.finished ? 'Replay day' : 'Auto-play');
+  }
+  function stopAuto() {
+    autoOn = false;
+    autoPaused = false;
+    if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
+    setFrozen(false);
+    resumeStep(); // if a step was frozen, let it finish quietly
+    setAutoLabel();
+  }
+  function autoTick(gen) {
+    autoTimer = null;
+    if (!autoOn || gen !== demoGen) return;
+    if (!demo || demo.mode !== 'guided' || demo.finished) { stopAuto(); return; }
+    if (demo.busy) { autoTimer = setTimeout(function() { autoTick(gen); }, 200); return; }
+    if (!autoGapDone) {
+      // short pause between classes so the result can be read
+      autoGapDone = true;
+      autoTimer = setTimeout(function() { autoTick(gen); }, Math.max(300, Math.round(effectiveSpeed() * 0.2)));
+      return;
+    }
+    autoGapDone = false;
+    processReference();
+    autoTimer = setTimeout(function() { autoTick(gen); }, 200);
+  }
+  function startAuto() {
+    if (demo.mode !== 'guided') return;
+    if (demo.finished) switchTab('guided', true);
+    autoOn = true;
+    autoPaused = false;
+    autoGapDone = true;
+    setAutoLabel();
+    autoTick(demoGen);
+  }
+  // True pause: freezes the highlight, the pop-up and the countdown right where they are
+  function pauseAuto() {
+    autoOn = false;
+    autoPaused = true;
+    if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
+    pauseStep();
+    setFrozen(true);
+    setAutoLabel();
+  }
+  function resumeAuto() {
+    autoPaused = false;
+    autoOn = true;
+    setFrozen(false);
+    resumeStep();
+    setAutoLabel();
+    autoTick(demoGen);
   }
 
   function initDemoIfNeeded() {
@@ -894,16 +1026,19 @@
   }
 
   function switchTab(mode, force) {
+    clearStep();
+    stopAuto();
     hideWinCelebration();
     demo = freshDemoState(mode);
     demoGen++;
+    syncFlashDur();
     document.getElementById('tabGuided').classList.toggle('tab-active', mode === 'guided');
     document.getElementById('tabFree').classList.toggle('tab-active', mode === 'free');
     document.getElementById('tabFree').classList.remove('glow');
     document.getElementById('demoControlsGuided').style.display = mode === 'guided' ? 'flex' : 'none';
     document.getElementById('demoControlsFree').style.display = mode === 'free' ? 'flex' : 'none';
     document.getElementById('demoBanner').innerHTML = mode === 'guided'
-      ? '<strong>Watch:</strong> this day follows one simple rule. Swap out whichever book has been in your bag the longest. Click "Step" below to move to the next class.'
+      ? '<strong>Watch:</strong> this day follows one simple rule. Swap out whichever book has been in your bag the longest. Press "Auto-play" to watch the whole day. Use the Speed menu to slow it down or speed it up.'
       : '<strong>Your turn:</strong> click a glowing slot to confirm a quick grab. Click any of the 3 books in your bag to put it back whenever your backpack is full and a new book is needed.';
     clearLog();
     renderDemo();
@@ -1048,7 +1183,7 @@
     var total = demo.hits + demo.faults;
     document.getElementById('statRate').textContent = total ? Math.round(100 * demo.hits / total) + '%' : 'N/A';
 
-    document.getElementById('stepBtn').disabled = demo.finished || demo.busy;
+    setAutoLabel();
     var freeBtn = document.getElementById('freeStepBtn');
     if (freeBtn) freeBtn.disabled = demo.finished || demo.busy || demo.awaitingEviction || demo.awaitingHit;
   }
@@ -1079,7 +1214,7 @@
       var gen = demoGen;
       demo.busy = true;
       renderDemo();
-      setTimeout(function() {
+      schedStep(function() {
         if (gen !== demoGen) return;
         demo.faults++;
         demo.frames[freeSlot] = { page: page, tick: demo.tick++ };
@@ -1117,7 +1252,7 @@
     demo.busy = true;
     renderDemo(makeFlash(frameIdx, 'flash-hit', 'hit', '<strong>' + page + '</strong> is already in your bag. No locker trip needed!', 'hit'));
 
-    setTimeout(function() {
+    schedStep(function() {
       if (gen !== demoGen) return;
       demo.frames[frameIdx].tick = demo.tick++;
       demo.hits++;
@@ -1154,7 +1289,7 @@
     demo.busy = true;
     renderDemo(makeFlash(frameIdx, wasCorrect ? 'flash-hit' : 'flash-fault', null, '<strong>' + evictedPage + '</strong> goes back to the locker. Your bag only has 3 spots.'));
 
-    setTimeout(function() {
+    schedStep(function() {
       if (gen !== demoGen) return;
       demo.faults++;
       demo.frames[frameIdx] = { page: page, tick: demo.tick++ };
@@ -1196,6 +1331,7 @@
       demo.finished = true;
       renderDemo();
       if (demo.mode === 'guided') {
+        stopAuto();
         var tabFreeEl = document.getElementById('tabFree');
         tabFreeEl.disabled = false;
         tabFreeEl.classList.add('glow');
@@ -1209,8 +1345,13 @@
     }
   }
 
-  document.getElementById('stepBtn').addEventListener('click', function() {
-    if (demo.mode === 'guided') processReference();
+  document.getElementById('autoBtn').addEventListener('click', function() {
+    if (autoOn) pauseAuto();
+    else if (autoPaused) resumeAuto();
+    else startAuto();
+  });
+  document.getElementById('speedSelect').addEventListener('change', function(e) {
+    applySpeed(+e.target.value);
   });
 
   // In free mode, advance automatically once a hit/free-slot fault happens;
