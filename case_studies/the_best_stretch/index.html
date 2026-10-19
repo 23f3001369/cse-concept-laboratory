@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Best Stretch: A Case Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EDF3FA;--panel:#fff;--pb:#D9E5F2;--tx:#1F2E37;--dm:#54666D;--fa:#93A5AB;--bl:#4A9BD1;--bd:#2B6FA3;--bs:#8FCBEF;--or:#A85D1A;--ob:#EA8C36;--bn:#22496B;--okb:#DCEAD8;--okt:#274B26;--okd:#4B7A4A;--erb:#FBE1DC;--ert:#8A3420;--erd:#D9714F}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:linear-gradient(180deg,#FDF1E9 0,var(--bg) 400px,var(--bg));color:var(--tx);font:400 15px Inter,sans-serif}
+h1,h2,h3{font-family:Poppins,sans-serif;font-weight:700}button{font-family:Poppins,sans-serif;cursor:pointer}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+.btn{border:0;border-radius:999px;padding:13px 30px;font-size:15px;font-weight:600;display:inline-flex;align-items:center;gap:8px;transition:transform .15s,box-shadow .15s}
+.btn:focus-visible,.tab-btn:focus-visible{outline:3px solid var(--bd);outline-offset:2px}
+.btn-primary{background:linear-gradient(135deg,var(--bl),var(--bd));color:#fff;box-shadow:0 8px 20px rgba(43,111,163,.28)}
+.btn-primary:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 26px rgba(43,111,163,.36)}.btn-primary:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+.btn-secondary{background:transparent;color:var(--bd);border:1.5px solid var(--bl)}.btn-secondary:hover{background:rgba(74,155,209,.08)}
+.btn-destructive{background:linear-gradient(135deg,#E0703F,#C1462A);color:#fff}.btn-destructive:hover{transform:translateY(-2px)}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(237,243,250,.9);backdrop-filter:blur(8px);border-bottom:1px solid var(--pb);padding:14px 24px;display:flex;align-items:center;gap:20px}
+.back-btn{background:transparent;border:0;color:var(--dm);font:600 14px Inter,sans-serif;padding:8px 14px;border-radius:999px;min-width:84px}
+.back-btn:hover{background:rgba(84,102,109,.08);color:var(--tx)}.back-btn.hidden{visibility:hidden;pointer-events:none}
+.progress{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;overflow-x:auto}.ps{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.sc{width:30px;height:30px;border-radius:999px;display:flex;align-items:center;justify-content:center;font:700 13px Poppins,sans-serif;border:1.5px solid var(--pb);color:var(--fa);background:var(--panel)}
+.sc.active{background:linear-gradient(135deg,var(--bl),var(--bd));color:#fff;border-color:transparent}.sc.done{background:var(--bd);color:#fff;border-color:transparent}
+.sl{font-size:12px;color:var(--dm);display:none}.sc.active+.sl{color:var(--tx);font-weight:600}.pl{width:22px;height:2px;background:var(--pb);flex-shrink:0}
+.brand{min-width:150px;text-align:right}.bt{font:700 15px Poppins,sans-serif}
+@media(min-width:1100px){.sl{display:inline}}@media(max-width:760px){.brand{display:none}}
+.screen{display:none;width:100%;padding:40px 24px 60px;justify-content:center}.screen.active{display:flex}.si{width:100%;max-width:1040px}#p1 .si{max-width:640px}#p2 .si{max-width:660px}
+.card{background:var(--panel);border-radius:16px;box-shadow:0 10px 30px rgba(23,50,77,.1);padding:36px}
+.kicker{font:700 12px Poppins,sans-serif;letter-spacing:.13em;text-transform:uppercase;color:var(--or)}.brand .kicker{font-size:10px}
+.ph{margin:10px 0 6px;font-size:26px}.sub{color:var(--dm);font-size:15px;margin:0 0 18px}
+.callout{background:#F5F9FD;border:1px solid var(--pb);border-radius:12px;padding:22px 24px}.callout.definition{border-left:4px solid var(--or)}.callout p{margin:0}
+.pc p{font-size:17px;line-height:1.65;color:var(--tx)}.pc .callout{margin:18px 0}
+.frow{display:flex;justify-content:flex-end;align-items:center;gap:16px;margin-top:30px}.frow.center{justify-content:center;flex-wrap:wrap;gap:12px}.hint{font-size:12.5px;color:var(--fa)}
+.cell{display:inline-block;min-width:42px;padding:8px;margin:2px;border-radius:8px;background:#EAF2F9;font-weight:600;text-align:center;font-family:Poppins,sans-serif}.cell.h{background:var(--ob);color:#fff}
+.tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}.tab-btn{background:transparent;border:1.5px solid var(--pb);color:var(--dm);border-radius:999px;padding:8px 18px;font-size:13.5px;font-weight:600}
+.tab-btn.tab-active{border-color:var(--bd);color:var(--bd);background:rgba(74,155,209,.08)}
+.dg{display:grid;grid-template-columns:1.6fr 1fr;gap:22px}@media(max-width:800px){.dg{grid-template-columns:1fr}}.dmain,.dside{min-width:0}
+.plot{background:var(--panel);border-radius:16px;box-shadow:0 10px 30px rgba(23,50,77,.1);padding:22px 18px}
+.chart{position:relative;display:grid;user-select:none;touch-action:none}
+.col{height:210px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}
+.v{font:600 11px Inter;color:var(--dm)}.bar{width:60%;background:var(--bs);border-radius:6px 6px 0 0;margin:2px 0;transition:background .2s}
+.col.in .bar{background:var(--ob)}.col.best .bar{background:var(--okd)}.dd{font-size:10px;color:var(--fa);padding-top:2px}
+.win{position:absolute;top:0;bottom:0;border:2px solid var(--bd);background:rgba(74,155,209,.12);border-radius:12px;cursor:grab;transition:left .3s;outline:none}
+.win.dr{transition:none;cursor:grabbing}.win:focus-visible{box-shadow:0 0 0 3px rgba(74,155,209,.45)}
+.win:after{content:"⇆";position:absolute;top:4px;left:50%;transform:translateX(-50%);font-size:13px;color:var(--bd);background:#fff;border-radius:999px;padding:0 7px;box-shadow:0 4px 12px rgba(23,50,77,.15)}
+.tip{position:absolute;left:50%;top:36px;transform:translateX(-50%);width:150px;text-align:center;background:var(--bd);color:#fff;font:600 12px/1.4 Inter,sans-serif;padding:8px 10px;border-radius:12px;box-shadow:0 8px 20px rgba(23,50,77,.2);pointer-events:none;z-index:5;animation:nudge 1.4s ease-in-out infinite}
+@keyframes nudge{0%,100%{transform:translateX(-50%)}50%{transform:translateX(calc(-50% + 10px))}}
+.dc{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.msg{display:none;margin-top:14px;padding:14px 18px;border-radius:12px;font-weight:600;font-size:14.5px;line-height:1.5}
+.msg.ok{display:block;background:var(--okb);color:var(--okt);border:1px solid var(--okd)}.msg.no{display:block;background:var(--erb);color:var(--ert);border:1px solid var(--erd)}.msg.in{display:block;background:var(--bn);color:#fff;font-weight:500}
+.side{background:var(--panel);border-radius:16px;box-shadow:0 10px 30px rgba(23,50,77,.1);padding:24px;height:100%}
+.big{font:700 17px/1.4 Poppins,sans-serif;color:var(--bd)}.note{font-size:13.5px;line-height:1.45;color:var(--dm);background:#F5F9FD;border-radius:8px;padding:10px 12px;margin-top:14px}.note:empty{display:none}
+.stats{margin-top:14px}.stats span{display:block;padding:9px 0;border-bottom:1px solid var(--pb);font-size:14px;color:var(--dm)}.stats span:last-child{border-bottom:0}.stats b{font-family:Poppins,sans-serif;color:var(--bd)}
+.qgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:24px}@media(max-width:900px){.qgrid{grid-template-columns:repeat(2,1fr)}}@media(max-width:600px){.qgrid{grid-template-columns:1fr}}
+.qcard{background:var(--panel);border-radius:16px;box-shadow:0 8px 22px rgba(23,50,77,.1);padding:26px 22px;min-height:190px;display:flex;flex-direction:column;gap:14px;transition:transform .18s,box-shadow .18s}
+.qcard:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(74,155,209,.22)}
+.qbadge{width:32px;height:32px;border-radius:999px;background:linear-gradient(135deg,var(--bl),var(--bd));color:#fff;display:flex;align-items:center;justify-content:center;font:700 14px Poppins,sans-serif;flex-shrink:0}
+.qcard p{font-size:15px;line-height:1.55;color:var(--tx);margin:0}.exlabel{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--or)}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+.sec{margin-bottom:24px}.sec p{margin:0;line-height:1.7;font-size:15.5px}
+.cg{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}@media(max-width:700px){.cg{grid-template-columns:repeat(2,1fr)}}
+.cg div{background:var(--panel);border-radius:14px;box-shadow:0 8px 22px rgba(23,50,77,.08);padding:18px 14px;text-align:center;font-size:12.5px;color:var(--dm)}.cg b{display:block;font:700 14px Poppins,sans-serif;color:var(--bd);margin-bottom:4px}
+.formula-card{background:linear-gradient(180deg,#EAF3FB,#F5FAFE);border:1px solid var(--pb);border-radius:14px;padding:30px;text-align:center}
+.formula-text{font:700 22px Poppins,sans-serif;color:var(--bd)}.formula-note{font-size:13.5px;color:var(--dm);margin-top:10px}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:18px}@media(max-width:640px){.cmp{grid-template-columns:1fr}}
+.cc{border-radius:14px;padding:24px;text-align:center}.cc.naive{background:var(--erb);border:1px solid var(--erd)}.cc.smart{background:#EAF3FB;border:1px solid var(--bl)}
+.cc svg{display:block;margin:4px auto;max-width:200px}.cap{font-size:13.5px;color:var(--dm);margin-top:10px}
+.ov{position:fixed;inset:0;background:rgba(31,46,55,.45);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}.ov.show{display:flex}
+.md{background:var(--panel);border-radius:16px;padding:32px;max-width:420px;width:100%;box-shadow:0 20px 50px rgba(23,50,77,.25);text-align:center}.md h3{margin:0 0 10px;font-size:20px}.md p{color:var(--dm);line-height:1.55;margin:0 0 22px;font-size:14.5px}
+.ma{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+</style></head><body>
+<div class="topbar"><button class="back-btn hidden" id="bk" onclick="back()">← Back</button><nav class="progress" id="progress"></nav><div class="brand"><div class="kicker">A case study</div><div class="bt">The Best Stretch</div></div></div>
+
+<section class="screen" id="p1"><div class="si"><div class="card pc"><div class="kicker">Mile 1 · A Familiar Problem</div><h2 class="ph">You've seen this before</h2>
+<p>A cricket coach scans the scorecard for the best five overs in a row: the stretch where the team scored the most.</p>
+<p>A fitness app lists your steps for every day this month. You want your most active seven days in a row.</p>
+<div class="callout definition"><p>Notice the shape: it isn't about one item, and not about everything, just a stretch of consecutive items, always the same length. And the best stretch isn't always where the biggest single number sits.</p></div>
+<p>Next stop, you'll hunt for the best stretch yourself.</p>
+<div class="frow"><button class="btn btn-primary nx" onclick="next()">Next →</button></div></div></div></section>
+
+<section class="screen" id="p2"><div class="si"><div class="card"><div class="kicker">Mile 2 · Before You Start</div><h2 class="ph">How this stop works</h2>
+<p class="sub">You're a sales analyst at a small shop. Each challenge shows daily sales (₹ in thousands) and a window size, like <strong>3 days</strong>. Find the most profitable stretch of that many consecutive days.</p>
+<div class="callout"><p><span class="cell">14</span><span class="cell h">22</span><span class="cell h">9</span><span class="cell h">31</span><span class="cell">12</span><span class="cell">18</span></p><p style="margin-top:12px;color:var(--dm)">A 3-day window: 22 + 9 + 31 = <strong style="color:var(--tx)">₹62k</strong>. Drag it along the days, watch the total change, then submit your best stretch.</p></div>
+<p style="margin:18px 0 0"><strong>Your task:</strong> play each of the 3 challenges yourself with <strong>Try it yourself</strong>, or press <strong>Automatic</strong> to watch it solve.</p>
+<div class="frow"><button class="btn btn-primary nx" onclick="next()">Next →</button></div></div></div></section>
+
+<section class="screen" id="p3"><div class="si"><div class="kicker">Mile 3 · The Sales Floor</div><h2 class="ph" id="gt"></h2><p class="sub" id="gp"></p>
+<div class="tabs"><button class="tab-btn" id="bM" onclick="resetChal()">✋ Try it yourself</button><button class="tab-btn" id="bA" onclick="toggleAuto()">▶ Automatic</button></div>
+<div class="dg"><div class="dmain"><div class="plot"><div class="chart" id="chart"></div></div>
+<div class="dc"><button class="btn btn-primary" id="bS" onclick="submitWin()">Submit this window</button><button class="btn btn-secondary" id="bN" onclick="nextChal()" style="display:none">Next challenge →</button></div>
+<div class="msg" id="msg"></div></div>
+<div class="dside"><div class="side"><div class="big" id="tot"></div><div class="note" id="note"></div><div class="stats" id="stats"></div></div></div></div>
+<div class="frow"><span class="hint" id="hint"></span><button class="btn btn-primary nx" onclick="next()">Next →</button></div></div></section>
+
+<section class="screen" id="p4"><div class="si"><div class="kicker">Mile 4 · Debrief</div><h2 class="ph">What just happened?</h2><p class="sub">Think back on the sales floor. Talk these through. No answer to click.</p>
+<div class="qgrid">
+<div class="qcard"><div class="qbadge">1</div><p>Where do you think this kind of window would be useful in real life? Can you think of situations where looking at a few consecutive days together is more useful than looking at one day alone?</p></div>
+<div class="qcard"><div class="qbadge">2</div><p>Why do you think the size of the window matters? If you could choose any size instead of just 3, 4, or 5 days, what would influence your choice?</p></div>
+<div class="qcard"><div class="qbadge">3</div><p>Suppose two windows have the same total sales, but one has a single very high-sales day while the other has more balanced sales. Which one would you choose, and how would you decide?</p></div>
+<div class="qcard"><div class="qbadge">4</div><p>What could go wrong if you accidentally skipped a day while moving the window? How might that affect the stretch you identify as the best?</p></div>
+<div class="qcard"><div class="qbadge">5</div><p>As you move the window one day at a time, what advantage do you get from using the previous window's total instead of calculating the new total from scratch?</p></div></div>
+<div class="frow"><button class="btn btn-primary nx" onclick="next()">Next →</button></div></div></section>
+
+<section class="screen" id="p5"><div class="si"><div class="kicker">Mile 5 · The Concept</div><h2 class="ph">The formal picture</h2><div style="height:14px"></div>
+<div class="sec callout definition"><p>What you did has a name: the <strong>sliding window</strong>: keep a fixed-size frame over consecutive items, and update it by dropping one and adding one instead of recomputing everything.</p></div>
+<div class="sec cg"><div><b>Window</b>k consecutive items</div><div><b>Slide</b>move one step</div><div><b>Update</b>drop one, add one</div><div><b>Track best</b>keep the max so far</div></div>
+<div class="sec formula-card"><div class="formula-text">sum(i) = sum(i−1) − a[i−1] + a[i+k−1]</div><div class="formula-note">Time: O(n·k) → O(n)</div></div>
+<div class="sec cmp"><div class="cc naive"><div id="cA"></div><div class="cap">Without: re-add all k days for every window</div></div><div class="cc smart"><div id="cB"></div><div class="cap">With: drop one, add one</div></div></div>
+<div class="frow"><button class="btn btn-primary nx" onclick="next()">Next →</button></div></div></section>
+
+<section class="screen" id="p6"><div class="si"><div class="kicker">Mile 6 · Checkpoint</div><h2 class="ph">Spot the pattern elsewhere</h2><p class="sub">Same shape, different scenery. Talk through each one.</p>
+<div class="qgrid">
+<div class="qcard"><div class="qbadge">1</div><div class="exlabel">Finding the Minimum</div><p>A temperature-monitoring system records these temperatures over 7 days: 31, 28, 30, 26, 29, 25, 32</p></div>
+<div class="qcard"><div class="qbadge">2</div><p>A stock market analytics platform receives thousands of price updates every minute. It needs to detect the period with the highest average price over a fixed number of consecutive updates without recalculating every average from scratch. Design an approach that processes incoming data efficiently while keeping the result up to date.</p></div>
+<div class="qcard"><div class="qbadge">3</div><p>A fitness application tracks daily steps for millions of users and wants to identify each user's most active 7-day period. Some users have months of historical data, while others have years. Design an approach that finds the best period efficiently and explain how it can handle datasets of different sizes.</p></div>
+<div class="qcard"><div class="qbadge">4</div><p>A network monitoring system records the number of requests received by a server every second. It must detect the highest traffic volume within any 60-second period, even when traffic suddenly spikes. Design a solution that updates the window efficiently and identifies the busiest period.</p></div>
+<div class="qcard"><div class="qbadge">5</div><p>A hospital monitors the number of emergency admissions every hour and wants to identify the consecutive 24-hour period with the highest number of admissions. The system must update its results as new hourly data arrives. Design an approach that avoids repeatedly processing all 24 hours and explain how it handles the arrival of new data.</p></div>
+<div class="qcard"><div class="qbadge">6</div><p>A delivery company wants to find the shortest consecutive period in which it completes at least 100 deliveries. The number of deliveries each hour is non-negative. Why might a window that expands and shrinks be more suitable than a fixed-size window?</p></div>
+<div class="qcard"><div class="qbadge">7</div><p>A weather monitoring system records hourly temperatures and needs to identify the consecutive 6-hour period with the lowest average temperature. The system receives new readings continuously and must update its result without repeatedly calculating every temperature average. Design an efficient solution and explain how it determines the coldest period.</p></div>
+<div class="qcard"><div class="qbadge">8</div><p>A manufacturing plant records the number of defective products produced each hour. The quality team wants to find the shortest consecutive period in which the total number of defects reaches a specified threshold. Since the required period can vary in length, design an approach that adapts the window as new values are examined and explain how it differs from using a fixed-size window.</p></div></div>
+<p class="sub" style="margin:24px 0 0;text-align:center">Same shape, different costumes, every time.</p>
+<div class="frow center"><button class="btn btn-secondary" onclick="location.href='../../'">🏠 Home</button><button class="btn btn-destructive" onclick="restart()">↺ Restart journey</button></div></div></section>
+
+<div class="ov" id="ov"><div class="md"><h3>Heads up</h3><p>Going back will erase your progress on this stop. Continue?</p><div class="ma"><button class="btn btn-secondary" onclick="$('ov').classList.remove('show')">Cancel</button><button class="btn btn-destructive" onclick="confirmBack()">Yes, go back</button></div></div></div>
+
+<script>
+const $=id=>document.getElementById(id),PN=6;let cur=1,G;
+const CH=[{k:3,d:[14,22,9,31,12,18,25,16,20,11]},{k:4,d:[10,15,40,5,8,12,20,22,18,21,9]},{k:5,d:[8,19,14,27,10,6,23,17,29,12,21,7]}];
+const S=(a,i,k)=>a.slice(i,i+k).reduce((x,y)=>x+y,0);
+const bestIdx=(d,k)=>{let b=0;for(let i=1;i<=d.length-k;i++)if(S(d,i,k)>S(d,b,k))b=i;return b};
+const cl=(v,k,n)=>Math.max(0,Math.min(n-k,v));
+
+function showPage(n){document.querySelectorAll('.screen').forEach((p,j)=>p.classList.toggle('active',j+1==n));cur=n;
+ $('progress').innerHTML=[...Array(PN)].map((_,j)=>{const m=j+1;return `<div class="ps"><div class="sc ${m==n?'active':m<n?'done':''}">${m<n?'✓':m}</div><span class="sl">Mile ${m}</span></div>`+(m<PN?'<div class="pl"></div>':'')}).join('');
+ $('bk').classList.toggle('hidden',n==1);updateNext();scrollTo({top:0,behavior:'smooth'})}
+function updateNext(){const lock=cur==3&&G.ok.size<2;document.querySelectorAll('.nx').forEach(b=>b.disabled=lock);$('hint').textContent=lock?`Finish 2 challenges to continue (${G.ok.size}/2)`:''}
+function next(){if(cur<PN&&!(cur==3&&G.ok.size<2))showPage(cur+1)}
+function back(){cur==3?$('ov').classList.add('show'):showPage(cur-1)}
+function confirmBack(){$('ov').classList.remove('show');resetGame();showPage(2)}
+function restart(){resetGame();showPage(1)}
+
+function setMsg(t,c){const m=$('msg');m.textContent=t||'';m.className='msg '+(c||'')}
+function modeUI(){$('bM').classList.toggle('tab-active',!G.run);$('bA').classList.toggle('tab-active',!!G.run)}
+function resetGame(){stopAuto();G={c:0,ok:new Set(),hs:0};buildChart()}
+function resetChal(){stopAuto();buildChart()}
+function buildChart(){const {k,d}=CH[G.c],n=d.length,mx=Math.max(...d);
+ Object.assign(G,{i:0,prev:null,seen:new Set(),best:0,tries:0,run:0});
+ $('gt').textContent=`Challenge ${G.c+1} of 3 · ${k}-day window`;$('gp').textContent=`Find the most profitable ${k} consecutive days.`;
+ const ch=$('chart');ch.style.gridTemplateColumns=`repeat(${n},1fr)`;
+ ch.innerHTML=d.map((v,j)=>`<div class="col" data-j="${j}"><span class="v">${v}</span><div class="bar" style="height:${v/mx*130}px"></div><span class="dd">D${j+1}</span></div>`).join('')+'<div class="win" id="win" tabindex="0"></div>';
+ bindWin();showTip();setMsg('');$('bN').style.display='none';$('bS').disabled=false;$('bA').textContent='▶ Automatic';place(0,1)}
+
+function place(i,first){const {k,d}=CH[G.c],n=d.length;G.prev=first?null:G.i;G.i=i;G.seen.add(i);
+ if(S(d,i,k)>S(d,G.best,k))G.best=i;
+ const w=$('win');w.style.left=i/n*100+'%';w.style.width=k/n*100+'%';
+ document.querySelectorAll('.col').forEach((c,j)=>{c.classList.toggle('in',j>=i&&j<i+k);c.classList.remove('best')});
+ const p=G.prev;let note='';
+ if(p!==null&&Math.abs(i-p)==1){const o=i>p?p:i+k,a=i>p?i+k-1:i;note=`Slid ${i>p?'right':'left'}: −₹${d[o]}k (Day ${o+1} leaves), +₹${d[a]}k (Day ${a+1} enters)`}
+ else if(p!==null&&i!=p)note=`Jumped: all ${k} days re-added`;
+ $('tot').textContent=`Days ${i+1}–${i+k}: ${d.slice(i,i+k).join(' + ')} = ₹${S(d,i,k)}k`;$('note').textContent=note;
+ const b=G.best;$('stats').innerHTML=`<span>Windows checked: <b>${G.seen.size}</b> of ${n-k+1}</span><span>Best so far: Days ${b+1}–${b+k} (₹${S(d,b,k)}k)</span>`;modeUI()}
+
+function showTip(){if(G.hs>=2)return;G.hs++;const w=$('win');w.insertAdjacentHTML('beforeend','<div class="tip">✋ Hold the window and move it left or right</div>');const t=w.lastChild;setTimeout(()=>t.remove(),9000)}
+function hideTip(){document.querySelectorAll('.tip').forEach(t=>t.remove())}
+function bindWin(){const w=$('win'),ch=$('chart');
+ w.onpointerdown=e=>{if(G.run)return;hideTip();w.setPointerCapture(e.pointerId);w.classList.add('dr');const x0=e.clientX,i0=G.i;
+  w.onpointermove=m=>{const {k,d}=CH[G.c],n=d.length,ni=cl(i0+Math.round((m.clientX-x0)/(ch.clientWidth/n)),k,n);if(ni!=G.i)place(ni)};
+  w.onpointerup=w.onpointercancel=()=>{w.classList.remove('dr');w.onpointermove=null}};
+ w.onkeydown=e=>{if(G.run)return;hideTip();const {k,d}=CH[G.c],n=d.length,s=e.key=='ArrowRight'?1:e.key=='ArrowLeft'?-1:0;
+  if(s&&G.i+s>=0&&G.i+s<=n-k){place(G.i+s);e.preventDefault()}};
+ ch.onclick=e=>{const c=e.target.closest('.col');if(!c||G.run)return;hideTip();const {k,d}=CH[G.c];place(cl(+c.dataset.j-Math.floor(k/2),k,d.length))}}
+
+function finish(t){G.ok.add(G.c);updateNext();setMsg(t+(G.c==2?' All three challenges complete.':''),'ok');$('bS').disabled=true;$('bN').style.display=G.c<2?'inline-flex':'none'}
+function submitWin(){if(G.run)return;const {k,d}=CH[G.c],b=bestIdx(d,k);
+ if(G.i==b)finish(`Correct! Days ${b+1}–${b+k} earn ₹${S(d,b,k)}k, the best ${k}-day stretch.`);
+ else{G.tries++;setMsg(`Not the best: you chose ₹${S(d,G.i,k)}k and a better stretch exists. ${G.tries>1?'Hint: check every position once, left to right.':'Keep sliding.'}`,'no')}}
+function nextChal(){G.c++;stopAuto();buildChart()}
+
+function toggleAuto(){if(G.run){stopAuto();return}
+ const {k,d}=CH[G.c],n=d.length,b=bestIdx(d,k);let i=0;
+ Object.assign(G,{run:1,seen:new Set(),best:0});hideTip();$('bA').textContent='■ Stop';$('bS').disabled=true;$('bN').style.display='none';
+ setMsg('Sliding one step at a time, keeping track of the best…','in');place(0,1);
+ G.t=setInterval(()=>{if(i<n-k)place(++i);else{clearInterval(G.t);G.run=0;$('bA').textContent='▶ Automatic';place(b);$('note').textContent='';
+  document.querySelectorAll('.col').forEach((c,j)=>c.classList.toggle('best',j>=b&&j<b+k));
+  finish(`Done: best stretch is Days ${b+1}–${b+k}: ₹${S(d,b,k)}k. Each slide cost just one subtract and one add.`)}},900)}
+function stopAuto(){if(!G)return;clearInterval(G.t);if(G.run){G.run=0;$('bA').textContent='▶ Automatic';$('bS').disabled=false;setMsg('');modeUI()}}
+
+const row=(hi,y)=>[...Array(8)].map((_,i)=>`<rect x="${i*22}" y="${y}" width="20" height="18" rx="4" fill="${hi.includes(i)?'#EA8C36':'#fff'}"/>`).join('');
+$('cA').innerHTML=[0,1,2].map(r=>`<svg viewBox="0 0 176 20" width="100%">${row([r,r+1,r+2],1)}</svg>`).join('');
+$('cB').innerHTML=`<svg viewBox="0 0 176 40" width="100%"><text x="10" y="14" text-anchor="middle" font-size="14" font-weight="700" fill="#8A3420">−</text><text x="76" y="14" text-anchor="middle" font-size="14" font-weight="700" fill="#274B26">+</text>${row([1,2,3],18)}</svg>`;
+resetGame();showPage(1);
+</script></body></html>
