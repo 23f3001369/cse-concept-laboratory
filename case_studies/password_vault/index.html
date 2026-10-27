@@ -1,0 +1,1045 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9M9C5T1Y9R"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-9M9C5T1Y9R');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Password Vault — A Hashing Case Study</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root{
+    --bg:#EDF3FA;
+    --bg-top:#FDF1E9;
+    --panel:#FFFFFF;
+    --line:#D9E5F2;
+    --track:#B7CBDF;
+    --wash:#F3F8FD;
+    --teal:#4A9BD1;
+    --teal-dim:#8FCBEF;
+    --blue-dark:#2B6FA3;
+    --amber:#EA8C36;
+    --amber-dim:#F3A65C;
+    --orange-dark:#C96F1F;
+    --ink:#1F2E37;
+    --muted:#54666D;
+    --faint:#93A5AB;
+    --danger:#D9714F;
+    --success-bg:#DCEAD8;
+    --success-text:#274B26;
+    --success-border:#4B7A4A;
+    --error-bg:#FBE1DC;
+    --error-text:#8A3420;
+    --error-border:#D9714F;
+    --banner:#22496B;
+    --shadow-card:0 8px 24px rgba(23,50,77,0.10);
+    --shadow-lift:0 10px 30px rgba(23,50,77,0.12);
+    --shadow-btn:0 6px 18px rgba(43,111,163,0.28);
+    --font-display:'Poppins',sans-serif;
+    --font-body:'Inter',sans-serif;
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background:linear-gradient(180deg, var(--bg-top) 0%, var(--bg) 420px, var(--bg) 100%);
+    color:var(--ink); font-family:var(--font-body); min-height:100vh;
+  }
+  .app{ position:relative; min-height:100vh; width:100%; }
+
+  h1,h2,h3,h4{ font-family:var(--font-display); margin:0; letter-spacing:-0.01em; color:var(--ink); }
+  p{ line-height:1.6; color:var(--muted); margin:0; }
+  .eyebrow{ font-family:var(--font-body); font-weight:700; font-size:11.5px; letter-spacing:0.13em; text-transform:uppercase; color:var(--amber); display:block; margin-bottom:12px; }
+
+  button{ font-family:var(--font-display); cursor:pointer; border:none; outline:none; }
+  button:focus-visible{ outline:2px solid var(--teal); outline-offset:3px; }
+
+  .btn-primary{
+    background:linear-gradient(135deg, var(--teal-dim), var(--blue-dark)); color:#fff;
+    font-weight:600; font-size:14px; padding:13px 26px; border-radius:999px;
+    box-shadow:var(--shadow-btn); transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn-primary:hover{ transform:translateY(-1px); box-shadow:0 10px 24px rgba(43,111,163,.36); }
+  .btn-primary:disabled{ opacity:.4; cursor:not-allowed; transform:none; box-shadow:none; }
+  .btn-danger{
+    background:linear-gradient(135deg,#E39A7D,var(--danger)); color:#fff; font-weight:600; font-size:14px;
+    padding:13px 26px; border-radius:999px; box-shadow:0 6px 18px rgba(217,113,79,.3);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn-danger:hover{ transform:translateY(-1px); }
+  .btn-ghost{
+    background:transparent; color:var(--teal); font-size:13px; font-weight:600;
+    padding:9px 18px; border:1.5px solid var(--teal); border-radius:999px;
+    transition:all .15s ease;
+  }
+  .btn-ghost:hover{ background:rgba(74,155,209,.08); }
+  .btn-ghost:disabled{ opacity:.4; cursor:not-allowed; }
+  .btn-row{ display:flex; gap:12px; flex-wrap:wrap; justify-content:center; }
+
+  /* ---------- TOP BAR ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:40; background:rgba(255,255,255,.92); backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between;
+    padding:12px 20px; gap:14px; flex-wrap:wrap;
+  }
+  .back-btn{
+    background:transparent; border:1.5px solid var(--line); color:var(--muted);
+    font-family:var(--font-body); font-weight:600; font-size:11px; letter-spacing:.04em; text-transform:uppercase;
+    padding:7px 14px; border-radius:999px; cursor:pointer; flex-shrink:0;
+  }
+  .back-btn:hover{ border-color:var(--error-border); color:var(--error-text); }
+  .back-btn[disabled]{ visibility:hidden; }
+
+  .progress{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; justify-content:center; flex:1; }
+  .progress-step{ display:flex; align-items:center; gap:5px; font-family:var(--font-body); font-weight:600; font-size:9px; letter-spacing:.02em; text-transform:uppercase; color:var(--line); }
+  .progress-step .num{ width:18px; height:18px; border-radius:50%; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:9px; color:var(--muted); flex-shrink:0; }
+  .progress-step.done .num{ background:var(--teal); border-color:var(--teal); color:#fff; }
+  .progress-step.current .num{ background:linear-gradient(135deg,var(--teal-dim),var(--blue-dark)); border-color:var(--blue-dark); color:#fff; box-shadow:0 2px 8px rgba(43,111,163,.3); }
+  .progress-step.current .label{ color:var(--blue-dark); }
+  .progress-step .label{ color:var(--muted); }
+  .progress-line{ width:14px; height:1px; background:var(--line); flex-shrink:0; }
+
+  .screen{ display:none; min-height:calc(100vh - 56px); width:100%; align-items:center; justify-content:center; padding:40px 20px; }
+  .screen.active{ display:flex; }
+  .container{ width:100%; max-width:920px; margin:0 auto; min-width:0; }
+
+  .guide-note{ background:var(--wash); border-left:3px solid var(--teal); border-radius:0 12px 12px 0; padding:14px 18px; margin:0 0 16px; text-align:left; }
+  .guide-note p{ margin:0 0 6px; color:var(--ink); font-size:13.5px; }
+  .guide-note p:last-child{ margin-bottom:0; }
+
+  /* ---------- PAGE 1: PROBLEM ---------- */
+  #screen-problem .container{ text-align:center; max-width:900px; }
+  .problem-card{ background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:44px 40px; box-shadow:var(--shadow-lift); }
+  .problem-text{ font-size:clamp(15px,2vw,18px); line-height:1.75; color:var(--ink); }
+  .problem-text strong{ color:var(--amber); font-weight:600; }
+
+  /* ---------- PAGE 2: SETUP ---------- */
+  #screen-setup .container{ text-align:left; max-width:920px; }
+  .setup-card{ background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:40px 40px 34px; box-shadow:var(--shadow-lift); }
+  .setup-title{ font-size:clamp(22px,3.4vw,32px); line-height:1.18; margin-bottom:16px; }
+  .setup-title .accent{ color:var(--amber); }
+  .rules-box{ background:var(--wash); border:1px solid var(--line); border-radius:14px; padding:20px 24px; margin-bottom:24px; }
+  .rules-box li{ font-size:14px; color:var(--muted); line-height:1.7; margin-bottom:4px; }
+  .rules-box strong{ color:var(--ink); }
+
+  /* ---------- PAGE 3: GAME ---------- */
+  #screen-game .container{ max-width:940px; }
+
+  .game-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; flex-wrap:wrap; gap:10px; }
+  .game-title{ font-size:clamp(18px,2.5vw,22px); color:var(--ink); }
+  .game-controls{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+
+  .phase-banner{
+    background:var(--banner); border:none; border-radius:14px;
+    padding:14px 18px; margin-bottom:16px; font-family:var(--font-body); font-size:13.5px; font-weight:600;
+    color:#fff; text-align:center; letter-spacing:.01em;
+  }
+
+  /* --- The "app" card --- */
+  .app-card{ background:var(--panel); border:1px solid var(--line); border-radius:18px; box-shadow:var(--shadow-lift); overflow:hidden; }
+
+  .app-topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 20px; border-bottom:1px solid var(--line); background:var(--wash);
+  }
+  .app-name{ font-family:var(--font-display); font-weight:700; font-size:14px; color:var(--ink); }
+  .app-name span{ color:var(--amber); }
+  .app-badge{ font-family:var(--font-body); font-weight:700; font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:var(--blue-dark); background:rgba(74,155,209,.12); padding:4px 10px; border-radius:999px; }
+
+  .app-body{ padding:24px 24px 8px; display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:start; }
+  @media(max-width:720px){ .app-body{ grid-template-columns:1fr; } }
+
+  .auth-zone{ background:var(--panel); border:1.5px dashed var(--track); border-radius:14px; padding:18px; }
+  .zone-label{ font-family:var(--font-body); font-weight:700; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--amber); margin-bottom:12px; display:block; }
+  .auth-zone h3{ font-size:15px; margin-bottom:4px; }
+  .auth-zone .zone-sub{ font-size:12px; color:var(--muted); margin-bottom:12px; }
+
+  .pw-field{ width:100%; font-family:var(--font-body); font-size:14px; padding:11px 16px;
+    border:1.5px solid var(--line); border-radius:12px; background:#fff; color:var(--ink);
+    outline:none; transition:border-color .15s ease; margin-bottom:10px; }
+  .pw-field:focus{ border-color:var(--teal); }
+
+  .fp-mono{ font-family:'Courier New',monospace; font-weight:700; letter-spacing:1px; }
+
+  /* The machine */
+  .machine-wrap{ display:flex; align-items:center; justify-content:center; gap:12px; margin:14px 0 4px; flex-wrap:wrap; }
+  .machine-box{
+    display:flex; flex-direction:column; align-items:center; gap:2px;
+    background:linear-gradient(135deg,var(--teal-dim),var(--blue-dark)); color:#fff;
+    padding:12px 18px; border-radius:14px; box-shadow:var(--shadow-btn);
+    font-family:var(--font-display); font-size:15px; font-weight:600;
+  }
+  .machine-box small{ font-family:var(--font-body); font-size:9px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; opacity:.85; text-align:center; }
+  .machine-arrow{ font-size:22px; color:var(--teal); }
+  .machine-out{
+    display:flex; flex-direction:column; align-items:center; gap:4px; font-family:var(--font-body); font-size:11px; color:var(--muted);
+  }
+  .machine-out .fp{ font-family:'Courier New',monospace; font-size:16px; font-weight:700; color:var(--blue-dark); letter-spacing:2px; }
+
+  /* Results */
+  .result{ display:none; align-items:center; gap:10px; margin-top:10px; padding:12px 14px; border-radius:12px; font-family:var(--font-body); font-size:13.5px; font-weight:600; }
+  .result.show{ display:flex; animation:popin .3s ease; }
+  @keyframes popin{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
+  .result.granted{ background:var(--success-bg); border:1px solid var(--success-border); color:var(--success-text); }
+  .result.denied{ background:var(--error-bg); border:1px solid var(--error-border); color:var(--error-text); }
+  .result.info{ background:var(--wash); border:1px solid var(--line); color:var(--muted); }
+
+  /* Vault (hack zone) */
+  .vault-zone{ background:var(--panel); border:1.5px dashed var(--line); border-radius:14px; padding:18px; margin-top:14px; }
+  .vault-box{
+    background:var(--banner); border-radius:12px; padding:14px 16px; color:#fff;
+    transition:all .3s ease; position:relative; overflow:hidden;
+  }
+  .vault-box.breached{ background:var(--error-bg); border:1px solid var(--error-border); color:var(--error-text); }
+  .vault-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+  .vault-title{ font-family:var(--font-body); font-weight:700; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:inherit; opacity:.9; }
+  .vault-records{ font-family:'Courier New',monospace; font-size:12px; line-height:1.9; opacity:0; transition:opacity .3s ease; }
+  .vault-box.breached .vault-records{ opacity:1; }
+  .vault-secure-note{ font-size:12px; opacity:.85; margin-top:4px; }
+
+  .vault-btn-row{ display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+  .reverse-note{ font-size:13px; color:var(--muted); margin-top:10px; }
+
+  /* Twin keys */
+  .twin-zone{ margin-top:14px; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:16px 18px; }
+  .twin-zone h3{ font-size:15px; margin-bottom:6px; color:var(--ink); }
+  .twin-zone p{ font-size:13px; color:var(--muted); margin-bottom:12px; }
+  .twin-btns{ display:flex; gap:8px; flex-wrap:wrap; }
+  .twin-door{ display:flex; gap:10px; align-items:center; margin-top:12px; font-family:var(--font-body); font-size:13px; color:var(--ink); animation:popin .3s ease; }
+  .weak-fp-note{ font-family:'Courier New',monospace; font-size:12px; color:var(--danger); font-weight:700; }
+
+  /* Activity log */
+  .log-panel{ margin-top:14px; }
+  .log-box{ max-height:150px; overflow-y:auto; background:var(--wash); border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-family:var(--font-body); font-size:12px; color:var(--muted); }
+  .log-line{ padding:3px 0; border-bottom:1px solid var(--line); opacity:0; animation:fadeInLog .3s ease forwards; }
+  @keyframes fadeInLog{ to{opacity:1;} }
+  .log-line .fp-mono{ color:var(--blue-dark); }
+
+  .restart-link{ background:none; border:none; color:var(--muted); font-family:var(--font-body); font-size:11px; letter-spacing:.02em; text-decoration:underline; text-underline-offset:3px; cursor:pointer; width:100%; text-align:center; margin-top:10px; }
+  .restart-link:hover{ color:var(--ink); }
+
+  /* ---------- CONCEPT PAGE ---------- */
+  #screen-concept .container{ text-align:left; max-width:880px; }
+  #screen-concept .eyebrow{ text-align:center; }
+  .screen-title{ font-size:clamp(22px,3.2vw,30px); text-align:center; margin-bottom:22px; }
+
+  .concept-hero{
+    display:flex; align-items:flex-start; gap:16px;
+    background:var(--panel); border:1px solid var(--line); border-left:4px solid var(--amber);
+    border-radius:0 14px 14px 0; padding:24px 26px; margin-bottom:20px; box-shadow:var(--shadow-card);
+  }
+  .concept-hero-icon{ font-size:28px; line-height:1; flex-shrink:0; margin-top:2px; }
+  .concept-hero-text{ font-size:15px; line-height:1.7; color:var(--muted); margin:0; }
+  .concept-hero-text strong{ color:var(--ink); }
+  .concept-hero-text code{
+    font-family:var(--font-body); font-weight:600; font-size:13px; color:var(--teal);
+    background:rgba(74,155,209,.1); padding:1px 6px; border-radius:5px;
+  }
+
+  .formula-card{
+    background:linear-gradient(135deg,rgba(74,155,209,.08),rgba(74,155,209,.02));
+    border:1.5px solid var(--teal); border-radius:16px; padding:22px 24px; text-align:center;
+    margin-bottom:20px; box-shadow:var(--shadow-card);
+  }
+  .formula-label{ display:block; font-family:var(--font-body); font-weight:700; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--amber); margin-bottom:10px; }
+  .formula-main{ font-family:var(--font-display); font-size:clamp(16px,3vw,22px); color:var(--ink); font-weight:700; margin-bottom:10px; }
+  .formula-note{ font-size:13px; line-height:1.6; color:var(--muted); margin:0; text-align:left; }
+  .formula-note code{ font-family:var(--font-body); font-weight:600; font-size:12px; color:var(--teal); background:rgba(74,155,209,.1); padding:1px 5px; border-radius:4px; }
+
+  .realworld-box{ background:var(--wash); border:1px solid var(--line); border-radius:14px; padding:18px 22px; margin-bottom:20px; }
+  .realworld-box h4{ font-family:var(--font-display); font-weight:600; font-size:12.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--teal); margin-bottom:10px; }
+  .realworld-list{ margin:0; padding-left:20px; }
+  .realworld-list li{ font-size:13.5px; color:var(--muted); line-height:1.7; margin-bottom:4px; }
+
+  .vocab-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-bottom:20px; }
+  @media(max-width:600px){ .vocab-grid{ grid-template-columns:1fr; } }
+  .vocab-card{
+    background:var(--panel); border:1.5px dashed var(--track); border-radius:14px;
+    padding:18px 16px; box-shadow:var(--shadow-card);
+  }
+  .vocab-term{ font-family:var(--font-display); font-weight:700; font-size:14px; color:var(--ink); margin-bottom:6px; }
+  .vocab-def{ font-size:13px; color:var(--muted); line-height:1.5; }
+
+  .compare-cards{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:8px; }
+  @media(max-width:560px){ .compare-cards{ grid-template-columns:1fr; } }
+  .compare-card{
+    background:var(--panel); border:1.5px dashed var(--track); border-radius:14px; padding:20px 18px;
+    text-align:center; display:flex; flex-direction:column; align-items:center; gap:4px;
+  }
+  .compare-title{ font-family:var(--font-body); font-weight:600; font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); }
+  .compare-sub{ font-size:12.5px; color:var(--faint); line-height:1.5; }
+  .center-actions{ text-align:center; margin-top:8px; }
+
+  /* ---------- QUESTION GRID ---------- */
+  #screen-reflect .container, #screen-exercise .container{ text-align:left; max-width:1040px; }
+  #screen-reflect .eyebrow, #screen-exercise .eyebrow{ text-align:center; }
+
+  .questions-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin-bottom:22px; }
+  @media(max-width:640px){ .questions-grid{ grid-template-columns:1fr; } }
+
+  .q-card{
+    display:flex; flex-direction:column; gap:10px; background:var(--panel); border:1.5px dashed var(--track);
+    border-radius:16px; padding:20px 20px 18px; box-shadow:var(--shadow-card);
+    transition:border-color .15s ease, transform .15s ease;
+  }
+  .q-card:hover{ border-color:var(--teal); transform:translateY(-2px); }
+  .q-card-head{ display:flex; align-items:flex-start; gap:10px; }
+  .q-num{
+    flex-shrink:0; width:30px; height:30px; border-radius:50%; background:rgba(74,155,209,.12);
+    border:1.5px solid var(--teal-dim); display:flex; align-items:center; justify-content:center;
+    font-size:12.5px; font-weight:700; color:var(--blue-dark);
+  }
+  .q-note{ font-size:13px; color:var(--muted); flex:1; line-height:1.5; }
+
+  /* ---------- MODAL ---------- */
+  .modal-backdrop{ position:fixed; inset:0; background:rgba(31,46,55,.5); display:none; align-items:center; justify-content:center; z-index:80; padding:20px; }
+  .modal-backdrop.show{ display:flex; }
+  .modal-card{ background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:32px 30px; max-width:480px; width:100%; text-align:center; box-shadow:0 20px 50px rgba(23,50,77,.22); }
+  .modal-eyebrow{ font-family:var(--font-body); font-weight:700; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--amber); margin-bottom:12px; }
+  .modal-card p{ font-size:14.5px; line-height:1.6; color:var(--muted); margin:0 0 10px; }
+  .modal-card .punch{ color:var(--ink); font-weight:600; }
+
+  /* ---------- COLLISION LAB / LOGIN TESTER ---------- */
+  .twin-door .machine-wrap{ justify-content:flex-start; }
+  .twin-build{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:12px; }
+  @media(max-width:560px){ .twin-build{ grid-template-columns:1fr; } }
+  .word-col .zone-label{ display:block; margin-bottom:6px; }
+  .weak-live{ font-family:var(--font-body); font-size:13px; color:var(--muted); margin-top:6px; }
+  .collision-stats{ font-family:var(--font-body); font-size:12.5px; color:var(--muted); margin-top:12px; border-top:1px dashed var(--line); padding-top:10px; }
+  .trainer-question{ font-family:var(--font-body); font-size:13.5px; line-height:1.6; color:var(--ink); margin:12px 0; text-align:center; }
+  .trainer-score{ font-family:var(--font-body); font-size:12.5px; color:var(--muted); margin-top:10px; text-align:center; }
+  .twin-zone .result{ margin-top:12px; }
+
+  @media(max-width:480px){
+    .progress-step .label{ display:none; }
+    .progress-line{ width:8px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <button class="back-btn" id="back-btn">← Back</button>
+    <div class="progress" id="progress"></div>
+  </div>
+
+  <!-- ============ PAGE 1: PROBLEM ============ -->
+  <section class="screen active" id="screen-problem">
+    <div class="container">
+      <div class="problem-card">
+        <span class="eyebrow">Just think about it</span>
+        <p class="problem-text">
+          Every day, you type a password into an app or a website. And websites get broken into <strong>all the time</strong> — you've probably seen the headlines: "millions of passwords leaked."
+          <br><br>
+          So here's the puzzle: a site needs to <strong>check</strong> your password when you log in, but it really doesn't want to <strong>keep</strong> your password anywhere a thief could grab it. If it stored a list of your actual passwords, a break-in would hand the thief thousands of real ones.
+          <br><br>
+          How could a website recognise that you typed the right password... <strong>without ever keeping the password itself?</strong>
+        </p>
+      </div>
+      <div class="btn-row" style="margin-top:26px;">
+        <button class="btn-primary" id="problem-next">Continue</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PAGE 2: SETUP ============ -->
+  <section class="screen" id="screen-setup">
+    <div class="container">
+      <div class="setup-card">
+        <span class="eyebrow">Here's the setup</span>
+        <h2 class="setup-title">Let's begin — <span class="accent">The Password Vault</span></h2>
+        <div class="rules-box">
+          <ul>
+            <li>You're opening an account at a website — say, a photo-sharing app called <strong>"SnapVault"</strong>.</li>
+            <li>Instead of storing your password, the site runs it through a <strong>Fingerprint Machine</strong> — a small fingerprint comes out, and that's <strong>all</strong> it keeps.</li>
+            <li>Try logging in: type your password and see what the machine compares.</li>
+            <li>Then press <strong>🔓 Hack the Vault</strong> — break in and see exactly what thieves actually steal.</li>
+            <li>Finally, meet two different passwords that unlock <strong>the same door</strong>.</li>
+          </ul>
+        </div>
+        <button class="btn-primary" id="start-game">Open the App</button>
+      </div>
+    </div>
+  </section><!-- ============ PAGE 3: GAME ============ -->
+  <section class="screen" id="screen-game">
+    <div class="container">
+      <div class="game-header">
+        <h2 class="game-title">🔐 SnapVault — sign up, log in, then hack it</h2>
+        <div class="game-controls">
+          <button class="btn-primary" id="game-next">Next →</button>
+        </div>
+      </div>
+      <p class="phase-banner" id="phase-banner">Phase 1 — Sign up and watch what actually gets stored.</p>
+      <div class="app-card">
+        <div class="app-topbar">
+          <div class="app-name">Snap<span>Vault</span></div>
+          <div class="app-badge" id="app-badge">SECURE · FINGERPRINTS ONLY</div>
+        </div>
+        <div class="app-body">
+          <!-- SIGN UP -->
+          <div class="auth-zone">
+            <span class="zone-label">Sign up</span>
+            <h3>New account</h3>
+            <p class="zone-sub">Pick any password. It never gets stored — only its fingerprint.</p>
+            <input class="pw-field" id="signup-pw" type="password" placeholder="Choose a password" autocomplete="off">
+            <div class="machine-wrap">
+              <div class="machine-box">👤<small>Your password</small></div>
+              <div class="machine-arrow">➜</div>
+              <div class="machine-box">🖐️<small>Fingerprint Machine</small></div>
+              <div class="machine-arrow">➜</div>
+              <div class="machine-out">Store this<strong class="fp-mono" id="signup-fp">—</strong></div>
+            </div>
+            <button class="btn-ghost" id="signup-btn">Create Account</button>
+            <div class="result" id="signup-result"></div>
+          </div>
+          <!-- LOGIN -->
+          <div class="auth-zone">
+            <span class="zone-label">Log in</span>
+            <h3>Existing account</h3>
+            <p class="zone-sub">Type your password again. The machine compares the new fingerprint.</p>
+            <input class="pw-field" id="login-pw" type="password" placeholder="Type your password" autocomplete="off">
+            <div class="machine-wrap">
+              <div class="machine-box">👤<small>Typed password</small></div>
+              <div class="machine-arrow">➜</div>
+              <div class="machine-box">🖐️<small>Fingerprint Machine</small></div>
+              <div class="machine-arrow">➜</div>
+              <div class="machine-out">Compare<strong class="fp-mono" id="login-fp">—</strong></div>
+            </div>
+            <button class="btn-ghost" id="login-btn">Log In</button>
+            <div class="result" id="login-result"></div>
+          </div>
+        </div>
+
+        <!-- VAULT -->
+        <div class="vault-zone">
+          <div class="vault-box" id="vault-box">
+            <div class="vault-head">
+              <div class="vault-title">🔒 The Vault — everything this website stores</div>
+              <div class="app-badge">ONLINE</div>
+            </div>
+            <div class="vault-records" id="vault-records">—</div>
+            <div class="vault-secure-note" id="vault-secure-note">⛅ The server never sees your actual password. Only fingerprints.</div>
+          </div>
+          <div class="vault-btn-row">
+            <button class="btn-danger" id="hack-btn2">🔓 Hack the Vault</button>
+            <button class="btn-ghost" id="reverse-btn" disabled>🔄 Try to reverse a fingerprint</button>
+          </div>
+          <div class="reverse-note" id="reverse-note"></div>
+        </div>
+
+        <!-- LOGIN TESTER -->
+        <div class="twin-zone">
+          <h3>🎯 The Login Tester</h3>
+          <p>An attacker just tried a login. The vault only shows fingerprints — can you <strong>predict</strong> whether this password's fingerprint matches the stored one?</p>
+          <div class="twin-btns">
+            <button class="btn-primary" id="trainer-go">🔀 Run a surprise login test</button>
+          </div>
+          <div class="trainer-live" id="trainer-live" style="display:none;">
+            <div class="machine-wrap">
+              <div class="machine-box">👤<small>Login attempt</small></div>
+              <div class="machine-arrow">➜</div>
+              <div class="machine-box">🖐️<small>Fingerprint Machine</small></div>
+              <div class="machine-arrow">➜</div>
+              <div class="machine-out">Fingerprint<strong class="fp-mono" id="trainer-fp">?</strong></div>
+            </div>
+            <p class="trainer-question" id="trainer-question">…</p>
+            <div class="twin-btns">
+              <button class="btn-ghost" id="trainer-yes">✅ I bet it matches</button>
+              <button class="btn-ghost" id="trainer-no">❌ I bet it won't</button>
+            </div>
+            <div class="result" id="trainer-result"></div>
+            <div class="trainer-score">Your streak: <span class="fp-mono" id="trainer-correct">0</span> / <span class="fp-mono" id="trainer-total">0</span> correct</div>
+            <button class="btn-ghost" id="trainer-next" style="display:none;">Run another test →</button>
+          </div>
+        </div>
+
+        <!-- COLLISION LAB -->
+        <div class="twin-zone">
+          <h3>🔑 Build your own collision</h3>
+          <p>This site uses a <strong>lazy machine</strong>: fingerprint = letter sums (A=1, B=2 … Z=26). Nobody stores raw passwords — only these sums. Type two words and watch the fingerprints form <strong>live</strong>. Can you find two different words that land on the same door? (Anagrams are easy wins.)</p>
+          <div class="twin-build">
+            <div class="word-col">
+              <label class="zone-label">Word A</label>
+              <input class="pw-field" id="cword-a" placeholder="e.g. CAT" autocomplete="off" spellcheck="false">
+              <div class="weak-live">Fingerprint: <strong class="weak-fp-note" id="cfp-a">0</strong></div>
+            </div>
+            <div class="word-col">
+              <label class="zone-label">Word B</label>
+              <input class="pw-field" id="cword-b" placeholder="e.g. ACT" autocomplete="off" spellcheck="false">
+              <div class="weak-live">Fingerprint: <strong class="weak-fp-note" id="cfp-b">0</strong></div>
+            </div>
+          </div>
+          <div class="twin-btns">
+            <button class="btn-ghost" id="cat-btn">Fill: CAT</button>
+            <button class="btn-ghost" id="act-btn">Fill: ACT</button>
+            <button class="btn-primary" id="collision-test">Compare them</button>
+          </div>
+          <div class="twin-door" id="twin-door"></div>
+          <div class="collision-stats">Pairs tested: <span class="fp-mono" id="pairs-tested">0</span> ·
+            Collisions found: <span class="fp-mono" id="pairs-collided">0</span></div>
+        </div>
+
+        <!-- LOG -->
+        <div class="log-panel">
+          <div class="log-box" id="log-box"><em>— activity will appear here —</em></div>
+        </div>
+      </div>
+      <button class="restart-link" id="restart-game">↺ Restart the experience</button>
+    </div>
+  </section>
+
+  <!-- ============ PAGE 4: REFLECT ============ -->
+  <section class="screen" id="screen-reflect">
+    <div class="container">
+      <span class="eyebrow">Now think back</span>
+      <h2 class="screen-title">A few questions before you go</h2>
+      <div class="questions-grid">
+        <div class="q-card">
+          <div class="q-card-head">
+            <div class="q-num">01</div>
+            <p class="q-note">When you logged in, what did the app actually compare — <strong>your password</strong> or a <strong>fingerprint</strong> of it?</p>
+          </div>
+        </div>
+        <div class="q-card">
+          <div class="q-card-head">
+            <div class="q-num">02</div>
+            <p class="q-note">After you hacked the vault, what was really sitting inside — rows of <strong>passwords</strong> or rows of <strong>fingerprint codes</strong>?</p>
+          </div>
+        </div>
+        <div class="q-card">
+          <div class="q-card-head">
+            <div class="q-num">03</div>
+            <p class="q-note">CAT and ACT are different passwords, yet both opened the same door. What do you think could go wrong because two different passwords share one fingerprint?</p>
+          </div>
+        </div>
+        <div class="q-card">
+          <div class="q-card-head">
+            <div class="q-num">04</div>
+            <p class="q-note">If the site had stored passwords instead, what would a thief walk away with after a data breach? Why is that worse than fingerprints?</p>
+          </div>
+        </div>
+        <div class="q-card">
+          <div class="q-card-head">
+            <div class="q-num">05</div>
+            <p class="q-note">The reverse button refused to turn a fingerprint back into a password. Why does a login system need the fingerprint machine to work in one direction only?</p>
+          </div>
+        </div>
+      </div>
+      <div class="center-actions">
+        <button class="btn-primary" id="to-concept">Next: How Hashing Works →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PAGE 5: CONCEPT ============ -->
+  <section class="screen" id="screen-concept">
+    <div class="container">
+      <span class="eyebrow">The big reveal</span>
+      <h2 class="screen-title">The Fingerprint Machine is called <span style="color:var(--amber);">Hashing</span></h2>
+
+      <div class="concept-hero">
+        <div class="concept-hero-icon">🧠</div>
+        <p class="concept-hero-text">
+          When you signed up, the machine ran a <strong>hash function</strong>: it squeezed your password into a fixed-size
+          <strong>fingerprint</strong> — a <em>hash value</em>. The website never kept your password. It kept only this fingerprint.
+          On login it squeezed the same password again and compared the two fingerprints. Same code → welcome back.
+          Different code → wrong password. <strong>Fast, tiny, and there's no road back.</strong>
+        </p>
+      </div>
+
+      <div class="formula-card">
+        <span class="formula-label">One-way · fast · fixed size</span>
+        <div class="formula-main">password&nbsp;&nbsp;➜&nbsp;&nbsp;🖐️ hash function&nbsp;&nbsp;➜&nbsp;&nbsp;<span class="fp-mono">fingerprint</span></div>
+        <p class="formula-note">
+          Same password ➜ same fingerprint. Different password ➜ almost always a different fingerprint.
+          And here's the magic: you can <code>hash()</code> in one direction only — from a fingerprint you <strong>cannot</strong> recover the password.
+        </p>
+      </div>
+
+      <div class="vocab-grid">
+        <div class="vocab-card">
+          <div class="vocab-term">Hash function</div>
+          <div class="vocab-def">A machine that turns any input into one fixed-size fingerprint. Operates on whatever you feed it — a password, a file, a whole book.</div>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-term">Hash value</div>
+          <div class="vocab-def">The fingerprint itself — the short code that stands in place of the original data.</div>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-term">One-way</div>
+          <div class="vocab-def">The direction you can travel: input ➜ fingerprint. There is no finger-print ➜ input path.</div>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-term">Collision</div>
+          <div class="vocab-def">When two different inputs land on the same fingerprint — your CAT and ACT.</div>
+        </div>
+      </div>
+
+      <div class="compare-cards">
+        <div class="compare-card">
+          <div class="compare-title">🙅 The old, bad way</div>
+          <div class="compare-sub">Store the password. A break-in hands the thief the real, reusable passwords.</div>
+        </div>
+        <div class="compare-card">
+          <div class="compare-title">✅ The hashing way</div>
+          <div class="compare-sub">Store only fingerprints. A break-in finds nothing reversible back to your password.</div>
+        </div>
+      </div>
+
+      <div class="realworld-box">
+        <h4>Where you already meet hashing in the real world</h4>
+        <ul class="realworld-list">
+          <li><strong>Logging in</strong> — nearly every website and app stores a hash of your password, never the password itself.</li>
+          <li><strong>Git</strong> — every commit gets a 40-character hash. Change any file and the hash changes, so history can't be silently tampered with.</li>
+          <li><strong>Downloads</strong> — software sites publish a file's hash. After downloading, your computer hashes the file and compares the code to catch corruption or tampering.</li>
+          <li><strong>Digital signatures &amp; blockchain</strong> — hashes are the glue verifying that data is exactly what it claims to be.</li>
+          <li><strong>Fast lookups inside apps</strong> — search bars, caches and duplicate-file finders use hashes to locate things instantly instead of scanning everything.</li>
+        </ul>
+      </div>
+
+      <div class="center-actions">
+        <button class="btn-primary" id="to-exercise">Next: Try the Exercises →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PAGE 6: EXERCISE ============ -->
+  <section class="screen" id="screen-exercise">
+    <div class="container">
+      <span class="eyebrow">Now apply it</span>
+      <h2 class="screen-title">Exercises</h2>
+
+      <div class="questions-grid">
+        <div class="q-card">
+          <div class="q-card-head"><div class="q-num">01</div><p class="q-note"><strong>Compute by hand:</strong> A tiny fingerprint machine uses letter positions (A=1, B=2 … Z=26) and adds them up. What fingerprint does "BAD" give? What about "DAB"? Do they collide?</p></div>
+        </div>
+        <div class="q-card">
+          <div class="q-card-head"><div class="q-num">02</div><p class="q-note"><strong>Why it matters:</strong> The vault stores only fingerprints, never passwords. What does a thief actually walk away with after a breach — and why is that still safer?</p></div>
+        </div>
+        <div class="q-card">
+          <div class="q-card-head"><div class="q-num">03</div><p class="q-note"><strong>Collision consequences:</strong> CAT and ACT both landed on fingerprint 24. If two different passwords share one fingerprint, what could go wrong for the person who owns that account?</p></div>
+        </div>
+        <div class="q-card">
+          <div class="q-card-head"><div class="q-num">04</div><p class="q-note"><strong>Good vs. bad machines:</strong> A fingerprint machine that turns every password into the same code would be disastrous. What properties make a hash function "good" for logins?</p></div>
+        </div>
+        <div class="q-card">
+          <div class="q-card-head"><div class="q-num">05</div><p class="q-note"><strong>One-way only:</strong> The reverse button refused to turn a fingerprint back into a password. Why must a good fingerprint machine be one-way, and what could happen if it weren't?</p></div>
+        </div>
+      </div>
+
+      <div class="btn-row" style="margin-top:8px;">
+        <button class="btn-ghost" id="go-home-btn">🏠 Go to Home Page</button>
+        <button class="btn-primary" id="restart-journey">Restart the Whole Journey</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MODALS ============ -->
+  <div class="modal-backdrop" id="modal-back">
+    <div class="modal-card">
+      <div class="modal-eyebrow">Wait —</div>
+      <p>Going back will lose your progress on this page, and you'll need to reach it again through Next.</p>
+      <p class="punch">Are you sure you want to go back?</p>
+      <div class="btn-row" style="margin-top:20px;">
+        <button class="btn-ghost" id="modal-back-cancel">Stay Here</button>
+        <button class="btn-danger" id="modal-back-confirm">Go Back</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modal-hack">
+    <div class="modal-card">
+      <div class="modal-eyebrow">💥 Breached</div>
+      <p>You're in. Scroll the vault — every row is a <strong>fingerprint</strong>, and yours has its own short code:</p>
+      <p class="punch fp-mono" id="hack-fp" style="font-size:20px;color:var(--blue-dark);">—</p>
+      <p>Now try <strong>🔄 Try to reverse a fingerprint</strong>. The codes will never turn back into your password — and that's exactly why the real site is safe.</p>
+      <div class="btn-row">
+        <button class="btn-primary" id="modal-hack-close">Got it</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // ---------- Helpers ----------
+  function $(id){ return document.getElementById(id); }
+  function fp(str){
+    let h = 0;
+    for(let i=0;i<str.length;i++){ h = (h*31 + str.charCodeAt(i))|0; }
+    h = Math.abs(h);
+    return h.toString(16).toUpperCase().padStart(8,'0');
+  }
+  function weakFp(str){
+    let sum = 0;
+    for(const ch of str.toUpperCase()){
+      const code = ch.charCodeAt(0);
+      if(code>=65 && code<=90){ sum += code-64; }
+    }
+    return sum;
+  }
+
+  const logBox = $('log-box');
+  function log(msg){
+    const place = logBox.querySelector('em');
+    if(place){ place.remove(); }
+    const div = document.createElement('div');
+    div.className = 'log-line';
+    div.textContent = msg;
+    logBox.appendChild(div);
+    logBox.scrollTop = logBox.scrollHeight;
+  }
+
+  const screens = Array.from(document.querySelectorAll('.screen'));
+  const stepLabels = ['Problem','Setup','Game','Reflect','Concept','Exercise'];
+  let currentStep = 0;
+
+  function buildProgress(){
+    const bar = $('progress');
+    bar.innerHTML = '';
+    stepLabels.forEach((label, i) => {
+      const step = document.createElement('span');
+      step.className = 'progress-step';
+      step.innerHTML = '<span class="num">'+ (i+1) +'</span><span class="label">'+ label +'</span>';
+      bar.appendChild(step);
+      step.style.opacity = '';
+      if(i < stepLabels.length-1){
+        const line = document.createElement('span');
+        line.className = 'progress-line';
+        bar.appendChild(line);
+      }
+    });
+  }
+
+  function showPage(i){
+    currentStep = Math.max(0, Math.min(5, i));
+    screens.forEach((s, idx) => s.classList.toggle('active', idx===currentStep));
+    $('back-btn').disabled = (currentStep===0);
+    const steps = document.querySelectorAll('.progress-step');
+    steps.forEach((s, idx) => {
+      s.classList.toggle('current', idx===currentStep);
+      s.classList.toggle('done', idx<currentStep);
+    });
+    if(currentStep===0){ $('back-btn').disabled = true; }
+  }
+
+  function setPhase(txt){ $('phase-banner').textContent = txt; }
+
+  // ---------- State ----------
+  let created = false;
+  let storedFp = null;
+  let breached = false;
+  let demoPw = '';
+  const trainer = { queue: [], idx: 0, active: null, total: 0, correct: 0 };
+  const collider = { tested: 0, hits: 0 };
+
+  function resetDemo(){
+    created = false;
+    storedFp = null;
+    breached = false;
+    demoPw = '';
+    trainer.queue = [];
+    trainer.idx = 0;
+    trainer.active = null;
+    trainer.total = 0;
+    trainer.correct = 0;
+    collider.tested = 0;
+    collider.hits = 0;
+    $('signup-pw').value = '';
+    $('login-pw').value = '';
+    $('signup-fp').textContent = '—';
+    $('login-fp').textContent = '—';
+    $('signup-result').className = 'result';
+    $('login-result').className = 'result';
+    $('vault-box').classList.remove('breached');
+    $('vault-records').textContent = '—';
+    $('vault-secure-note').textContent = '⛅ The server never sees your actual password. Only fingerprints.';
+    $('app-badge').textContent = 'SECURE · FINGERPRINTS ONLY';
+    $('reverse-btn').disabled = true;
+    $('reverse-note').textContent = '';
+    $('twin-door').innerHTML = '';
+    $('hack-fp').textContent = '—';
+    $('trainer-live').style.display = 'none';
+    $('trainer-question').textContent = '…';
+    $('trainer-fp').textContent = '?';
+    $('trainer-result').className = 'result';
+    $('trainer-next').style.display = 'none';
+    $('trainer-correct').textContent = '0';
+    $('trainer-total').textContent = '0';
+    $('cword-a').value = '';
+    $('cword-b').value = '';
+    $('cfp-a').textContent = '0';
+    $('cfp-b').textContent = '0';
+    $('pairs-tested').textContent = '0';
+    $('pairs-collided').textContent = '0';
+    setPhase('Phase 1 — Sign up and watch what actually gets stored.');
+    logBox.innerHTML = '<em>— activity will appear here —</em>';
+  }
+
+  // ---------- Sign up ----------
+  $('signup-btn').addEventListener('click', () => {
+    const pw = $('signup-pw').value;
+    const res = $('signup-result');
+    res.classList.remove('show');
+    if(!pw){
+      res.className = 'result info show';
+      res.innerHTML = '😅 Type a password first — any password.';
+      return;
+    }
+    created = true;
+    breached = false;
+    demoPw = pw;
+    storedFp = fp(pw);
+    $('signup-fp').textContent = storedFp;
+    res.className = 'result granted show';
+    res.innerHTML = '✓ Account created! The site stored <strong>only</strong> the fingerprint above.';
+    $('vault-records').innerHTML = 'you&nbsp;&nbsp;&nbsp;→&nbsp;&nbsp;&nbsp;<span class="fp-mono">' + storedFp + '</span>';
+    log('✍️ Sign-up: stored fingerprint ' + storedFp + ' (password itself discarded)');
+    setPhase('Phase 2 — Now log in below. The machine compares fingerprints, not passwords.');
+    buildTrainerQueue();
+    showTrainer(false);
+    $('trainer-correct').textContent = '0';
+    $('trainer-total').textContent = '0';
+  });
+
+  // ---------- Log in ----------
+  $('login-btn').addEventListener('click', () => {
+    const pw = $('login-pw').value;
+    const res = $('login-result');
+    res.classList.remove('show');
+    if(!created){
+      res.className = 'result info show';
+      res.innerHTML = '💡 Create an account first — sign up on the left.';
+      return;
+    }
+    if(!pw){
+      res.className = 'result info show';
+      res.innerHTML = '😅 Type your password to test it.';
+      return;
+    }
+    const candidate = fp(pw);
+    $('login-fp').textContent = candidate;
+    if(candidate === storedFp){
+      res.className = 'result granted show';
+      res.innerHTML = '✓ Match! Fingerprints equal — welcome back, you\'re in.';
+      log('🔓 Login: fingerprint ' + candidate + ' matched the stored one');
+      setPhase('Phase 3 — You\'re in. Now click 🔓 Hack the Vault and see what the site really kept.');
+    } else {
+      res.className = 'result denied show';
+      res.innerHTML = '✗ Denied — fingerprints differ. That\'s the wrong password.';
+      log('🚫 Login attempt: fingerprint ' + candidate + ' did not match');
+    }
+    $('login-pw').value = '';
+  });
+
+  // ---------- Hack ----------
+  function hack(){
+    if(!created){
+      const res = $('signup-result');
+      res.classList.remove('show');
+      res.className = 'result info show';
+      res.innerHTML = '😈 You can\'t steal nothing! Create an account first so there\'s a vault to break into.';
+      return;
+    }
+    breached = true;
+    $('vault-box').classList.add('breached');
+    $('app-badge').textContent = '⚠ BREACHED';
+    $('vault-records').innerHTML = 'you&nbsp;&nbsp;&nbsp;→&nbsp;&nbsp;&nbsp;<span class="fp-mono">' + storedFp + '</span>';
+    $('vault-secure-note').textContent = '💀 Everything stolen is above. Codes, not passwords. Go on — try to reverse one.';
+    $('reverse-btn').disabled = false;
+    $('hack-fp').textContent = storedFp;
+    log('💥 Breach! Grabbed everything the site kept: fingerprint ' + storedFp + ' — no password found.');
+    setPhase('Phase 4 — You\'re inside. All the thieves got: codes, not passwords.');
+    $('modal-hack').classList.add('show');
+  }
+  $('hack-btn2').addEventListener('click', hack);
+  $('modal-hack-close').addEventListener('click', () => $('modal-hack').classList.remove('show'));
+
+  // ---------- Reverse ----------
+  $('reverse-btn').addEventListener('click', () => {
+    $('reverse-note').textContent = '🔁 Tried running the fingerprint backwards… and nothing happened. A fingerprint is one-way: no button, no machine, no trick turns a code back into a password. That\'s exactly why real sites can be hacked and still keep your password secret.';
+  });
+
+  // ---------- Collision lab ----------
+  function buildDoor(word, reveal){
+    return '<div class="machine-wrap"><div class="machine-box">🔑<small>' + word + '</small></div>'
+      + '<div class="machine-arrow">➜</div>'
+      + '<div class="machine-box">🖐️<small>tiny machine</small></div>'
+      + '<div class="machine-arrow">➜</div>'
+      + '<div class="machine-out">Sum<strong class="weak-fp-note">' + reveal + '</strong></div></div>';
+  }
+
+  function refreshLiveSums(){
+    $('cfp-a').textContent = weakFp($('cword-a').value);
+    $('cfp-b').textContent = weakFp($('cword-b').value);
+  }
+  $('cword-a').addEventListener('input', () => {
+    refreshLiveSums();
+    if(!$('cword-a').value && !$('cword-b').value){ $('twin-door').innerHTML = ''; }
+  });
+  $('cword-b').addEventListener('input', () => {
+    refreshLiveSums();
+    if(!$('cword-a').value && !$('cword-b').value){ $('twin-door').innerHTML = ''; }
+  });
+
+  function fillWord(inputId, word){ $(inputId).value = word; refreshLiveSums(); }
+
+  $('collision-test').addEventListener('click', () => {
+    const a = $('cword-a').value.trim().toUpperCase();
+    const b = $('cword-b').value.trim().toUpperCase();
+    const door = $('twin-door');
+    $('trainer-result').classList.remove('show');
+    if(!a && !b){ return; }
+    const sumA = weakFp(a);
+    const sumB = weakFp(b);
+    collider.tested++;
+    door.innerHTML = '<div class="machine-wrap">'
+      + '<div class="machine-box">🔑<small>' + (a || '(empty)') + '</small></div>'
+      + '<div class="machine-arrow">➜</div>'
+      + '<div class="machine-out">Sum<strong class="weak-fp-note">' + sumA + '</strong></div>'
+      + '<div class="machine-arrow" style="margin-left:8px;">vs</div>'
+      + '<div class="machine-box">🔑<small>' + (b || '(empty)') + '</small></div>'
+      + '<div class="machine-arrow">➜</div>'
+      + '<div class="machine-out">Sum<strong class="weak-fp-note">' + sumB + '</strong></div></div>';
+    if(a && b && sumA === sumB){
+      if(a !== b){
+        collider.hits++;
+        log('💥 COLLISION: "' + a + '" and "' + b + '" both → fingerprint ' + sumA);
+      }
+      door.innerHTML += '<p style="margin:10px 0 4px;font-size:13px;">'
+        + (a === b ? ('Same word twice — both give ' + sumA + '. Try two <strong>different</strong> words for a real collision.')
+                   : '💥 <strong>COLLISION!</strong> Two different words, one fingerprint <strong class="weak-fp-note">' + sumA + '</strong>. Both unlock the same door.')
+        + '</p>';
+    } else {
+      log('🔑 "' + a + '" → ' + sumA + ' · "' + b + '" → ' + sumB + ' — different doors');
+      door.innerHTML += '<p style="margin:10px 0 4px;font-size:13px;color:var(--muted);">Different fingerprints — different doors. Fix one letter and the code usually changes. Keep hunting for a match!</p>';
+    }
+    $('pairs-tested').textContent = collider.tested;
+    $('pairs-collided').textContent = collider.hits;
+  });
+
+  $('cat-btn').addEventListener('click', () => { fillWord('cword-a', 'CAT'); fillWord('cword-b', 'ACT'); $('collision-test').click(); });
+  $('act-btn').addEventListener('click', () => { fillWord('cword-a', 'CAT'); fillWord('cword-b', 'ACT'); $('collision-test').click(); });
+
+  // ---------- Login Tester ----------
+  function buildTrainerQueue(){
+    const base = demoPw;
+    const cands = [];
+    function push(p){ if(p && typeof p === 'string' && p.length >= 2 && cands.indexOf(p) === -1){ cands.push(p); } }
+    push(base);
+    push(base + '1');
+    push(base.slice(0, -1));
+    push(base.toLowerCase());
+    push(base.toUpperCase());
+    push('password');
+    push('12345678');
+    const queue = cands.map(c => ({ pw: c, match: fp(c) === storedFp }));
+    for(let i = queue.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      const tmp = queue[i]; queue[i] = queue[j]; queue[j] = tmp;
+    }
+    trainer.queue = queue;
+    trainer.idx = 0;
+  }
+
+  function showTrainer(on){
+    $('trainer-live').style.display = on ? 'block' : 'none';
+  }
+  function renderTrainerScore(){
+    $('trainer-correct').textContent = trainer.correct;
+    $('trainer-total').textContent = trainer.total;
+  }
+
+  function beginTest(){
+    if(!created){
+      const res = $('login-result');
+      res.classList.remove('show');
+      res.className = 'result info show';
+      res.innerHTML = '💡 Create an account first — the tester tests passwords against <strong>your</strong> stored fingerprint.';
+      return;
+    }
+    buildTrainerQueue();
+    trainer.total++;
+    const item = trainer.queue[trainer.idx % trainer.queue.length];
+    trainer.idx++;
+    trainer.active = item;
+    $('trainer-result').className = 'result';
+    $('trainer-fp').textContent = '?';
+    $('trainer-question').textContent = 'Login attempt: "' + '•'.repeat(Math.max(3, item.pw.length)) + '" — will its fingerprint equal what the vault stores?';
+    $('trainer-yes').disabled = false;
+    $('trainer-no').disabled = false;
+    $('trainer-next').style.display = 'none';
+    showTrainer(true);
+    renderTrainerScore();
+  }
+
+  function resolveTest(guess){
+    if(!trainer.active) return;
+    const item = trainer.active;
+    $('trainer-yes').disabled = true;
+    $('trainer-no').disabled = true;
+    $('trainer-fp').textContent = fp(item.pw);
+    const right = (guess === item.match);
+    const res = $('trainer-result');
+    if(guess){
+      res.className = 'result granted show';
+    } else {
+      res.className = 'result denied show';
+    }
+    if(right){
+      trainer.correct++;
+      res.innerHTML = '✔ Your prediction was right! The real password was "' + item.pw + '" → ' + fp(item.pw)
+        + (item.match ? ' — <strong>a match!</strong> It would log in.'
+                      : ' — <strong>no match.</strong> Stored fingerprint is different.');
+    } else {
+      res.innerHTML = '✘ Prediction wrong! The password was "' + item.pw + '" → ' + fp(item.pw)
+        + (item.match ? ' — it actually <strong>matches</strong>!'
+                      : ' — it does <strong>not</strong> match the stored one.');
+    }
+    log('🎯 Tester: "' + item.pw + '" → ' + fp(item.pw) + (item.match ? ' = MATCH' : ' ≠ no match'));
+    renderTrainerScore();
+    trainer.active = null;
+    $('trainer-next').style.display = 'inline-block';
+  }
+
+  $('trainer-go').addEventListener('click', beginTest);
+  $('trainer-yes').addEventListener('click', () => resolveTest(true));
+  $('trainer-no').addEventListener('click', () => resolveTest(false));
+  $('trainer-next').addEventListener('click', beginTest);
+
+  // ---------- Navigation ----------
+  $('problem-next').addEventListener('click', () => showPage(1));
+  $('start-game').addEventListener('click', () => { showPage(2); resetDemo(); });
+  $('game-next').addEventListener('click', () => showPage(3));
+  $('to-concept').addEventListener('click', () => showPage(4));
+  $('to-exercise').addEventListener('click', () => showPage(5));
+  $('go-home-btn').addEventListener('click', () => { window.location.href = '../../'; });
+  $('restart-journey').addEventListener('click', () => { resetDemo(); showPage(0); });
+  $('restart-game').addEventListener('click', () => { resetDemo(); showPage(2); });
+
+  // ---------- Top-bar back button ----------
+  $('back-btn').addEventListener('click', () => {
+    if(currentStep === 2){ $('modal-back').classList.add('show'); }
+    else if(currentStep > 0){ showPage(currentStep-1); }
+  });
+  $('modal-back-cancel').addEventListener('click', () => $('modal-back').classList.remove('show'));
+  $('modal-back-confirm').addEventListener('click', () => { $('modal-back').classList.remove('show'); if(currentStep > 0) showPage(currentStep-1); });
+
+  // ---------- Enter key ----------
+  $('signup-pw').addEventListener('keydown', e => { if(e.key==='Enter'){ $('signup-btn').click(); } });
+  $('login-pw').addEventListener('keydown', e => { if(e.key==='Enter'){ $('login-btn').click(); } });
+
+  // ---------- Init ----------
+  buildProgress();
+  showPage(0);
+</script>
+</body>
+</html>

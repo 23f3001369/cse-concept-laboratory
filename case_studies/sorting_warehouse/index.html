@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9M9C5T1Y9R"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-9M9C5T1Y9R');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Sorting Warehouse — A Hashing Case Study</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root{
+    --bg: #EDF3FA;
+    --bg-top: #FDF1E9;
+    --panel: #FFFFFF;
+    --line: #D9E5F2;
+    --track: #B7CBDF;
+    --wash: #F3F8FD;
+    --teal: #4A9BD1;
+    --teal-dim: #8FCBEF;
+    --blue-dark: #2B6FA3;
+    --amber: #EA8C36;
+    --amber-dim: #F3A65C;
+    --orange-dark: #C96F1F;
+    --ink: #1F2E37;
+    --muted: #54666D;
+    --faint: #93A5AB;
+    --danger: #D9714F;
+    --success-bg: #DCEAD8;
+    --success-text: #274B26;
+    --success-border: #4B7A4A;
+    --error-bg: #FBE1DC;
+    --error-text: #8A3420;
+    --error-border: #D9714F;
+    --banner: #22496B;
+    --shadow-card: 0 8px 24px rgba(23,50,77,0.10);
+    --shadow-lift: 0 10px 30px rgba(23,50,77,0.12);
+    --shadow-btn: 0 6px 18px rgba(43,111,163,0.28);
+    --font-display: 'Poppins', sans-serif;
+    --font-body: 'Inter', sans-serif;
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg) 420px, var(--bg) 100%);
+    color: var(--ink); font-family: var(--font-body); min-height:100vh;
+  }
+  .app{ position:relative; min-height:100vh; width:100%; }
+
+  h1,h2,h3,h4{ font-family: var(--font-display); margin:0; letter-spacing:-0.01em; color: var(--ink); }
+  p{ line-height:1.6; color: var(--muted); margin:0; }
+  .eyebrow{ font-family:var(--font-body); font-weight:700; font-size:11.5px; letter-spacing:0.13em; text-transform:uppercase; color: var(--amber); display:block; margin-bottom:12px; }
+
+  button{ font-family: var(--font-display); cursor:pointer; border:none; outline:none; }
+  button:focus-visible{ outline:2px solid var(--teal); outline-offset:3px; }
+
+  .btn-primary{
+    background: linear-gradient(135deg, var(--teal-dim), var(--blue-dark)); color:#fff;
+    font-weight:600; font-size:14px; padding:13px 26px; border-radius:999px;
+    box-shadow: var(--shadow-btn); transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .btn-primary:hover{ transform:translateY(-1px); box-shadow:0 10px 24px rgba(43,111,163,.36); }
+  .btn-primary:disabled{ opacity:.4; cursor:not-allowed; transform:none; box-shadow:none; }
+  .btn-danger{
+    background: linear-gradient(135deg,#E39A7D,var(--danger)); color:#fff; font-weight:600; font-size:14px;
+    padding:13px 26px; border-radius:999px; box-shadow:0 6px 18px rgba(217,113,79,.3);
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .btn-danger:hover{ transform:translateY(-1px); }
+  .btn-ghost{
+    background:transparent; color: var(--teal); font-size:13px; font-weight:600;
+    padding:9px 18px; border:1.5px solid var(--teal); border-radius:999px;
+    transition: all .15s ease;
+  }
+  .btn-ghost:hover{ background: rgba(74,155,209,.08); }
+  .btn-ghost.on{ background: rgba(74,155,209,.1); }
+  .btn-row{ display:flex; gap:12px; flex-wrap:wrap; justify-content:center; }
+
+  /* ---------- TOP BAR ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:40; background:rgba(255,255,255,.92); backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between;
+    padding:12px 20px; gap:14px; flex-wrap:wrap;
+  }
+  .back-btn{
+    background:transparent; border:1.5px solid var(--line); color: var(--muted);
+    font-family:var(--font-body); font-weight:600; font-size:11px; letter-spacing:.04em; text-transform:uppercase;
+    padding:7px 14px; border-radius:999px; cursor:pointer; flex-shrink:0;
+  }
+  .back-btn:hover{ border-color: var(--error-border); color: var(--error-text); }
+  .back-btn[disabled]{ visibility:hidden; }
+
+  .progress{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; justify-content:center; flex:1; }
+  .progress-step{ display:flex; align-items:center; gap:5px; font-family:var(--font-body); font-weight:600; font-size:9px; letter-spacing:.02em; text-transform:uppercase; color: var(--line); }
+  .progress-step .num{ width:18px; height:18px; border-radius:50%; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:9px; color: var(--muted); flex-shrink:0; }
+  .progress-step.done .num{ background: var(--teal); border-color: var(--teal); color:#fff; }
+  .progress-step.current .num{ background: linear-gradient(135deg,var(--teal-dim),var(--blue-dark)); border-color: var(--blue-dark); color:#fff; box-shadow:0 2px 8px rgba(43,111,163,.3); }
+  .progress-step.current .label{ color: var(--blue-dark); }
+  .progress-step .label{ color: var(--muted); }
+  .progress-line{ width:14px; height:1px; background: var(--line); flex-shrink:0; }
+
+  .screen{ display:none; min-height:calc(100vh - 56px); width:100%; align-items:center; justify-content:center; padding:40px 20px; }
+  .screen.active{ display:flex; }
+  .container{ width:100%; max-width:920px; margin:0 auto; min-width:0; }
+
+  .guide-note{ background: var(--wash); border-left:3px solid var(--teal); border-radius:0 12px 12px 0; padding:14px 18px; margin:0 0 16px; text-align:left; }
+  .guide-note p{ margin:0 0 6px; color: var(--ink); font-size:13.5px; }
+  .guide-note p:last-child{ margin-bottom:0; }
+
+  /* ---------- PAGE 1: PROBLEM ---------- */
+  #screen-problem .container{ text-align:center; max-width:900px; }
+  .problem-card{ background: var(--panel); border:1px solid var(--line); border-radius:16px; padding:44px 40px; box-shadow: var(--shadow-lift); }
+  .problem-text{ font-size:clamp(15px,2vw,18px); line-height:1.75; color:var(--ink); }
+  .problem-text strong{ color:var(--amber); font-weight:600; }
+
+  /* ---------- PAGE 2: SETUP ---------- */
+  #screen-setup .container{ text-align:left; max-width:920px; }
+  .setup-card{ background: var(--panel); border:1px solid var(--line); border-radius:16px; padding:40px 40px 34px; box-shadow: var(--shadow-lift); }
+  .setup-title{ font-size:clamp(22px,3.4vw,32px); line-height:1.18; margin-bottom:16px; }
+  .setup-title .accent{ color: var(--amber); }
+  .rules-box{ background: var(--wash); border:1px solid var(--line); border-radius:14px; padding:20px 24px; margin-bottom:24px; }
+  .rules-box li{ font-size:14px; color: var(--muted); line-height:1.7; margin-bottom:4px; }
+  .rules-box strong{ color: var(--ink); }
+
+  /* ---------- PAGE 3: GAME ---------- */
+  #screen-game .container{ max-width:1000px; }
+  .game-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; flex-wrap:wrap; gap:10px; }
+  .game-title{ font-size:clamp(18px,2.5vw,22px); color:var(--ink); }
+  .game-controls{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+
+  .phase-banner{
+    background: var(--banner); border:none; border-radius:14px;
+    padding:14px 18px; margin-bottom:16px; font-family:var(--font-body); font-size:13.5px; font-weight:600;
+    color:#fff; text-align:center; letter-spacing:.01em;
+  }
+
+  .game-layout{ display:grid; grid-template-columns:1fr 280px; gap:20px; align-items:start; }
+  @media(max-width:860px){ .game-layout{ grid-template-columns:1fr; } }
+
+  .warehouse-frame{ background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:20px; box-shadow:var(--shadow-lift); }
+
+  /* Bins grid */
+  .bins-label{ font-family:var(--font-body); font-weight:700; font-size:10.5px; letter-spacing:.13em; text-transform:uppercase; color:var(--amber); margin-bottom:12px; display:block; }
+  .bins-grid{ display:grid; grid-template-columns:repeat(10,1fr); gap:6px; margin-bottom:16px; }
+  @media(max-width:600px){ .bins-grid{ grid-template-columns:repeat(5,1fr); } }
+  .bin{
+    position:relative; background:var(--wash); border:1.5px solid var(--line); border-radius:10px;
+    padding:10px 4px; text-align:center; transition: all .3s ease; min-height:60px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+  }
+  .bin-num{ font-family:var(--font-display); font-weight:700; font-size:11px; color:var(--muted); }
+  .bin-content{ font-family:var(--font-body); font-size:9px; font-weight:600; color:var(--ink); word-break:break-all; line-height:1.3; min-height:14px; }
+  .bin.scanning{ border-color:var(--amber); background:rgba(234,140,54,.08); transform:scale(1.08); }
+  .bin.found{ border-color:var(--teal); background:rgba(74,155,209,.12); transform:scale(1.1); box-shadow:0 0 12px rgba(74,155,209,.3); }
+  .bin.hash-jump{ border-color:var(--success-border); background:var(--success-bg); transform:scale(1.12); box-shadow:0 0 16px rgba(75,122,74,.3); }
+  .bin.collision{ border-color:var(--danger); background:var(--error-bg); animation:shake .4s ease; }
+  .bin.pick{ border-color:var(--amber); background:rgba(234,140,54,.14); transform:scale(1.08); box-shadow:0 0 12px rgba(234,140,54,.28); }
+  .bin.checked-miss{ opacity:.45; background:var(--error-bg); border-color:var(--error-border); }
+  .bin.clickable{ cursor:pointer; }
+  .bin.clickable:hover{ border-color:var(--teal); transform:scale(1.04); box-shadow:0 0 10px rgba(74,155,209,.2); }
+  @keyframes shake{ 0%,100%{transform:translateX(0);} 25%{transform:translateX(-4px);} 75%{transform:translateX(4px);} }
+
+  .bin-chain{ font-family:var(--font-body); font-size:8px; color:var(--blue-dark); font-weight:600; margin-top:2px; }
+
+  /* Play hint */
+  .play-hint{
+    background:var(--panel); border:1.5px dashed var(--teal-dim); border-radius:12px;
+    padding:10px 16px; margin-bottom:14px; text-align:center;
+    font-family:var(--font-body); font-size:13px; font-weight:600; color:var(--blue-dark);
+  }
+
+  /* Package display */
+  .package-display{ display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:16px; min-height:60px; }
+  .package{
+    background:linear-gradient(135deg,var(--amber-dim),var(--amber)); color:#fff;
+    font-family:var(--font-display); font-weight:700; font-size:13px;
+    padding:10px 18px; border-radius:12px; box-shadow:0 4px 12px rgba(234,140,54,.3);
+    transition: all .4s ease; white-space:nowrap;
+  }
+  .package.arriving{ animation:slideIn .5s ease; }
+  @keyframes slideIn{ from{opacity:0; transform:translateY(-20px);} to{opacity:1; transform:translateY(0);} }
+  .package-arrow{ font-size:20px; color:var(--muted); }
+  .package-target{ font-family:var(--font-body); font-size:12px; color:var(--muted); font-weight:600; }
+
+  /* Manual input */
+  .manual-input{ display:flex; align-items:center; gap:8px; justify-content:center; margin-bottom:12px; }
+  .manual-input input{
+    font-family:var(--font-body); font-size:14px; padding:10px 16px;
+    border:1.5px solid var(--line); border-radius:999px; background:var(--panel); color:var(--ink);
+    width:200px; outline:none; transition: border-color .15s ease;
+  }
+  .manual-input input:focus{ border-color:var(--teal); }
+
+  .speed-label{ font-family:var(--font-body); font-size:10px; font-weight:600; color:var(--muted); text-align:center; margin-bottom:6px; }
+
+  /* Side panel */
+  .side-panel{ display:flex; flex-direction:column; gap:14px; }
+  .panel-box{ background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:18px; box-shadow:var(--shadow-card); }
+  .panel-label{ font-family:var(--font-body); font-weight:700; font-size:10.5px; letter-spacing:.13em; text-transform:uppercase; color:var(--amber); margin-bottom:10px; display:block; }
+  .stat-row{ display:flex; justify-content:space-between; align-items:baseline; padding:6px 0; border-bottom:1px solid var(--line); font-family:var(--font-body); font-size:13px; }
+  .stat-row:last-child{ border-bottom:none; }
+  .stat-row .k{ color:var(--muted); }
+  .stat-row .v{ color:var(--ink); font-weight:700; }
+  .stat-row .v.highlight{ color:var(--teal); }
+
+  .log-box{ max-height:140px; overflow-y:auto; font-family:var(--font-body); font-size:12px; color:var(--muted); }
+  .log-line{ padding:3px 0; border-bottom:1px solid var(--line); opacity:0; animation:fadeInLog .3s ease forwards; }
+  @keyframes fadeInLog{ to{opacity:1;} }
+  .log-line .hash-val{ color:var(--teal); font-weight:700; }
+  .log-line .bin-val{ color:var(--amber); font-weight:700; }
+  .log-line .collision-tag{ color:var(--danger); font-weight:700; font-size:10px; }
+
+  /* ---------- CONCEPT PAGE ---------- */
+  #screen-concept .container{ text-align:left; max-width:880px; }
+  #screen-concept .eyebrow{ text-align:center; }
+  .screen-title{ font-size:clamp(22px,3.2vw,30px); text-align:center; margin-bottom:22px; }
+
+  .concept-hero{
+    display:flex; align-items:flex-start; gap:16px;
+    background:var(--panel); border:1px solid var(--line); border-left:4px solid var(--amber);
+    border-radius:0 14px 14px 0; padding:24px 26px; margin-bottom:20px; box-shadow:var(--shadow-card);
+  }
+  .concept-hero-icon{ font-size:28px; line-height:1; flex-shrink:0; margin-top:2px; }
+  .concept-hero-text{ font-size:15px; line-height:1.7; color:var(--muted); margin:0; }
+  .concept-hero-text strong{ color:var(--ink); }
+  .concept-hero-text code{
+    font-family:var(--font-body); font-weight:600; font-size:13px; color:var(--teal);
+    background:rgba(74,155,209,.1); padding:1px 6px; border-radius:5px;
+  }
+
+  .vocab-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-bottom:20px; }
+  @media(max-width:600px){ .vocab-grid{ grid-template-columns:1fr; } }
+  .vocab-card{
+    background:var(--panel); border:1.5px dashed var(--track); border-radius:14px;
+    padding:18px 16px; box-shadow:var(--shadow-card);
+  }
+  .vocab-term{ font-family:var(--font-display); font-weight:700; font-size:14px; color:var(--ink); margin-bottom:6px; }
+  .vocab-def{ font-size:13px; color:var(--muted); line-height:1.5; }
+
+  .compare-cards{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:8px; }
+  @media(max-width:560px){ .compare-cards{ grid-template-columns:1fr; } }
+  .compare-card{
+    background:var(--panel); border:1.5px dashed var(--track); border-radius:14px; padding:20px 18px;
+    text-align:center; display:flex; flex-direction:column; align-items:center; gap:4px;
+  }
+  .compare-title{ font-family:var(--font-body); font-weight:600; font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); }
+  .compare-num{ font-family:var(--font-display); font-size:22px; font-weight:700; color:var(--ink); margin:4px 0 2px; }
+  .compare-card.slow .compare-num{ color:var(--error-text); }
+  .compare-card.fast .compare-num{ color:var(--teal); }
+  .compare-sub{ font-size:12.5px; color:var(--faint); }
+
+  .center-actions{ text-align:center; margin-top:8px; }
+
+  /* ---------- QUESTION GRID ---------- */
+  #screen-reflect .container, #screen-exercise .container{ text-align:left; max-width:1040px; }
+  #screen-reflect .eyebrow, #screen-exercise .eyebrow{ text-align:center; }
+
+  .questions-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin-bottom:22px; }
+  @media(max-width:640px){ .questions-grid{ grid-template-columns:1fr; } }
+
+  .q-card{
+    display:flex; flex-direction:column; gap:10px; background:var(--panel); border:1.5px dashed var(--track);
+    border-radius:16px; padding:20px 20px 18px; box-shadow:var(--shadow-card);
+    transition: border-color .15s ease, transform .15s ease;
+  }
+  .q-card:hover{ border-color:var(--teal); transform:translateY(-2px); }
+  .q-card-head{ display:flex; align-items:flex-start; gap:10px; }
+  .q-num{
+    flex-shrink:0; width:30px; height:30px; border-radius:50%; background:rgba(74,155,209,.12);
+    border:1.5px solid var(--teal-dim); display:flex; align-items:center; justify-content:center;
+    font-size:12.5px; font-weight:700; color:var(--blue-dark);
+  }
+  .q-note{ font-size:13px; color:var(--muted); flex:1; line-height:1.5; }
+
+  /* ---------- MODAL ---------- */
+  .modal-backdrop{ position:fixed; inset:0; background:rgba(31,46,55,.5); display:none; align-items:center; justify-content:center; z-index:80; padding:20px; }
+  .modal-backdrop.show{ display:flex; }
+  .modal-card{ background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:32px 30px; max-width:480px; width:100%; text-align:center; box-shadow:0 20px 50px rgba(23,50,77,.22); }
+  .modal-eyebrow{ font-family:var(--font-body); font-weight:700; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--amber); margin-bottom:12px; }
+  .modal-card p{ font-size:14.5px; line-height:1.6; color:var(--muted); margin:0 0 10px; }
+  .modal-card .punch{ color:var(--ink); font-weight:600; }
+
+  .modal-stats{ display:flex; justify-content:center; gap:24px; margin:18px 0 22px; flex-wrap:wrap; }
+  .modal-stat .num{ font-family:var(--font-display); font-weight:700; font-size:24px; color:var(--teal); }
+  .modal-stat .lbl{ font-family:var(--font-body); font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
+
+  /* Hash formula display */
+  .formula-card{
+    background:linear-gradient(135deg,rgba(74,155,209,.08),rgba(74,155,209,.02));
+    border:1.5px solid var(--teal); border-radius:16px; padding:22px 24px; text-align:center;
+    margin-bottom:16px; box-shadow:var(--shadow-card);
+  }
+  .formula-label{ display:block; font-family:var(--font-body); font-weight:700; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--amber); margin-bottom:10px; }
+  .formula-main{ font-family:var(--font-display); font-size:clamp(16px,3vw,22px); color:var(--ink); font-weight:700; margin-bottom:10px; }
+  .formula-note{ font-size:13px; line-height:1.6; color:var(--muted); margin:0; text-align:left; }
+  .formula-note code{
+    font-family:var(--font-body); font-weight:600; font-size:12px; color:var(--teal);
+    background:rgba(74,155,209,.1); padding:1px 5px; border-radius:4px;
+  }
+
+  .restart-link{ background:none; border:none; color:var(--muted); font-family:var(--font-body); font-size:11px; letter-spacing:.02em; text-decoration:underline; text-underline-offset:3px; cursor:pointer; width:100%; text-align:center; margin-top:6px; }
+  .restart-link:hover{ color:var(--ink); }
+
+  @media(max-width:480px){
+    .progress-step .label{ display:none; }
+    .progress-line{ width:8px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <button class="back-btn" id="back-btn">← Back</button>
+    <div class="progress" id="progress"></div>
+  </div>
+
+  <!-- ============ PAGE 1: PROBLEM ============ -->
+  <section class="screen active" id="screen-problem">
+    <div class="container">
+      <div class="problem-card">
+        <span class="eyebrow">Just think about it</span>
+        <p class="problem-text">
+          You work at a busy delivery warehouse. Every day, hundreds of packages arrive and must be stored in numbered bins. When a customer comes to pick up their package, you need to find it <strong>fast</strong>.
+          <br><br>
+          With thousands of bins, checking each one is painfully slow. You open bin 1 — not there. Bin 2 — not there. Bin 3… and so on.
+          <br><br>
+          What if there was a way to know <strong>exactly which bin</strong> a package belongs in — without searching at all?
+        </p>
+      </div>
+      <div class="btn-row" style="margin-top:26px;">
+        <button class="btn-primary" id="problem-next">Continue</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PAGE 2: SETUP ============ -->
+  <section class="screen" id="screen-setup">
+    <div class="container">
+      <div class="setup-card">
+        <span class="eyebrow">Here's the setup</span>
+        <h2 class="setup-title">Let's begin — <span class="accent">The Sorting Warehouse</span></h2>
+        <div class="rules-box">
+          <ul>
+            <li>There are <strong>20 numbered bins</strong> (0–19) in the warehouse.</li>
+            <li>Packages arrive with a <strong>sender's name</strong> on them.</li>
+            <li><strong>First, watch it solve itself automatically:</strong> the formula jumps each package to its bin in one go — no searching needed.</li>
+            <li><strong>Then guess the bin</strong> for each new package, and watch the warehouse's <strong>magic formula</strong> jump straight to the right one.</li>
+            <li><strong>Finally, store packages yourself</strong> — lock in a prediction and see what happens when <strong>two packages collide</strong> in the same bin.</li>
+          </ul>
+        </div>
+        <button class="btn-primary" id="start-game">Enter the Warehouse</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PAGE 3: GAME ============ -->
+  <section class="screen" id="screen-game">
+    <div class="container">
+      <div class="game-header">
+        <h2 class="game-title">Sort the packages. <span style="color:var(--amber)">You find the bins.</span></h2>
+        <div class="game-controls">
+          <button class="btn-ghost" id="auto-btn">⚡ Automatic</button>
+          <button class="btn-ghost on" id="scan-btn">🔍 Search (Your Turn)</button>
+          <button class="btn-ghost" id="guess-btn" disabled>⚡ Guess the Bin</button>
+          <button class="btn-primary" id="game-next" style="padding:9px 18px; font-size:12px;">Next →</button>
+        </div>
+      </div>
+
+      <p class="phase-banner" id="phase-banner">Phase 1 — Watch the warehouse solve it automatically. Click ⚡ Automatic to begin.</p>
+
+      <div class="play-hint" id="play-hint">Click bins one at a time until one opens.</div>
+
+      <div class="game-layout">
+        <div class="warehouse-frame">
+          <div class="package-display" id="package-display">
+            <div class="package" id="current-package" style="opacity:0">—</div>
+            <span class="package-arrow" id="package-arrow" style="opacity:0">→</span>
+            <span class="package-target" id="package-target" style="opacity:0">Bin —</span>
+          </div>
+
+          <span class="bins-label">Warehouse Bins (0–19)</span>
+          <div class="bins-grid" id="bins-grid"></div>
+
+          <div class="manual-input" id="manual-input" style="display:none;">
+            <input type="text" id="name-input" placeholder="Type a name..." maxlength="15">
+            <button class="btn-primary" id="hash-btn" style="padding:10px 18px; font-size:13px;">Store It</button>
+          </div>
+          <div class="speed-label" id="speed-label"></div>
+        </div>
+
+        <div class="side-panel">
+          <div class="panel-box">
+            <span class="panel-label">Stats</span>
+            <div class="stat-row"><span class="k">Bins checked</span><span class="v highlight" id="stat-checked">0</span></div>
+            <div class="stat-row"><span class="k">Packages stored</span><span class="v" id="stat-stored">0</span></div>
+            <div class="stat-row"><span class="k">Collisions</span><span class="v" id="stat-collisions" style="color:var(--danger)">0</span></div>
+            <div class="stat-row"><span class="k">Guessed right</span><span class="v" id="stat-guessed">0</span></div>
+          </div>
+          <div class="panel-box">
+            <span class="panel-label">Activity Log</span>
+            <div class="log-box" id="log-box"></div>
+          </div>
+          <button class="restart-link" id="restart-warehouse">Restart this warehouse</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PAGE 4: REFLECT ============ -->
+  <section class="screen" id="screen-reflect">
+    <div class="container">
+      <span class="eyebrow">Now think back</span>
+      <h2 class="screen-title">A few questions before you go</h2>
+
+      <div class="questions-grid">
+        <div class="q-card">
+          <div class="q-card-head"><div class="q-num">01</div><div class="q-note">What was the difference between finding a package by <strong>scanning bins one by one</strong>, and letting the formula <strong>jump straight</strong> to its bin?</div></div>
+        </div>
+        <div class="q-card">
+          <div class="q-card-head"><div class="q-num">02</div><div class="q-note">Why was the formula-based approach faster? What made it possible to skip the search entirely?</div></div>
+        </div>
+        <div class="q-card">
+          <div class="q-card-head"><div class="q-num">03</div><div class="q-note">What happened when two different names produced the same bin number? How did the warehouse handle it?</div></div>
+        </div>
+        <div class="q-card">
+          <div class="q-card-head"><div class="q-num">04</div><div class="q-note">If you had 1,000 bins instead of 20, how would the scanning approach be affected? What about the formula approach?</div></div>
+        </div>
+        <div class="q-card">
+          <div class="q-card-head"><div class="q-num">05</div><div class="q-note">Why would a formula that always returns the same number (like 0) be a bad choice for this warehouse?</div></div>
+        </div>
+      </div>
+
+      <div class="center-actions">
+        <button class="btn-primary" id="to-concept">Next: How Hashing Works →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PAGE 5: CONCEPT ============ -->
+  <section class="screen" id="screen-concept">
+    <div class="container">
+      <span class="eyebrow">The idea behind it</span>
+      <h2 class="screen-title">Hashing, Explained</h2>
+
+      <div class="concept-hero">
+        <div class="concept-hero-icon">📦</div>
+        <p class="concept-hero-text"><strong>Hashing</strong> is a technique that uses a mathematical function (called a <em>hash function</em>) to map a piece of data (like a name) directly to a specific storage location (like a bin number). Instead of searching through every possible location, you compute where the data <em>should</em> be and go straight there. The hash function takes a <code>key</code> and returns an index — that's the bin number. When two different keys produce the same index, it's called a <code>collision</code>, and the warehouse handles it by chaining — linking both items at the same bin.</p>
+      </div>
+
+      <div class="formula-card">
+        <span class="formula-label">The Hash Function (used in the game)</span>
+        <div class="formula-main">bin = (sum of ASCII values of letters) mod 20</div>
+        <p class="formula-note">For example, <code>"ALI"</code> → A(65) + L(76) + I(73) = 214 → <code>214 mod 20 = 14</code> → Bin 14. The <code>mod</code> operator ensures the result always fits within 0–19.</p>
+      </div>
+
+      <div class="vocab-grid">
+        <div class="vocab-card">
+          <div class="vocab-term">Hash Function</div>
+          <div class="vocab-def">A mathematical formula that takes a key (like a name) and converts it into a number (an index or bin number).</div>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-term">Key</div>
+          <div class="vocab-def">The input data you want to store or look up — like a sender's name or a username.</div>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-term">Bucket / Bin</div>
+          <div class="vocab-def">The storage location where a key is placed, determined by the hash function's output.</div>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-term">Collision</div>
+          <div class="vocab-def">When two different keys hash to the same bucket. This is handled by chaining (linking items) or other resolution strategies.</div>
+        </div>
+      </div>
+
+      <div class="compare-cards">
+        <div class="compare-card slow">
+          <span class="compare-title">Scanning Every Bin</span>
+          <span class="compare-num">O(n)</span>
+          <span class="compare-sub">Check up to 20 bins</span>
+        </div>
+        <div class="compare-card fast">
+          <span class="compare-title">Using Hashing</span>
+          <span class="compare-num">O(1)</span>
+          <span class="compare-sub">Jump straight there</span>
+        </div>
+      </div>
+
+      <div class="center-actions">
+        <button class="btn-primary" id="to-exercise">Next: Try the Exercises →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PAGE 6: EXERCISE ============ -->
+  <section class="screen" id="screen-exercise">
+    <div class="container">
+      <span class="eyebrow">Now apply it</span>
+      <h2 class="screen-title">Exercises</h2>
+
+      <div class="questions-grid">
+        <div class="q-card">
+          <div class="q-card-head"><div class="q-num">01</div><div class="q-note"><strong>Compute by hand:</strong> Using the hash function <code>sum of ASCII values mod 10</code>, which bin would "CAT" go into? What about "DOG"? Do they collide?</div></div>
+        </div>
+        <div class="q-card">
+          <div class="q-card-head"><div class="q-num">02</div><div class="q-note"><strong>Why collisions happen:</strong> You have 5 bins and 10 packages. Explain why collisions are inevitable. What strategy could reduce them?</div></div>
+        </div>
+        <div class="q-card">
+          <div class="q-card-head"><div class="q-num">03</div><div class="q-note"><strong>Real-world hashing:</strong> Besides warehouses, name two other systems that use hashing to find things quickly. How does hashing help them?</div></div>
+        </div>
+        <div class="q-card">
+          <div class="q-card-head"><div class="q-num">04</div><div class="q-note"><strong>Good vs. bad hash functions:</strong> A hash function always returns 0 for every input. Why would this be terrible? What properties make a hash function "good"?</div></div>
+        </div>
+        <div class="q-card">
+          <div class="q-card-head"><div class="q-num">05</div><div class="q-note"><strong>Scaling up:</strong> If collisions slow things down, why not just make the hash table enormous (millions of bins)? What trade-off does that introduce?</div></div>
+        </div>
+      </div>
+
+      <div class="btn-row" style="margin-top:8px;">
+        <button class="btn-ghost" id="go-home-btn">🏠 Go to Home Page</button>
+        <button class="btn-primary" id="restart-journey">Restart the Whole Journey</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MODAL: PHASE COMPLETE ============ -->
+  <div class="modal-backdrop" id="modal-phase">
+    <div class="modal-card">
+      <div class="modal-eyebrow">Search Complete</div>
+      <p>You clicked through <strong id="phase-checked">0</strong> bins to store <strong id="phase-stored">0</strong> packages — one at a time, every single time.</p>
+      <p class="punch">Now let the warehouse use its formula.</p>
+      <div class="btn-row" style="margin-top:20px;">
+        <button class="btn-primary" id="phase-continue">Show Me the Fast Way →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ MODAL: AUTOMATIC RUN ============ -->
+  <div class="modal-backdrop" id="modal-auto">
+    <div class="modal-card">
+      <div class="modal-eyebrow">Automatic Run Complete</div>
+      <p>The warehouse placed <strong id="auto-count">6</strong> packages using its formula — <strong>one jump each</strong>, no searching.</p>
+      <p class="punch">Now it's your turn. Try finding packages the slow way, one bin at a time.</p>
+      <div class="btn-row" style="margin-top:20px;">
+        <button class="btn-primary" id="auto-continue">Now You Try →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ MODAL: WIN ============ -->
+  <div class="modal-backdrop" id="modal-win">
+    <div class="modal-card">
+      <div class="modal-eyebrow">All Packages Sorted</div>
+      <p>The formula jumped <strong id="win-stored">0</strong> packages straight to their bins — you guessed <strong style="color:var(--teal)" id="win-total-checked">0</strong> of them right.</p>
+      <p class="punch">That's the power of hashing: <span style="color:var(--teal)">O(1)</span> lookup.</p>
+      <div class="modal-stats">
+        <div class="modal-stat"><div class="num" id="modal-stored">0</div><div class="lbl">Stored</div></div>
+        <div class="modal-stat"><div class="num" id="modal-checked">0</div><div class="lbl">Guessed right</div></div>
+        <div class="modal-stat"><div class="num" id="modal-collisions">0</div><div class="lbl">Collisions</div></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-ghost" id="win-replay">Play Again</button>
+        <button class="btn-primary" id="win-next">Next: What You Learned →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ MODAL: BACK WARNING ============ -->
+  <div class="modal-backdrop" id="modal-back-warn">
+    <div class="modal-card">
+      <div class="modal-eyebrow">Wait —</div>
+      <p>Going back will lose your progress on this page, and you'll need to reach it again through Next.</p>
+      <p class="punch">Are you sure you want to go back?</p>
+      <div class="btn-row" style="margin-top:20px;">
+        <button class="btn-ghost" id="back-cancel">Stay Here</button>
+        <button class="btn-danger" id="back-confirm">Go Back</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var NUM_BINS = 20;
+
+  var AUTO_NAMES = [
+    'ALI', 'BOB', 'CARA', 'DAN', 'EVE', 'FRANK'
+  ];
+
+  var SAMPLE_NAMES = [
+    'ALI', 'BOB', 'CARA', 'DAN', 'EVE', 'FRANK', 'GRACE',
+    'HEIDI', 'IVAN', 'JUDY', 'KARL', 'LEO', 'MALLORY',
+    'NINA', 'OSCAR', 'PAT', 'QUINN', 'RUTH', 'STEVE', 'TRUDY'
+  ];
+
+  // Demos use a shorter set so the rounds don't drag on.
+  var SCAN_NAMES = SAMPLE_NAMES.slice(0, 6);
+  var GUESS_NAMES = SAMPLE_NAMES.slice(0, 8);
+  var PHASE1 = 'Find where each package belongs — one bin at a time.';
+  var PHASE2 = 'The formula knows every bin. See if your guess beats it.';
+  var PHASE3 = 'Type any name — tap your predicted bin first, then Store It.';
+
+  var state = {
+    bins: [],            // array of arrays (chains)
+    stored: 0,
+    checked: 0,
+    collisions: 0,
+    guessedRight: 0,
+    busy: false,
+    roundActive: null,   // null | 'scan' | 'guess'
+    scanIdx: 0,
+    guessIdx: 0,
+    scanDone: false,
+    awaiting: false,
+    targetBin: -1,
+    myPick: -1,
+    predictBin: null,
+    pkgChecked: 0,
+    timers: []
+  };
+
+  // ---------- HASH FUNCTION ----------
+  function hash(name){
+    var sum = 0;
+    for(var i = 0; i < name.length; i++){
+      sum += name.charCodeAt(i);
+    }
+    return sum % NUM_BINS;
+  }
+
+  // ---------- PAGE NAVIGATION ----------
+  var PAGES = ['screen-problem','screen-setup','screen-game','screen-reflect','screen-concept','screen-exercise'];
+  var PAGE_LABELS = ['Problem','Setup','The Warehouse','Reflect','Concept','Exercise'];
+  var currentPage = 0;
+  var unlockedPage = 0;
+
+  var progressEl = document.getElementById('progress');
+  function renderProgress(){
+    progressEl.innerHTML = '';
+    PAGES.forEach(function(_, i){
+      var step = document.createElement('div');
+      step.className = 'progress-step' + (i === currentPage ? ' current' : (i < currentPage ? ' done' : ''));
+      step.innerHTML = '<span class="num">' + (i+1) + '</span><span class="label">' + PAGE_LABELS[i] + '</span>';
+      progressEl.appendChild(step);
+      if(i < PAGES.length - 1){
+        var line = document.createElement('div');
+        line.className = 'progress-line';
+        progressEl.appendChild(line);
+      }
+    });
+  }
+
+  function showPage(idx){
+    currentPage = idx;
+    if(idx > unlockedPage) unlockedPage = idx;
+    document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+    document.getElementById(PAGES[idx]).classList.add('active');
+    document.getElementById('back-btn').disabled = (idx === 0);
+    renderProgress();
+    window.scrollTo({ top:0, behavior:'instant' in window ? 'instant' : 'auto' });
+  }
+  function goNext(idx){ showPage(idx); }
+
+  document.getElementById('problem-next').addEventListener('click', function(){ goNext(1); });
+  document.getElementById('start-game').addEventListener('click', function(){
+    initBins();
+    goNext(2);
+  });
+
+  document.getElementById('back-btn').addEventListener('click', function(){
+    if(currentPage === 0) return;
+    if(PAGES[currentPage] === 'screen-game'){
+      document.getElementById('modal-back-warn').classList.add('show');
+      return;
+    }
+    unlockedPage = currentPage - 1;
+    showPage(currentPage - 1);
+  });
+  document.getElementById('back-cancel').addEventListener('click', function(){
+    document.getElementById('modal-back-warn').classList.remove('show');
+  });
+  document.getElementById('back-confirm').addEventListener('click', function(){
+    document.getElementById('modal-back-warn').classList.remove('show');
+    stopDemo();
+    unlockedPage = currentPage - 1;
+    showPage(currentPage - 1);
+  });
+
+  function hideModals(){
+    document.querySelectorAll('.modal-backdrop').forEach(function(m){ m.classList.remove('show'); });
+  }
+
+  // ---------- BINS ----------
+  var binsGrid = document.getElementById('bins-grid');
+  var binEls = [];
+
+  function initBins(){
+    state.bins = [];
+    for(var i = 0; i < NUM_BINS; i++) state.bins.push([]);
+    state.stored = 0;
+    state.checked = 0;
+    state.collisions = 0;
+    state.guessedRight = 0;
+    state.busy = false;
+    state.roundActive = null;
+    state.scanIdx = 0;
+    state.guessIdx = 0;
+    state.scanDone = false;
+    state.awaiting = false;
+    state.targetBin = -1;
+    state.myPick = -1;
+    state.predictBin = null;
+    state.timers = [];
+
+    binsGrid.innerHTML = '';
+    binEls = [];
+    for(var i = 0; i < NUM_BINS; i++){
+      (function(idx){
+        var bin = document.createElement('div');
+        bin.className = 'bin';
+        bin.innerHTML = '<div class="bin-num">' + idx + '</div><div class="bin-content" id="bin-c-' + idx + '"></div>';
+        bin.addEventListener('click', function(){ handleBinClick(idx); });
+        binsGrid.appendChild(bin);
+        binEls.push(bin);
+      })(i);
+    }
+
+    updateStats();
+    clearLog();
+    resetPackageDisplay();
+    setBanner('Phase 1 — Watch the warehouse solve it automatically. Click ⚡ Automatic to begin.');
+    setHint('The formula finds each bin in one jump. Click the button below to watch.');
+    enableRoundButtons(true, false, false);
+    setClickable(false);
+    document.getElementById('manual-input').style.display = 'none';
+    document.getElementById('speed-label').textContent = '';
+    hideModals();
+  }
+
+  function resetBins(){
+    stopTimers();
+    for(var i = 0; i < NUM_BINS; i++){
+      state.bins[i] = [];
+      binEls[i].className = 'bin';
+      document.getElementById('bin-c-' + i).textContent = '';
+      var chain = binEls[i].querySelector('.bin-chain');
+      if(chain) chain.remove();
+    }
+    state.stored = 0;
+    state.checked = 0;
+    state.collisions = 0;
+    state.guessedRight = 0;
+    state.predictBin = null;
+    state.awaiting = false;
+    updateStats();
+    clearLog();
+    resetPackageDisplay();
+    setClickable(false);
+  }
+
+  function setBanner(txt){ document.getElementById('phase-banner').textContent = txt; }
+  function setHint(txt){ document.getElementById('play-hint').textContent = txt; }
+  function ph1Hint(){ return 'Click bins one at a time — a miss is greyed out. Find all 6 packages.'; }
+  function setClickable(on){
+    for(var i = 0; i < NUM_BINS; i++){
+      binEls[i].classList.toggle('clickable', on);
+    }
+  }
+  function stopTimers(){
+    state.timers.forEach(function(t){ clearTimeout(t); });
+    state.timers = [];
+  }
+  function later(fn, ms){
+    state.timers.push(setTimeout(fn, ms));
+  }
+  function stopDemo(){ stopTimers(); hideModals(); }
+
+  function resetPackageDisplay(){
+    var pkg = document.getElementById('current-package');
+    var arrow = document.getElementById('package-arrow');
+    var target = document.getElementById('package-target');
+    pkg.style.opacity = '0';
+    arrow.style.opacity = '0';
+    target.style.opacity = '0';
+    pkg.textContent = '—';
+    target.textContent = 'Bin —';
+  }
+
+  function showPackage(name, binNum, found){
+    var pkg = document.getElementById('current-package');
+    var arrow = document.getElementById('package-arrow');
+    var target = document.getElementById('package-target');
+    pkg.textContent = '📦 ' + name;
+    pkg.style.opacity = '1';
+    pkg.className = 'package arriving';
+    arrow.style.opacity = '1';
+    target.textContent = found ? 'Bin ' + binNum : 'Bin —';
+    target.style.opacity = '1';
+  }
+
+  // ---------- STATS & LOG ----------
+  function updateStats(){
+    document.getElementById('stat-checked').textContent = state.checked;
+    document.getElementById('stat-stored').textContent = state.stored;
+    document.getElementById('stat-collisions').textContent = state.collisions;
+    document.getElementById('stat-guessed').textContent = state.guessedRight;
+  }
+
+  var logBox = document.getElementById('log-box');
+  function addLog(msg){
+    var div = document.createElement('div');
+    div.className = 'log-line';
+    div.innerHTML = msg;
+    logBox.appendChild(div);
+    logBox.scrollTop = logBox.scrollHeight;
+    while(logBox.children.length > 20){ logBox.removeChild(logBox.firstChild); }
+  }
+  function clearLog(){ logBox.innerHTML = ''; }
+
+  // ---------- VISUAL HELPERS ----------
+  function esc(str){
+    return String(str).replace(/[&<>"']/g, function(c){
+      return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+    });
+  }
+
+  function storeInBin(name, binIdx){
+    state.bins[binIdx].push(name);
+    state.stored++;
+    var contentEl = document.getElementById('bin-c-' + binIdx);
+    var names = state.bins[binIdx];
+    contentEl.innerHTML = names.map(function(n){ return '<span style="display:block;font-size:9px;line-height:1.4;">' + esc(n) + '</span>'; }).join('');
+
+    if(names.length > 1){
+      state.collisions++;
+      binEls[binIdx].classList.add('collision');
+      setTimeout(function(){ binEls[binIdx].classList.remove('collision'); }, 500);
+    }
+
+    updateStats();
+  }
+
+  // ---------- ROUNDS ----------
+  function enableRoundButtons(autoOn, scanOn, guessOn){
+    document.getElementById('auto-btn').disabled = !autoOn;
+    document.getElementById('scan-btn').disabled = !scanOn;
+    document.getElementById('guess-btn').disabled = !guessOn;
+  }
+
+  function startAutoRound(){
+    if(state.roundActive) return;
+    stopDemo();
+    resetBins();
+    state.roundActive = 'auto';
+    enableRoundButtons(false, false, false);
+    document.getElementById('auto-btn').disabled = true;
+    setBanner('Phase 1 — Watch the warehouse solve it automatically.');
+    setHint('The formula finds each bin in one jump. Just watch.');
+    addLog('⚡ Automatic run — watch the formula place ' + AUTO_NAMES.length + ' packages.');
+    autoStep(0);
+  }
+
+  function autoStep(k){
+    if(state.roundActive !== 'auto') return;
+    if(k >= AUTO_NAMES.length){ endAutoRound(); return; }
+    var name = AUTO_NAMES[k];
+    var b = hash(name);
+    state.currentName = name; state.targetBin = b;
+    showPackage(name, b, true);
+    binEls[b].classList.add('hash-jump','found');
+    var collisionNote = state.bins[b].length > 0 ? ' <span class="collision-tag">COLLISION!</span>' : '';
+    addLog('⚡ hash("' + esc(name) + '") → Bin <span class="bin-val">' + b + '</span>' + collisionNote);
+    setHint('📦 ' + name + ' → Bin ' + b + ' in one jump.');
+    later(function(){
+      binEls[b].classList.remove('hash-jump','found');
+      storeInBin(name, b);
+      autoStep(k+1);
+    }, 650);
+  }
+
+  function endAutoRound(){
+    state.roundActive = null;
+    enableRoundButtons(true, true, false);
+    document.getElementById('auto-btn').disabled = false;
+    document.getElementById('auto-count').textContent = AUTO_NAMES.length;
+    setBanner('Phase 1 complete — the formula placed everything with one jump each.');
+    setHint('Now it\u2019s your turn.');
+    later(function(){ document.getElementById('modal-auto').classList.add('show'); }, 300);
+  }
+
+  function startScanRound(){
+    if(state.roundActive === 'scan') return;
+    stopDemo();
+    resetBins();
+    state.roundActive = 'scan';
+    state.scanIdx = 0;
+    enableRoundButtons(false, true, false);
+    setBanner('Phase 2 — Your turn: search it yourself. Click bins one at a time until each package is found.');
+    setHint(ph1Hint());
+    addLog('📦 Shipment 1 arrived. Find all <span class="hash-val">' + SCAN_NAMES.length + '</span> packages.');
+    beginScanStep();
+  }
+
+  function beginScanStep(){
+    if(state.roundActive !== 'scan') return;
+    if(state.scanIdx >= SCAN_NAMES.length){ endScanRound(); return; }
+    state.currentName = SCAN_NAMES[state.scanIdx];
+    state.targetBin = hash(state.currentName);
+    state.pkgChecked = 0;
+    state.awaiting = true;
+    clearPickClasses();
+    showPackage(state.currentName, state.targetBin, false);
+    document.getElementById('package-target').textContent = 'Bin ?';
+    document.getElementById('package-target').style.opacity = '0';
+    setHint('Find 📦 ' + state.currentName + '. Click bins one at a time — misses get greyed out.');
+    setClickable(true);
+  }
+
+  function scanClick(i){
+    if(i === state.targetBin){
+      state.awaiting = false;
+      setClickable(false);
+      state.checked++;
+      state.pkgChecked++;
+      binEls[i].classList.add('found');
+      updateStats();
+      document.getElementById('package-target').textContent = 'Bin ' + i;
+      document.getElementById('package-target').style.opacity = '1';
+      addLog('📦 ' + displayName(state.currentName) + ' found after <span class="hash-val">' + state.pkgChecked + '</span> click' + (state.pkgChecked === 1 ? '' : 's') + ' → Bin <span class="bin-val">' + i + '</span>');
+      setHint('Found it in ' + state.pkgChecked + ' click' + (state.pkgChecked === 1 ? '' : 's') + '. Next package coming…');
+      later(function(){
+        binEls[i].classList.remove('found');
+        storeInBin(state.currentName, state.targetBin);
+        state.scanIdx++;
+        beginScanStep();
+      }, 700);
+    } else {
+      state.checked++;
+      state.pkgChecked++;
+      updateStats();
+      binEls[i].classList.add('checked-miss');
+      setHint('Not Bin ' + i + '. You\'ve checked ' + state.pkgChecked + ' bin' + (state.pkgChecked === 1 ? '' : 's') + ' so far.');
+    }
+  }
+
+  function endScanRound(){
+    state.roundActive = null;
+    state.scanDone = true;
+    state.awaiting = false;
+    setClickable(false);
+    enableRoundButtons(false, true, true);
+    setBanner('Phase 2 complete — every package found by searching, one bin at a time.');
+    setHint('Now the warehouse uses its formula. Click ⚡ Guess the Bin.');
+    document.getElementById('phase-checked').textContent = state.checked;
+    document.getElementById('phase-stored').textContent = state.stored;
+    later(function(){ document.getElementById('modal-phase').classList.add('show'); }, 300);
+  }
+
+  function startGuessRound(){
+    if(state.roundActive === 'guess') return;
+    stopDemo();
+    resetBins();
+    state.roundActive = 'guess';
+    state.guessIdx = 0;
+    enableRoundButtons(false, false, false);
+    setBanner('Phase 3 — Guess the bin. Tap which bin each package lands in.');
+    setHint('Tap the bin you think each package lands in.');
+    addLog('⚡ The warehouse switched on its formula. Guess ' + GUESS_NAMES.length + ' bins.');
+    beginGuessStep();
+  }
+
+  function beginGuessStep(){
+    if(state.roundActive !== 'guess') return;
+    if(state.guessIdx >= GUESS_NAMES.length){ endGuessRound(); return; }
+    state.currentName = GUESS_NAMES[state.guessIdx];
+    state.targetBin = hash(state.currentName);
+    state.awaiting = true;
+    state.myPick = -1;
+    clearPickClasses();
+    showPackage(state.currentName, state.targetBin, false);
+    document.getElementById('package-target').textContent = 'Bin ?';
+    document.getElementById('package-target').style.opacity = '0';
+    setHint('Where will 📦 ' + state.currentName + ' land? Tap the bin you think.');
+    setClickable(true);
+  }
+
+  function guessClick(i){
+    state.awaiting = false;
+    setClickable(false);
+    state.myPick = i;
+    binEls[i].classList.add('pick');
+    state.checked++;
+    updateStats();
+    var correct = (i === state.targetBin);
+    document.getElementById('package-target').textContent = 'Bin ' + state.targetBin;
+    document.getElementById('package-target').style.opacity = '1';
+    later(function(){
+      binEls[state.targetBin].classList.add('hash-jump');
+      if(correct){
+        state.guessedRight++;
+        updateStats();
+        addLog('✓ "' + esc(state.currentName) + '" — you said Bin ' + i + ' and the formula agreed.');
+      } else {
+        addLog('✗ "' + esc(state.currentName) + '" — you guessed Bin <span class="bin-val">' + i + '</span>, the formula jumped to Bin <span class="bin-val">' + state.targetBin + '</span>.');
+      }
+      var collisionNote = state.bins[state.targetBin].length > 0 ? ' <span class="collision-tag">COLLISION!</span>' : '';
+      addLog('⚡ hash("' + esc(state.currentName) + '") → Bin <span class="bin-val">' + state.targetBin + '</span>' + collisionNote);
+      setHint(correct ? '✓ You nailed it — the formula picked the same bin!' : '✗ The formula picked Bin ' + state.targetBin + '. One jump, zero searching.');
+      later(function(){
+        binEls[state.targetBin].classList.remove('hash-jump');
+        storeInBin(state.currentName, state.targetBin);
+        clearPickClasses();
+        state.guessIdx++;
+        beginGuessStep();
+      }, 600);
+    }, 250);
+  }
+
+  function endGuessRound(){
+    state.roundActive = null;
+    state.awaiting = false;
+    setClickable(false);
+    setBanner('Phase 3 complete — the formula placed everything with one jump each.');
+    setHint('Now you: type a name and Store It.');
+    document.getElementById('win-stored').textContent = state.stored;
+    document.getElementById('win-total-checked').textContent = state.guessedRight;
+    document.getElementById('modal-stored').textContent = state.stored;
+    document.getElementById('modal-checked').textContent = state.guessedRight;
+    document.getElementById('modal-collisions').textContent = state.collisions;
+    later(function(){ document.getElementById('modal-win').classList.add('show'); }, 300);
+  }
+
+  // ---------- MANUAL PHASE ----------
+  function setManualPhase(){
+    document.getElementById('manual-input').style.display = 'flex';
+    document.getElementById('speed-label').textContent = 'Optional: tap a bin as your prediction, then Store It.';
+    enableRoundButtons(true, true, true);
+    setBanner('Phase 4 — Your warehouse. ' + PHASE3);
+    setHint('Type a name, tap your predicted bin (optional), press Store It.');
+    setClickable(true);
+  }
+
+  function manualPick(i){
+    if(i === state.predictBin) return;
+    if(state.predictBin !== null){ binEls[state.predictBin].classList.remove('pick'); }
+    state.predictBin = i;
+    binEls[i].classList.add('pick');
+    setHint('Prediction locked to Bin ' + i + ' — now type a name and press Store It.');
+  }
+
+  function clearPickClasses(){
+    for(var i = 0; i < NUM_BINS; i++) binEls[i].classList.remove('pick');
+  }
+  function displayName(n){ return '<span class="hash-val">' + esc(n) + '</span>'; }
+
+  function handleBinClick(i){
+    if(state.roundActive === 'scan' && state.awaiting){ scanClick(i); return; }
+    if(state.roundActive === 'guess' && state.awaiting){ guessClick(i); return; }
+    if(state.roundActive === null && document.getElementById('manual-input').style.display === 'flex'){
+      manualPick(i);
+    }
+  }
+
+  // ---------- MODAL BUTTONS ----------
+  document.getElementById('phase-continue').addEventListener('click', function(){
+    hideModals();
+    startGuessRound();
+  });
+
+  document.getElementById('auto-continue').addEventListener('click', function(){
+    hideModals();
+    startScanRound();
+  });
+
+  document.getElementById('win-replay').addEventListener('click', function(){
+    hideModals();
+    startGuessRound();
+  });
+
+  document.getElementById('win-next').addEventListener('click', function(){
+    hideModals();
+    setManualPhase();
+    enableRoundButtons(true, true, true);
+  });
+
+  // ---------- MANUAL MODE ----------
+  var nameInput = document.getElementById('name-input');
+  document.getElementById('hash-btn').addEventListener('click', function(){
+    if(state.busy) return;
+    var name = nameInput.value.trim().toUpperCase();
+    if(!name){ nameInput.focus(); return; }
+    state.busy = true;
+    state.awaiting = false;
+    setClickable(false);
+    var bin = hash(name);
+    var pred = state.predictBin;
+    setHint('Hashing "' + name + '"…');
+    later(function(){
+      binEls[bin].classList.add('hash-jump');
+      document.getElementById('package-target').textContent = 'Bin ' + bin;
+      document.getElementById('package-target').style.opacity = '1';
+      showPackage(name, bin, true);
+      if(pred !== null){
+        if(pred === bin){
+          addLog('✓ You predicted Bin ' + pred + ' for "' + esc(name) + '" — right!');
+          setHint('✓ Prediction locked in. The formula agreed: Bin ' + bin + '.');
+        } else {
+          addLog('✗ You predicted Bin <span class="bin-val">' + pred + '</span>, but the formula chose Bin <span class="bin-val">' + bin + '</span>.');
+          setHint('Precise prediction is impossible — the formula decides.');
+        }
+      } else {
+        setHint('No prediction — the formula went straight to Bin ' + bin + '. Try predicting next time!');
+      }
+      var collisionNote = state.bins[bin].length > 0 ? ' <span class="collision-tag">COLLISION!</span>' : '';
+      addLog('"' + esc(name) + '" → hash → Bin <span class="bin-val">' + bin + '</span>' + collisionNote);
+      later(function(){
+        binEls[bin].classList.remove('hash-jump');
+        storeInBin(name, bin);
+        if(state.predictBin !== null){ binEls[state.predictBin].classList.remove('pick'); state.predictBin = null; }
+        state.busy = false;
+        nameInput.value = '';
+        nameInput.focus();
+        setClickable(true);
+      }, 600);
+    }, 250);
+  });
+  nameInput.addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){ document.getElementById('hash-btn').click(); }
+  });
+
+  // ---------- ROUND BUTTONS ----------
+  document.getElementById('auto-btn').addEventListener('click', function(){
+    if(state.roundActive) return;
+    hideModals();
+    startAutoRound();
+  });
+  document.getElementById('scan-btn').addEventListener('click', function(){
+    if(state.roundActive) return;
+    hideModals();
+    startScanRound();
+  });
+  document.getElementById('guess-btn').addEventListener('click', function(){
+    if(state.roundActive) return;
+    hideModals();
+    startGuessRound();
+  });
+
+  // ---------- RESTART ----------
+  document.getElementById('restart-warehouse').addEventListener('click', function(){
+    stopDemo();
+    initBins();
+  });
+
+  // ---------- GAME NEXT ----------
+  document.getElementById('game-next').addEventListener('click', function(){
+    goNext(3);
+  });
+
+  // ---------- CONCEPT / EXERCISE NAV ----------
+  document.getElementById('to-concept').addEventListener('click', function(){ goNext(4); });
+  document.getElementById('to-exercise').addEventListener('click', function(){ goNext(5); });
+  document.getElementById('go-home-btn').addEventListener('click', function(){ window.location.href = '../../'; });
+  document.getElementById('restart-journey').addEventListener('click', function(){
+    initBins();
+    showPage(0);
+  });
+
+  // ---------- INIT ----------
+  renderProgress();
+  document.getElementById('back-btn').disabled = true;
+
+})();
+</script>
+</body>
+</html>
