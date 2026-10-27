@@ -182,11 +182,11 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;
 <h2 class="section-title">What did you notice?</h2>
 <p class="section-sub">No single right answer, just what you saw happen on the shelf.</p>
 <div class="card"><div class="qgrid">
-<div class="qcard"><span class="q-num">01 · Second jar in</span><span class="q-text">The second jar often ended up next to the first. Did it ever land far from where the first one went? Why not?</span></div>
-<div class="qcard"><span class="q-num">02 · The slide</span><span class="q-text">When a short jar arrived, the taller ones slid over. Which direction did they move, front or back?</span></div>
-<div class="qcard"><span class="q-num">03 · Already placed</span><span class="q-text">Did a jar you placed early ever move again? What does that tell you about the part of the shelf already filled?</span></div>
-<div class="qcard"><span class="q-num">04 · Same feeling</span><span class="q-text">Where else do you slide one thing into its spot, books you just bought, cards you are holding in your hand?</span></div>
-<div class="qcard"><span class="q-num">05 · No redo</span><span class="q-text">You never had to empty the shelf and start over. Why did the single-jar-at-a-time rule make that possible?</span></div>
+                <div class="qcard"><span class="q-num">01 · Find the spot</span><span class="q-text">You need to place a new jar into a sorted row. Did you scan from the end, or look for where it belongs? How did you know when to stop?</span></div>
+                <div class="qcard"><span class="q-num">02 · Make room</span><span class="q-text">When placing the jar, did you swap it in or shift jars to the right? What did shifting do to the sorted part of the shelf?</span></div>
+                <div class="qcard"><span class="q-num">03 · Prefix stays sorted</span><span class="q-text">After inserting one jar, was the left side still sorted? Why does keeping that prefix sorted help with the next insertion?</span></div>
+                <div class="qcard"><span class="q-num">04 · Slide vs swap</span><span class="q-text">How is sliding jars to make room different from selection sort's direct swap to a final position?</span></div>
+                <div class="qcard"><span class="q-num">05 · Already sorted</span><span class="q-text">If jars arrived already sorted, did you do many shifts? What happened when the new jar was bigger than all on the shelf?</span></div>
 </div>
 <div class="section-nav"><button class="btn ghost" id="btn-notes-back">⬅ Back</button><button class="btn" id="btn-notes-continue">Continue to The Method ➜</button></div></div>
 </section>
@@ -232,12 +232,12 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;
 <h2 class="section-title">Try on your own</h2>
 <p class="section-sub">Work it out in your head.</p>
 <div class="card"><div class="qgrid">
-<div class="qcard"><span class="q-num">01 · Count the shifts</span><span class="q-text">Shelf holds 5 and 7. Jar 4 arrives. How many jars shift right on this insertion pass, and where does 4 land?</span></div>
-<div class="qcard"><span class="q-num">02 · The easy order</span><span class="q-text">Jars arrive 3, 4, 5, 6, 7, 8 in perfect height order. How many shifts does the whole round need, and why is it so small?</span></div>
-<div class="qcard"><span class="q-num">03 · The reverse pile</span><span class="q-text">Jars arrive biggest first: 8, 7, 6, 5, 4, 3. Which single pass makes the most shifts, and roughly how many shifts in total?</span></div>
-<div class="qcard"><span class="q-num">04 · Re-sort each time</span><span class="q-text">An assistant empties and re-sorts the whole shelf after every jar. Why does that move already placed jars again, and how does a single insertion pass avoid it?</span></div>
-<div class="qcard"><span class="q-num">05 · Use the prefix</span><span class="q-text">The sorted prefix is 1, 3, 6, 8 and jar 9 arrives last. How many shifts does the final insertion pass need, and where does 9 land?</span></div>
-<div class="qcard"><span class="q-num">06 · Pick the box</span><span class="q-text">Two boxes: one arrives nearly sorted, the other fully reversed. Which box makes insertion sort shine, and which forces the most shifts?</span></div>
+                <div class="qcard"><span class="q-num">01 · New book</span><span class="q-text">You get a new book and want to put it on a shelf where books are already sorted by year. Instead of resorting everything, how would you do it? How is this like insertion sort?</span></div>
+                <div class="qcard"><span class="q-num">02 · Insert at front</span><span class="q-text">You need to insert a very old book at the very front of a sorted shelf of 100 books. How many would you need to shift? Why does insertion at front cost more?</span></div>
+                <div class="qcard"><span class="q-num">03 · Nearly sorted</span><span class="q-text">You're filing report cards that just arrived mostly in order. Would insertion sort do much work? When does it shine compared to a method that always scans everything?</span></div>
+                <div class="qcard"><span class="q-num">04 · Play cards</span><span class="q-text">You're sorting cards in your hand by drawing one at a time and placing it in the right spot among the ones you're already holding. Which cards slide? How is this exactly like insertion sort?</span></div>
+                <div class="qcard"><span class="q-num">05 · Shift vs swap</span><span class="q-text">Compare insertion sort (slide elements right) with selection sort (swap to place minimum). For inserting into the middle of an already-sorted prefix, why might sliding feel different?</span></div>
+                <div class="qcard"><span class="q-num">06 · End of row</span><span class="q-text">A new jar is bigger than every jar already on the shelf. How many shifts happen, and where does it go? Does the algorithm still scan?</span></div>
 <div class="qcard"><span class="q-num">07 · Marksheet stack</span><span class="q-text">A teacher files marksheets by roll number, sliding only the sheets after each new one. When is this fastest, when the stack is nearly sorted or fully shuffled? Why?</span></div>
 
 <div class="qcard"><span class="q-num">08 · A jar already in place</span><span class="q-text">You hold jar 6 and every jar on the shelf is 5 or shorter. Do you need to slide anything at all? What does a single insertion pass do when the new jar belongs at the very end, and how does the shelf stop being touched?</span></div>
